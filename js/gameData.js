@@ -125,9 +125,11 @@ function addResource(type, amount) {
     if (GameData.resources[type] !== undefined) {
         GameData.resources[type] += amount;
         updateHUD();
+        updateInventory(); // 🔥 AJOUT ICI
         saveGame();
     }
 }
+
 
 function spendResource(type, amount) {
     if (GameData.resources[type] >= amount) {
@@ -138,6 +140,19 @@ function spendResource(type, amount) {
     }
     return false;
 }
+
+function updateInventory() {
+    const invScrap  = document.getElementById("invScrap");
+    const invEnergy = document.getElementById("invEnergy");
+    const invNano   = document.getElementById("invNano");
+    const invData   = document.getElementById("invData");
+
+    if (invScrap)  invScrap.textContent  = Math.floor(GameData.resources.scrap);
+    if (invEnergy) invEnergy.textContent = Math.floor(GameData.resources.energy);
+    if (invNano)   invNano.textContent   = Math.floor(GameData.resources.nano);
+    if (invData)   invData.textContent   = Math.floor(GameData.resources.data);
+}
+
 
 // ===============================
 // BOUCLE DE JEU
