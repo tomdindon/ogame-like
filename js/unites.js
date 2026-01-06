@@ -9,10 +9,14 @@
 // ===============================
 function syncUnitsToSave() {
     const save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
+
     // Sauvegarde spécifique pour le système de missions
     save.droneCount = GameData.units["drone_recuperateur"]?.count || 0;
+    save.chasseurCount = GameData.units["chasseur"]?.count || 0;
+
     localStorage.setItem("cosmicSave", JSON.stringify(save));
 }
+
 
 // ===============================
 // DONNÉES DES UNITÉS (CONFIG)

@@ -2,6 +2,13 @@
    Définition des missions disponibles
 ===================================================== */
 const MISSIONS = {
+    exploration_galactique: {
+        key: "exploration_galactique",
+        name: "Exploration Galactique",
+        duration: 10, // 5 minutes
+        reward: { exploration: true }, // récompense spéciale
+        prereq: { drones: 5 }
+    },
     exploration: {
         key: "exploration",
         name: "Exploration",
@@ -26,13 +33,13 @@ const MISSIONS = {
         prereq: { drones: 8 }
     },
 
-    exploration_galactique: {
-        key: "exploration_galactique",
-        name: "Exploration Galactique",
-        duration: 10, // 5 minutes
-        reward: { exploration: true }, // récompense spéciale
-        prereq: { drones: 5 }
-    }
+    sauvetage_OCC: {
+        key: "sauvetage_OCC",
+        name: "Sauvetage OCC",
+        duration: 120, // 2 minutes
+        reward: { energy: 20 },
+        prereq: { chasseur: 5 }
+    },
 };
 
 const ACTIVE_MISSIONS_KEY = "activeMissions";
@@ -70,10 +77,19 @@ function hasPrerequisites(missionKey) {
     if (!mission) return false;
 
     const save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
-    const drones = save.droneCount || 0;
 
-    return drones >= (mission.prereq.drones || 0);
+    const drones = save.droneCount || 0;
+    const chasseurs = save.chasseurCount || 0;
+
+    const req = mission.prereq || {};
+
+    if (req.drones && drones < req.drones) return false;
+    if (req.chasseur && chasseurs < req.chasseur) return false;
+
+    return true;
 }
+
+
 
 /* =====================================================
    Vérifier si une mission est déjà active
@@ -113,10 +129,24 @@ function renderMissionsList() {
             rewardText.push("Aucune récompense directe");
         }
 
+        // --- Affichage dynamique des prérequis ---
+        let prereqText = [];
+
+        if (mission.prereq.drones) {
+            prereqText.push(`${mission.prereq.drones} Drones récupérateurs`);
+        }
+        if (mission.prereq.chasseur) {
+            prereqText.push(`${mission.prereq.chasseur} Chasseurs`);
+        }
+
+        if (prereqText.length === 0) {
+            prereqText.push("Aucun");
+        }
+
         div.innerHTML = `
             <p><strong>${mission.name}</strong></p>
             <p>Durée : ${Math.floor(mission.duration / 60)} minutes</p>
-            <p>Pré‑requis : ${mission.prereq.drones || 0} Drones récupérateurs</p>
+            <p>Pré‑requis : ${prereqText.join(" + ")}</p>
             <p>Récompense : ${rewardText.join(" + ")}</p>
             <button data-mission="${mission.key}"></button>
         `;
@@ -138,14 +168,14 @@ function renderMissionsList() {
         }
 
         container.appendChild(div);
-    }
+    } // ← FIN de la boucle for
 
     if (activeMissions.length > 0) {
         missionStatus.textContent = "Missions en cours.";
     } else {
         missionStatus.textContent = "";
     }
-}
+} // ← FIN de la fonction renderMissionsList
 
 /* =====================================================
    Mise à jour du journal de mission
@@ -313,4 +343,4 @@ window.addEventListener("load", () => {
         updateMissionLogDisplay();
         startGlobalTimer();
     }
-});
+})

@@ -1,12 +1,25 @@
 /* ============================
+   RESET GLOBAL
+============================ */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Empêche les bandes noires */
+    width: 100%;
+    height: 100%;
+    background: black; /* Sécurité si le fond ne couvre pas */
+    transform: none !important;
+}
+
+/* ============================
    PAGE INDEX (Accueil du jeu)
 ============================ */
 
 /* --- ÉCRAN D’ACCUEIL --- */
 #home-screen {
     position: relative;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
 
     background-image: url("../assets/Logo/logo.png");
     background-size: cover;
@@ -23,7 +36,7 @@
 
     color: white;
     text-align: center;
-    z-index: 2;
+    z-index: 1; /* Laisse les étoiles passer au-dessus */
 }
 
 /* On masque l’image <img> si elle existe */
@@ -55,7 +68,7 @@
     margin-bottom: 30vh;
 }
 
-/* --- BOUTON START (style spécifique) --- */
+/* --- BOUTON START --- */
 #start-btn {
     padding: 15px 30px;
     font-size: 20px;
@@ -77,7 +90,7 @@
         0 0 40px rgba(127, 255, 212, 0.3);
 }
 
-/* --- EFFET VERRE DÉPOLI SUR LE BOUTON --- */
+/* --- EFFET VERRE DÉPOLI --- */
 #home-screen #start-btn {
     background: rgba(0, 0, 0, 0.45);
     padding: 12px 25px;
@@ -91,10 +104,15 @@
 
 .shooting-stars {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
     pointer-events: none;
     z-index: 2;
     overflow: hidden;
+    background: transparent;
 }
 
 .star-static {
