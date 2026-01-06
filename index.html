@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <title>Accueil du Jeu</title>
 
+    <!-- Styles -->
     <link rel="stylesheet" href="css/global-scale.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/index.css">
 
     <!-- Police Orbitron -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/index.css">
-
 </head>
+
 <body>
 
     <!-- Écran d'accueil -->
     <div id="home-screen">
 
-        <!-- Étoiles scintillantes (doit être DANS home-screen) -->
+        <!-- Étoiles scintillantes -->
         <div class="shooting-stars"></div>
 
         <div class="title-zone">
@@ -32,19 +32,6 @@
         </div>
 
     </div>
-
-    <!-- Script bouton -->
-    <script>
-        const startBtn = document.getElementById("start-btn");
-
-        startBtn.addEventListener("click", () => {
-            document.body.classList.add("fade-out");
-
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 500);
-        });
-    </script>
 
     <!-- Script étoiles -->
     <script>
@@ -74,7 +61,14 @@
         createStaticStars(150);
     </script>
 
+    <!-- Script bouton Démarrer -->
+    <script>
+        const startBtn = document.getElementById("start-btn");
+
+        startBtn.addEventListener("click", () => {
+            window.location.href = "dashboard.html";
+        });
+    </script>
+
 </body>
-
-
 </html>
