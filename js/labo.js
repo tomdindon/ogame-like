@@ -1,53 +1,69 @@
 // Table de correspondance des transmutations
 const transmutations = {
-    "scrap": {
-        cout: "1 000 000 Ferraille",
+    scrap: {
+        inputKey: "scrap",
+        cout: 1000000,
         duree: 30,
         resultat: "Acier renforcé",
+        outputKey: "acier",
         emoji: "🛠️"
     },
-    "energie": {
-        cout: "1 000 000 Énergie",
+    energie: {
+        inputKey: "energy",
+        cout: 1000000,
         duree: 60,
         resultat: "Nanites synthétiques",
+        outputKey: "nanites",
         emoji: "🤖"
     },
-    "nano": {
-        cout: "1 000 000 Nano‑composants",
+    nano: {
+        inputKey: "nano",
+        cout: 1000000,
         duree: 45,
         resultat: "Module cybernétique",
+        outputKey: "module",
         emoji: "🧩"
     },
-    "data": {
-        cout: "1 000 000 Données anciennes",
+    data: {
+        inputKey: "data",
+        cout: 1000000,
         duree: 50,
         resultat: "Fragment d’IA oubliée",
+        outputKey: "fragment",
         emoji: "🧠"
     }
 };
 
 // Sélecteurs DOM
 const inputSelect = document.getElementById("inputSelect");
-const inputEmoji = document.getElementById("inputEmoji");
+const inputEmoji  = document.getElementById("inputEmoji");
 
 const outputEmoji = document.getElementById("outputEmoji");
-const outputText = document.getElementById("outputText");
+const outputText  = document.getElementById("outputText");
 
-const inputCost = document.getElementById("inputCost");
-const outputGain = document.getElementById("outputGain");
+const inputCost   = document.getElementById("inputCost");
+const outputGain  = document.getElementById("outputGain");
 
-const startBtn = document.getElementById("startBtn");
-const statusBox = document.getElementById("statusBox");
+const startBtn    = document.getElementById("startBtn");
+const statusBox   = document.getElementById("statusBox");
 
 let currentRecipe = null;
 let timer = null;
 
 // Emojis d'entrée
 const emojiMap = {
-    scrap: "🔩",
+    scrap:   "🔩",
     energie: "⚡",
-    nano: "🧬",
-    data: "📡"
+    nano:    "🧬",
+    data:    "📡"
+};
+
+// Noms lisibles pour le coût
+const inputLabels = {
+    scrap:   "Ferraille",
+    energie: "Énergie",
+    nano:    "Nano‑composants",
+    data:    "Données anciennes"
 };
 
 // Mise à jour automatique
@@ -55,13 +71,13 @@ inputSelect.addEventListener("change", () => {
     const value = inputSelect.value;
 
     if (!value) {
-        inputEmoji.textContent = "";
+        inputEmoji.textContent  = "";
         outputEmoji.textContent = "";
-        outputText.textContent = "Sélectionnez une ressource.";
-        inputCost.textContent = "Coût : -";
-        outputGain.textContent = "Gain : -";
-        startBtn.disabled = true;
-        currentRecipe = null;
+        outputText.textContent  = "Sélectionnez une ressource.";
+        inputCost.textContent   = "Coût : -";
+        outputGain.textContent  = "Gain : -";
+        startBtn.disabled       = true;
+        currentRecipe           = null;
         return;
     }
 
@@ -73,11 +89,12 @@ inputSelect.addEventListener("change", () => {
 
     // Résultat
     outputEmoji.textContent = r.emoji;
-    outputText.textContent = r.resultat;
+    outputText.textContent  = r.resultat;
 
-    // Coût & gain
-    inputCost.textContent = "Coût : " + r.cout;
-    outputGain.textContent = "Gain : 1 " + r.resultat;
+    // Coût & gain (affichage)
+    const label = inputLabels[value] || "Ressource";
+    inputCost.textContent  = `Coût : ${r.cout.toLocaleString("fr-FR")} ${label}`;
+    outputGain.textContent = `Gain : 1 ${r.resultat}`;
 
     startBtn.disabled = false;
 });
@@ -86,11 +103,21 @@ inputSelect.addEventListener("change", () => {
 startBtn.addEventListener("click", () => {
     if (!currentRecipe) return;
 
-    let timeLeft = currentRecipe.duree;
+    const value = inputSelect.value;
+    const r = currentRecipe;
+
+    // Vérification + consommation via GameData
+    const ok = spendResource(r.inputKey, r.cout);
+    if (!ok) {
+        statusBox.innerHTML = "❌ Ressources insuffisantes.";
+        return;
+    }
+
+    let timeLeft = r.duree;
 
     statusBox.innerHTML = `Transmutation en cours... (${timeLeft}s restantes)`;
 
-    startBtn.disabled = true;
+    startBtn.disabled   = true;
     inputSelect.disabled = true;
 
     timer = setInterval(() => {
@@ -99,8 +126,13 @@ startBtn.addEventListener("click", () => {
 
         if (timeLeft <= 0) {
             clearInterval(timer);
-            statusBox.innerHTML = `✔️ Transmutation terminée ! Vous obtenez : <strong>${currentRecipe.resultat}</strong>`;
-            startBtn.disabled = false;
+
+            // Ajout du résultat dans GameData
+            addResource(r.outputKey, 1);
+
+            statusBox.innerHTML = `✔️ Transmutation terminée ! Vous obtenez : <strong>${r.resultat}</strong>`;
+
+            startBtn.disabled    = false;
             inputSelect.disabled = false;
         }
     }, 1000);

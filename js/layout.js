@@ -3,8 +3,10 @@
 // ===============================
 
 document.addEventListener("DOMContentLoaded", () => {
-    injectHUD();
-    updateGlobalUnitHUD(); // Mise à jour initiale des unités
+    if (!window.DISABLE_HUD) {
+        injectHUD();
+        updateGlobalUnitHUD();
+    }
 });
 
 // 1. INJECTION DU HTML

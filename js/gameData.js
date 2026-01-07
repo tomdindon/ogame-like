@@ -7,7 +7,17 @@ let GameData = {
     devMultiplier: 1, 
     // ----------------
 
-    resources: { scrap: 0, energy: 0, nano: 0, data: 0 },
+    resources: { 
+    scrap: 0, 
+    energy: 0, 
+    nano: 0, 
+    data: 0,
+    acier: 0,
+    nanites: 0,
+    module: 0,
+    fragment: 0
+},
+
     xp: 0,
     buildings: {
         extracteur_ferraille: { level: 1 },
@@ -147,11 +157,22 @@ function updateInventory() {
     const invNano   = document.getElementById("invNano");
     const invData   = document.getElementById("invData");
 
-    if (invScrap)  invScrap.textContent  = Math.floor(GameData.resources.scrap);
-    if (invEnergy) invEnergy.textContent = Math.floor(GameData.resources.energy);
-    if (invNano)   invNano.textContent   = Math.floor(GameData.resources.nano);
-    if (invData)   invData.textContent   = Math.floor(GameData.resources.data);
+    const invAcier    = document.getElementById("invAcier");
+    const invNanites  = document.getElementById("invNanites");
+    const invModule   = document.getElementById("invModule");
+    const invFragment = document.getElementById("invFragment");
+
+    if (invScrap)     invScrap.textContent     = Math.floor(GameData.resources.scrap);
+    if (invEnergy)    invEnergy.textContent    = Math.floor(GameData.resources.energy);
+    if (invNano)      invNano.textContent      = Math.floor(GameData.resources.nano);
+    if (invData)      invData.textContent      = Math.floor(GameData.resources.data);
+
+    if (invAcier)     invAcier.textContent     = Math.floor(GameData.resources.acier);
+    if (invNanites)   invNanites.textContent   = Math.floor(GameData.resources.nanites);
+    if (invModule)    invModule.textContent    = Math.floor(GameData.resources.module);
+    if (invFragment)  invFragment.textContent  = Math.floor(GameData.resources.fragment);
 }
+
 
 
 // ===============================
