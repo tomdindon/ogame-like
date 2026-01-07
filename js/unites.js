@@ -67,8 +67,9 @@ const containerUnits = document.getElementById("units-container");
 
 if (containerUnits) {
     unitsConfig.forEach(u => {
-        // Niveau actuel depuis GameData
+
         const level = GameData.units[u.id]?.level ?? 1;
+        const count = GameData.units[u.id]?.count ?? 0;
 
         const card = document.createElement("div");
         card.className = "unit-card";
@@ -78,6 +79,9 @@ if (containerUnits) {
             <div class="unit-name">${u.name}</div>
             <div class="unit-description">${u.description}</div>
             <div class="unit-level">Niveau : ${level} / ${u.maxLevel}</div>
+
+            ${u.id !== "hangar" ? `<div class="unit-available">Disponible : ${count}</div>` : ""}
+
             <div class="unit-stats">ATK : ${u.attack} | DEF : ${u.defense} | VIT : ${u.speed}</div>
             <div class="unit-cost">Coût : ${u.cost.metal} métal, ${u.cost.crystal} cristal</div>
             <div class="unit-time">Temps : ${u.time}</div>
@@ -96,37 +100,40 @@ if (containerUnits) {
             if (spendResource("scrap", cost)) {
                 GameData.units[u.id].level++;
 
-                // MAJ Carte
-                card.querySelector(".unit-level").textContent = `Niveau : ${GameData.units[u.id].level} / ${u.maxLevel}`;
+                card.querySelector(".unit-level").textContent =
+                    `Niveau : ${GameData.units[u.id].level} / ${u.maxLevel}`;
 
-                // Si Hangar, on met à jour le HUD global
                 if (u.id === "hangar") {
-                    updateGlobalUnitHUD(); // Fonction de layout.js
+                    updateGlobalUnitHUD();
                     syncUnitsToSave();
                 }
             }
         });
 
-        // --- ACTION : CRÉER (Sauf Hangar) ---
+        // --- ACTION : CRÉER ---
         if (u.id !== "hangar") {
             const createBtn = card.querySelector(".unit-create");
             createBtn.addEventListener("click", () => {
-                
-                // On utilise les fonctions globales de layout.js
+
                 const total = getTotalUnits();
                 const capacity = getUnitCapacity();
 
                 if (total >= capacity) {
-                    // Feedback visuel optionnel : Hangar plein
                     alert("Hangar plein !");
-                    return; 
+                    return;
                 }
 
                 if (spendResource("scrap", u.cost.metal)) {
-                    GameData.units[u.id].count = (GameData.units[u.id].count || 0) + 1;
+
+                    GameData.units[u.id].count =
+                        (GameData.units[u.id].count || 0) + 1;
+
+                    // 🔥 Mise à jour de la ligne "Disponible : X"
+                    card.querySelector(".unit-available").textContent =
+                        "Disponible : " + GameData.units[u.id].count;
 
                     syncUnitsToSave();
-                    updateGlobalUnitHUD(); // Mise à jour immédiate du compteur
+                    updateGlobalUnitHUD();
                 }
             });
         }

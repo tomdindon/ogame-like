@@ -117,3 +117,35 @@ header h1 {
     color: #d0d4d8;
     font-size: 1.1em;
 }
+
+.unit-available {
+    color: #ffffff;
+    background: rgba(127, 255, 212, 0.15);
+    border: 1px solid rgba(127, 255, 212, 0.3);
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.unit-create {
+    display: block;
+    width: 70%;
+    margin: 10px auto 0 auto;
+    padding: 10px;
+    background: rgba(127, 255, 212, 0.2);
+    border: 1px solid rgba(127, 255, 212, 0.4);
+    border-radius: 6px;
+    font-weight: bold;
+    color: #7fffd4;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.25s;
+}
+
+.unit-create:hover {
+    background: rgba(127, 255, 212, 0.35);
+    transform: translateY(-2px);
+}
+
