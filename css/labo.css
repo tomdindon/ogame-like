@@ -1,0 +1,104 @@
+/* ============================
+   LABORATOIRE DE TRANSMUTATION
+============================ */
+
+/* Fond spécifique */
+body {
+    background-image: url("../assets/Logo/labo.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    color: #eee;
+    padding: 20px;
+}
+
+/* Titre */
+h1 {
+    text-align: center;
+    color: #ff7a18;
+    text-shadow: 0 0 10px rgba(255, 122, 24, 0.6);
+    margin-bottom: 10px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+/* Bloc translucide */
+.section select {
+    display: block;
+    margin: 10px auto; /* centre horizontalement */
+    width: 20%; /* optionnel : largeur plus élégante */
+    min-width: 200px; /* évite qu'il devienne trop petit */
+    text-align: center;
+}
+
+
+.section:hover {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+/* Grille 2 colonnes */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+/* Colonnes */
+.col {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    backdrop-filter: blur(3px);
+}
+
+.col h3 {
+    color: #ff7a18;
+    margin-top: 0;
+}
+
+/* Bouton centré */
+.center {
+    text-align: center;
+}
+
+button {
+    padding: 12px;
+    font-size: 18px;
+    width: 50%;
+    background: #ff7a18;
+    border: none;
+    border-radius: 8px;
+    color: #111;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:disabled {
+    background: #444;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    background: #ffa64d;
+}
+
+/* Zone de statut */
+.status-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    min-height: 40px;
+}

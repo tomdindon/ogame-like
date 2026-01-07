@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Laboratoire de transmutation</title>
+    <link rel="stylesheet" href="css/labo.css">
+</head>
+<body>
+
+    <h1>Laboratoire de transmutation</h1>
+    <p class="subtitle">
+        Ici, la matière perd ses lois. Les ressources se recomposent et renaissent sous de nouvelles formes.
+    </p>
+
+    <!-- Bloc 2 colonnes -->
+    <div class="section grid-2" id="recipeColumns">
+
+        <!-- Colonne 1 : choix ressource -->
+        <div class="col">
+            <h3>Ressource d’entrée</h3>
+            <select id="inputSelect">
+                <option value="">-- Choisir une ressource --</option>
+                <option value="fer">Fer</option>
+                <option value="cristal">Cristal</option>
+                <option value="energie">Énergie</option>
+            </select>
+        </div>
+
+        <!-- Colonne 2 : résultat -->
+        <div class="col">
+            <h3>Résultat obtenu</h3>
+            <p class="col-content" id="colOutput">Sélectionnez une ressource.</p>
+        </div>
+
+    </div>
+
+    <!-- Bouton centré -->
+    <div class="section center">
+        <button id="startBtn" disabled>Lancer la transmutation</button>
+    </div>
+
+    <!-- Zone de feedback -->
+    <div class="section status-box" id="statusBox">
+        Aucune transmutation en cours.
+    </div>
+
+    <script src="js/labo.js"></script>
+</body>
+</html>
