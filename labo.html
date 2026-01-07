@@ -16,21 +16,40 @@
     <div class="section grid-2" id="recipeColumns">
 
         <!-- Colonne 1 : choix ressource -->
-        <div class="col">
-            <h3>Ressource d’entrée</h3>
-            <select id="inputSelect">
-                <option value="">-- Choisir une ressource --</option>
-                <option value="fer">Fer</option>
-                <option value="cristal">Cristal</option>
-                <option value="energie">Énergie</option>
-            </select>
-        </div>
+       <div class="col">
+    <h3>Ressource d’entrée</h3>
+
+    <div class="col-content" id="inputDisplay">
+        <select id="inputSelect">
+            <option value="">-- Choisir une ressource --</option>
+            <option value="scrap">Ferraille</option>
+            <option value="energie">Énergie</option>
+            <option value="nano">Nano‑composants</option>
+            <option value="data">Données anciennes</option>
+        </select>
+
+        <span id="inputEmoji" class="emoji-display"></span>
+
+        <!-- BOX COÛT ENTRÉE -->
+        <span id="inputCost" class="cost-item">Coût : -</span>
+    </div>
+</div>
+
 
         <!-- Colonne 2 : résultat -->
         <div class="col">
-            <h3>Résultat obtenu</h3>
-            <p class="col-content" id="colOutput">Sélectionnez une ressource.</p>
-        </div>
+    <h3>Résultat obtenu</h3>
+
+    <div class="col-content" id="outputDisplay">
+        <span id="outputText" class="result-name">Sélectionnez une ressource.</span>
+
+        <span id="outputEmoji" class="emoji-display"></span>
+
+        <!-- BOX GAIN SORTIE -->
+        <span id="outputGain" class="cost-item">Gain : -</span>
+    </div>
+</div>
+
 
     </div>
 
@@ -38,6 +57,9 @@
     <div class="section center">
         <button id="startBtn" disabled>Lancer la transmutation</button>
     </div>
+
+</div>
+    
 
     <!-- Zone de feedback -->
     <div class="section status-box" id="statusBox">

@@ -21,28 +21,10 @@ h1 {
     margin-bottom: 10px;
 }
 
-h2 {
-    text-align: center;
-}
-
 .subtitle {
     text-align: center;
     color: #ccc;
     margin-bottom: 30px;
-}
-
-/* Bloc translucide */
-.section select {
-    display: block;
-    margin: 10px auto; /* centre horizontalement */
-    width: 20%; /* optionnel : largeur plus élégante */
-    min-width: 200px; /* évite qu'il devienne trop petit */
-    text-align: center;
-}
-
-
-.section:hover {
-    background: rgba(0, 0, 0, 0.45);
 }
 
 /* Grille 2 colonnes */
@@ -59,11 +41,48 @@ h2 {
     border-radius: 10px;
     padding: 15px;
     backdrop-filter: blur(3px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
 }
 
+/* Titres centrés */
 .col h3 {
     color: #ff7a18;
-    margin-top: 0;
+    margin: 0;
+    text-align: center;
+}
+
+/* Bloc contenant select + emoji */
+.col-content {
+    display: flex;
+    flex-direction: column; /* emoji SOUS le select */
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+/* Select centré */
+select {
+    padding: 6px;
+    font-size: 16px;
+    background: #222;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 6px;
+    margin: 0 auto;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Emoji affiché sous le select */
+.emoji-display {
+    font-size: 7rem;
+    line-height: 1;
+    text-align: center;
 }
 
 /* Bouton centré */
@@ -74,7 +93,7 @@ h2 {
 button {
     padding: 12px;
     font-size: 18px;
-    width: 50%;
+    width: 20%;
     background: #ff7a18;
     border: none;
     border-radius: 8px;
@@ -101,4 +120,46 @@ button:hover:not(:disabled) {
     padding: 20px;
     backdrop-filter: blur(4px);
     min-height: 40px;
+}
+#outputDisplay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+#outputEmoji {
+    font-size: 7rem;
+    line-height: 1;
+    text-align: center;
+}
+.result-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #eee;
+    padding: 6px 12px;
+    background: #222;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    text-align: center;
+    min-width: 160px;
+    display: inline-block; /* indispensable */
+}
+
+.cost-gain {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    margin-top: 10px;
+}
+
+.cost-item {
+    font-size: 1.1rem;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 14px;
+    border-radius: 8px;
+    min-width: 180px;
+    text-align: center;
 }

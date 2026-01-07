@@ -1,36 +1,65 @@
-// Table de correspondance
+// Table de correspondance des transmutations
 const transmutations = {
-    "fer": {
-        cout: "50 Fer",
+    "scrap": {
+        cout: "1 000 000 Ferraille",
         duree: 30,
-        resultat: "10 Acier renforcé"
-    },
-    "cristal": {
-        cout: "40 Cristal",
-        duree: 45,
-        resultat: "5 Plasma instable"
+        resultat: "Acier renforcé",
+        emoji: "🛠️"
     },
     "energie": {
-        cout: "100 Énergie",
+        cout: "1 000 000 Énergie",
         duree: 60,
-        resultat: "20 Nanites synthétiques"
+        resultat: "Nanites synthétiques",
+        emoji: "🤖"
+    },
+    "nano": {
+        cout: "1 000 000 Nano‑composants",
+        duree: 45,
+        resultat: "Module cybernétique",
+        emoji: "🧩"
+    },
+    "data": {
+        cout: "1 000 000 Données anciennes",
+        duree: 50,
+        resultat: "Fragment d’IA oubliée",
+        emoji: "🧠"
     }
 };
 
+// Sélecteurs DOM
 const inputSelect = document.getElementById("inputSelect");
-const colOutput = document.getElementById("colOutput");
+const inputEmoji = document.getElementById("inputEmoji");
+
+const outputEmoji = document.getElementById("outputEmoji");
+const outputText = document.getElementById("outputText");
+
+const inputCost = document.getElementById("inputCost");
+const outputGain = document.getElementById("outputGain");
+
 const startBtn = document.getElementById("startBtn");
 const statusBox = document.getElementById("statusBox");
 
 let currentRecipe = null;
 let timer = null;
 
-// Mise à jour automatique du résultat
+// Emojis d'entrée
+const emojiMap = {
+    scrap: "🔩",
+    energie: "⚡",
+    nano: "🧬",
+    data: "📡"
+};
+
+// Mise à jour automatique
 inputSelect.addEventListener("change", () => {
     const value = inputSelect.value;
 
     if (!value) {
-        colOutput.innerHTML = "Sélectionnez une ressource.";
+        inputEmoji.textContent = "";
+        outputEmoji.textContent = "";
+        outputText.textContent = "Sélectionnez une ressource.";
+        inputCost.textContent = "Coût : -";
+        outputGain.textContent = "Gain : -";
         startBtn.disabled = true;
         currentRecipe = null;
         return;
@@ -39,7 +68,17 @@ inputSelect.addEventListener("change", () => {
     const r = transmutations[value];
     currentRecipe = r;
 
-    colOutput.innerHTML = `<strong>${r.resultat}</strong>`;
+    // Emoji entrée
+    inputEmoji.textContent = emojiMap[value];
+
+    // Résultat
+    outputEmoji.textContent = r.emoji;
+    outputText.textContent = r.resultat;
+
+    // Coût & gain
+    inputCost.textContent = "Coût : " + r.cout;
+    outputGain.textContent = "Gain : 1 " + r.resultat;
+
     startBtn.disabled = false;
 });
 
