@@ -2,7 +2,7 @@
 // DONNÉES GLOBALES DU JEU (gameData.js)
 // ===============================
 
-let GameData = {
+export let GameData = {
     // --- DEV MODE ---
     devMultiplier: 1, 
     // ----------------
@@ -40,7 +40,7 @@ let GameData = {
 // DÉFINITION DES BÂTIMENTS
 // ===============================
 // J'ai ajouté "imageBase" ici 👇
-const buildings = [
+export const buildings = [
     { 
         id: "extracteur_ferraille", 
         name: "Extracteur de ferraille", 
@@ -110,7 +110,7 @@ if (saved) {
 if (!GameData.units.hangar) GameData.units.hangar = { level: 1, count: 0 };
 if ((GameData.units.hangar.level || 0) < 1) GameData.units.hangar.level = 1;
 
-function saveGame() {
+export function saveGame() {
     localStorage.setItem("CosmicEmpiresSave", JSON.stringify(GameData));
 }
 
@@ -131,7 +131,7 @@ function updateHUD() {
     }
 }
 
-function addResource(type, amount) {
+export function addResource(type, amount) {
     if (GameData.resources[type] !== undefined) {
         GameData.resources[type] += amount;
         updateHUD();
@@ -141,7 +141,7 @@ function addResource(type, amount) {
 }
 
 
-function spendResource(type, amount) {
+export function spendResource(type, amount) {
     if (GameData.resources[type] >= amount) {
         GameData.resources[type] -= amount;
         updateHUD();
@@ -151,7 +151,7 @@ function spendResource(type, amount) {
     return false;
 }
 
-function updateInventory() {
+export function updateInventory() {
     const invScrap  = document.getElementById("invScrap");
     const invEnergy = document.getElementById("invEnergy");
     const invNano   = document.getElementById("invNano");

@@ -9,17 +9,14 @@
 
 
 /* Fond spécifique */
-body.bg-profil {
+#page-profil {
     background-image: url("../assets/Logo/profil.png");
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
-     margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centre tout verticalement dans le viewport */
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
+
 
 /* Titre */
 header h1 {

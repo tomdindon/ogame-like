@@ -1,16 +1,15 @@
 // ===============================
-// UNITES.JS - GESTION DES CARTES
+// UNITES.JS - VERSION SPA
 // ===============================
 
-// Note: getUnitCapacity() et getTotalUnits() viennent maintenant de layout.js
+import { GameData, spendResource } from "./gameData.js";
+import { getUnitCapacity, getTotalUnits, updateGlobalUnitHUD } from "./layout.js";
 
-// ===============================
-// SYNC AVEC LES MISSIONS
-// ===============================
+
+// Sync missions
 function syncUnitsToSave() {
     const save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
 
-    // Sauvegarde spécifique pour le système de missions
     save.droneCount = GameData.units["drone_recuperateur"]?.count || 0;
     save.chasseurCount = GameData.units["chasseur"]?.count || 0;
 
@@ -19,7 +18,7 @@ function syncUnitsToSave() {
 
 
 // ===============================
-// DONNÉES DES UNITÉS (CONFIG)
+// CONFIG DES UNITÉS
 // ===============================
 const unitsConfig = [
     {
@@ -60,12 +59,18 @@ const unitsConfig = [
     }
 ];
 
-// ===============================
-// GÉNÉRATION DES CARTES
-// ===============================
-const containerUnits = document.getElementById("units-container");
 
-if (containerUnits) {
+// ===============================
+// INITIALISATION POUR LA SPA
+// ===============================
+export function initUnites() {
+
+    const containerUnits = document.getElementById("units-container");
+    if (!containerUnits) return;
+
+    // Reset propre à chaque ouverture de la page
+    containerUnits.innerHTML = "";
+
     unitsConfig.forEach(u => {
 
         const level = GameData.units[u.id]?.level ?? 1;
@@ -128,7 +133,6 @@ if (containerUnits) {
                     GameData.units[u.id].count =
                         (GameData.units[u.id].count || 0) + 1;
 
-                    // 🔥 Mise à jour de la ligne "Disponible : X"
                     card.querySelector(".unit-available").textContent =
                         "Disponible : " + GameData.units[u.id].count;
 

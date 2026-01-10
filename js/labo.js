@@ -1,4 +1,13 @@
-// Table de correspondance des transmutations
+// ===============================
+// IMPORTS
+// ===============================
+import { spendResource, addResource } from "./gameData.js";
+
+
+// ===============================
+// TABLE DES TRANSMUTATIONS
+// ===============================
+
 const transmutations = {
     scrap: {
         inputKey: "scrap",
@@ -34,106 +43,150 @@ const transmutations = {
     }
 };
 
-// Sélecteurs DOM
-const inputSelect = document.getElementById("inputSelect");
-const inputEmoji  = document.getElementById("inputEmoji");
 
-const outputEmoji = document.getElementById("outputEmoji");
-const outputText  = document.getElementById("outputText");
+// ===============================
+// TABLES D'AFFICHAGE
+// ===============================
 
-const inputCost   = document.getElementById("inputCost");
-const outputGain  = document.getElementById("outputGain");
+const emojiMap = {
+    scrap: "🔩",
+    energie: "⚡",
+    nano: "🧬",
+    data: "📡"
+};
 
-const startBtn    = document.getElementById("startBtn");
-const statusBox   = document.getElementById("statusBox");
+const inputLabels = {
+    scrap: "Ferraille",
+    energie: "Énergie",
+    nano: "Nano‑composants",
+    data: "Données anciennes"
+};
+
+
+// ===============================
+// VARIABLES INTERNES
+// ===============================
 
 let currentRecipe = null;
 let timer = null;
 
-// Emojis d'entrée
-const emojiMap = {
-    scrap:   "🔩",
-    energie: "⚡",
-    nano:    "🧬",
-    data:    "📡"
-};
 
-// Noms lisibles pour le coût
-const inputLabels = {
-    scrap:   "Ferraille",
-    energie: "Énergie",
-    nano:    "Nano‑composants",
-    data:    "Données anciennes"
-};
+// ===============================
+// INITIALISATION DE LA PAGE LABO
+// ===============================
 
-// Mise à jour automatique
-inputSelect.addEventListener("change", () => {
-    const value = inputSelect.value;
+export function initLabo() {
 
-    if (!value) {
-        inputEmoji.textContent  = "";
-        outputEmoji.textContent = "";
-        outputText.textContent  = "Sélectionnez une ressource.";
-        inputCost.textContent   = "Coût : -";
-        outputGain.textContent  = "Gain : -";
-        startBtn.disabled       = true;
-        currentRecipe           = null;
-        return;
+    // Sélecteurs DOM
+    const inputSelect = document.getElementById("inputSelect");
+    const inputEmoji  = document.getElementById("inputEmoji");
+    const outputEmoji = document.getElementById("outputEmoji");
+    const outputText  = document.getElementById("outputText");
+    const inputCost   = document.getElementById("inputCost");
+    const outputGain  = document.getElementById("outputGain");
+    const startBtn    = document.getElementById("startBtn");
+    const statusBox   = document.getElementById("statusBox");
+
+    // ===============================
+    // RESET COMPLET À CHAQUE ENTRÉE
+    // ===============================
+
+    if (timer) {
+        clearInterval(timer);
+        timer = null;
     }
 
-    const r = transmutations[value];
-    currentRecipe = r;
+    inputSelect.disabled = false;
+    startBtn.disabled = true;
 
-    // Emoji entrée
-    inputEmoji.textContent = emojiMap[value];
+    inputSelect.value = "";
+    inputEmoji.textContent = "";
+    outputEmoji.textContent = "";
+    outputText.textContent = "Sélectionnez une ressource.";
+    inputCost.textContent = "Coût : -";
+    outputGain.textContent = "Gain : -";
+    statusBox.textContent = "Aucune transmutation en cours.";
 
-    // Résultat
-    outputEmoji.textContent = r.emoji;
-    outputText.textContent  = r.resultat;
+    currentRecipe = null;
 
-    // Coût & gain (affichage)
-    const label = inputLabels[value] || "Ressource";
-    inputCost.textContent  = `Coût : ${r.cout.toLocaleString("fr-FR")} ${label}`;
-    outputGain.textContent = `Gain : 1 ${r.resultat}`;
 
-    startBtn.disabled = false;
-});
+    // ===============================
+    // CHOIX DE LA RESSOURCE
+    // ===============================
 
-// Lancer la transmutation
-startBtn.addEventListener("click", () => {
-    if (!currentRecipe) return;
+    inputSelect.onchange = () => {
+        const value = inputSelect.value;
 
-    const value = inputSelect.value;
-    const r = currentRecipe;
+        if (!value) {
+            inputEmoji.textContent = "";
+            outputEmoji.textContent = "";
+            outputText.textContent = "Sélectionnez une ressource.";
+            inputCost.textContent = "Coût : -";
+            outputGain.textContent = "Gain : -";
+            startBtn.disabled = true;
+            currentRecipe = null;
+            return;
+        }
 
-    // Vérification + consommation via GameData
-    const ok = spendResource(r.inputKey, r.cout);
-    if (!ok) {
-        statusBox.innerHTML = "❌ Ressources insuffisantes.";
-        return;
-    }
+        const r = transmutations[value];
+        currentRecipe = r;
 
-    let timeLeft = r.duree;
+        // Emoji entrée
+        inputEmoji.textContent = emojiMap[value];
 
-    statusBox.innerHTML = `Transmutation en cours... (${timeLeft}s restantes)`;
+        // Résultat
+        outputEmoji.textContent = r.emoji;
+        outputText.textContent = r.resultat;
 
-    startBtn.disabled   = true;
-    inputSelect.disabled = true;
+        // Coût & gain
+        const label = inputLabels[value];
+        inputCost.textContent = `Coût : ${r.cout.toLocaleString("fr-FR")} ${label}`;
+        outputGain.textContent = `Gain : 1 ${r.resultat}`;
 
-    timer = setInterval(() => {
-        timeLeft--;
+        startBtn.disabled = false;
+    };
+
+
+    // ===============================
+    // LANCER LA TRANSMUTATION
+    // ===============================
+
+    startBtn.onclick = () => {
+        if (!currentRecipe) return;
+
+        const r = currentRecipe;
+
+        // Vérification des ressources
+        const ok = spendResource(r.inputKey, r.cout);
+        if (!ok) {
+            statusBox.innerHTML = "❌ Ressources insuffisantes.";
+            return;
+        }
+
+        let timeLeft = r.duree;
+
         statusBox.innerHTML = `Transmutation en cours... (${timeLeft}s restantes)`;
 
-        if (timeLeft <= 0) {
-            clearInterval(timer);
+        startBtn.disabled = true;
+        inputSelect.disabled = true;
 
-            // Ajout du résultat dans GameData
-            addResource(r.outputKey, 1);
+        timer = setInterval(() => {
+            timeLeft--;
+            statusBox.innerHTML = `Transmutation en cours... (${timeLeft}s restantes)`;
 
-            statusBox.innerHTML = `✔️ Transmutation terminée ! Vous obtenez : <strong>${r.resultat}</strong>`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                timer = null;
 
-            startBtn.disabled    = false;
-            inputSelect.disabled = false;
-        }
-    }, 1000);
-});
+                // Ajout du résultat
+                addResource(r.outputKey, 1);
+
+                statusBox.innerHTML =
+                    `✔️ Transmutation terminée ! Vous obtenez : <strong>${r.resultat}</strong>`;
+
+                startBtn.disabled = false;
+                inputSelect.disabled = false;
+            }
+        }, 1000);
+    };
+}

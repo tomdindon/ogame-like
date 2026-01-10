@@ -2,15 +2,8 @@
 // LAYOUT.JS - GESTION GLOBALE DU HUD
 // ===============================
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (!window.DISABLE_HUD) {
-        injectHUD();
-        updateGlobalUnitHUD();
-    }
-});
-
 // 1. INJECTION DU HTML
-function injectHUD() {
+export function injectHUD() {
     // Vérifie si le HUD existe déjà pour éviter les doublons
     if (document.querySelector(".global-hud")) return;
 
@@ -24,37 +17,38 @@ function injectHUD() {
             <p>🧬 Nano : <span id="nano">0</span></p>
             <p>📡 Données : <span id="data">0</span></p>
             <p id="unit-count-display">Unités : 0 / 0</p>
-              <button class="btn-map" onclick="window.location.href='map.html'">
-            🌌 Carte Galactique
-        </button>
+
+            <button class="btn-map" onclick="location.hash='page-map'">
+                🌌 Carte Galactique
+            </button>
         </div>
     `;
 
-    // Insère la nav tout en haut du body
-    document.body.prepend(nav);
+    // 🔥 Correction : injecter le HUD dans #app, pas dans <body>
+    const app = document.getElementById("app");
+    if (app) {
+        app.prepend(nav);
+    }
 }
 
 // ===============================
-// LOGIQUE GLOBALE (Accessible partout)
+// LOGIQUE GLOBALE
 // ===============================
 
-// Calcul de la capacité du hangar
-function getUnitCapacity() {
+export function getUnitCapacity() {
     if (typeof GameData === "undefined") return 0;
     const hangarLevel = GameData.units["hangar"]?.level ?? 1;
     return hangarLevel * 50;
 }
 
-// Calcul du total des unités actuelles
-function getTotalUnits() {
+export function getTotalUnits() {
     if (typeof GameData === "undefined") return 0;
     return Object.values(GameData.units)
-        .filter(u => u.count) // On prend ceux qui ont une propriété count
+        .filter(u => u.count)
         .reduce((sum, u) => sum + u.count, 0);
 }
 
-// Mise à jour visuelle uniquement pour la partie "Unités" du HUD
-function updateGlobalUnitHUD() {
+export function updateGlobalUnitHUD() {
     const unitDisplay = document.getElementById("unit-count-display");
     if (!unitDisplay) return;
 
@@ -63,12 +57,16 @@ function updateGlobalUnitHUD() {
 
     unitDisplay.textContent = `Unités : ${total} / ${capacity}`;
 
-    // Petit effet visuel : rouge si plein, vert sinon
     if (total >= capacity) {
-        unitDisplay.style.color = "#ff4a4a"; // Rouge
+        unitDisplay.style.color = "#ff4a4a";
         unitDisplay.style.borderColor = "#ff4a4a";
     } else {
-        unitDisplay.style.color = "#7fffd4"; // Vert cyan
+        unitDisplay.style.color = "#7fffd4";
         unitDisplay.style.borderColor = "rgba(127, 255, 212, 0.3)";
     }
+}
+
+export function removeHUD() {
+    const hud = document.querySelector(".global-hud");
+    if (hud) hud.remove();
 }

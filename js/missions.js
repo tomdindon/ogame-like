@@ -344,3 +344,9 @@ window.addEventListener("load", () => {
         startGlobalTimer();
     }
 })
+
+export {
+    renderMissionsList,
+    updateMissionLogDisplay,
+    startGlobalTimer
+};

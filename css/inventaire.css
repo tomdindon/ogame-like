@@ -3,12 +3,14 @@
 ============================ */
 
 /* Fond spécifique */
-body.bg-inventory {
+#page-inventaire {
     background-image: url("../assets/Logo/salle.png");
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
+
 
 /* Titre */
 .page-title {

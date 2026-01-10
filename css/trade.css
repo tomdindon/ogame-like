@@ -2,7 +2,7 @@
    PAGE TRADE
 ============================ */
 
-body.bg-trade {
+.bg-trade {
     background-image: url("../assets/Logo/trade.png");
     background-size: cover;
     background-position: center;

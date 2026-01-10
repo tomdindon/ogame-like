@@ -1,13 +1,23 @@
 /* ============================
    RESET GLOBAL
 ============================ */
-html, body {
+html {
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Empêche les bandes noires */
+    overflow-x: hidden;
     width: 100%;
     height: 100%;
     background: black; /* Sécurité si le fond ne couvre pas */
+    transform: none !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100%; /* 🔥 Correction ici */
+    background: black;
     transform: none !important;
 }
 
@@ -17,7 +27,7 @@ html, body {
 
 /* --- ÉCRAN D’ACCUEIL --- */
 #home-screen {
-    position: relative;
+    position: fixed;
     width: 100%;
     min-height: 100vh;
 
@@ -32,7 +42,7 @@ html, body {
     align-items: center;
 
     padding-top: 10vh;
-    padding-bottom: 1vh;
+    padding-bottom: 0;
 
     color: white;
     text-align: center;

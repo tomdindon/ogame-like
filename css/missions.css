@@ -3,12 +3,14 @@
 ============================ */
 
 /* Fond spécifique */
-body.bg-missions {
+#page-missions {
     background-image: url("../assets/Logo/mission.png");
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
+
 
 /* Conteneur principal */
 #missionsList {

@@ -3,7 +3,7 @@
 ============================ */
 
 /* Fond spécifique */
-body {
+.bg-labo {
     background-image: url("../assets/Logo/labo.png");
     background-size: cover;
     background-position: center;
@@ -12,6 +12,7 @@ body {
     color: #eee;
     padding: 20px;
 }
+
 
 /* Titre */
 h1 {
