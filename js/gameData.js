@@ -85,7 +85,17 @@ export const buildings = [
         cost: { scrap: 180, energy: 80 },
         imageBase: "assets/batiments/atelier"
         // Pas de production
+    },
+    {
+    id: "hangar",
+    name: "Hangar",
+    maxLevel: 10,
+    description: "Augmente la capacité maximale de vos unités.",
+    cost: { scrap: 300, energy: 150 },
+    capacityPerLevel: 10,   // ⭐ 10 unités par niveau
+    imageBase: "assets/batiments/hangar"
     }
+
 ];
 
 // ===============================

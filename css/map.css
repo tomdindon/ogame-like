@@ -2,18 +2,16 @@
    PAGE CARTE (isolation totale)
 ================================ */
 
-.map-page {
-    margin: 0;
-    padding: 0;
+#page-map {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: #000; /* Fond neutre */
+    background: #000;
     position: relative;
 }
 
 /* Empêche le style global du jeu d'affecter la carte */
-.map-page * {
+#page-map * {
     box-sizing: border-box;
     font-family: inherit;
 }
@@ -37,13 +35,26 @@
     cursor: grabbing;
 }
 
+/* ======================================
+   CONTENU DE LA MAP (carte + fog + systèmes)
+====================================== */
+
+#map-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6144px;
+    height: 4096px;
+    transform-origin: top left;
+}
+
 /* ================================
    CARTE GALACTIQUE
 ================================ */
 
 #map {
-    width: 6144px;
-    height: 4096px;
+    width: 100%;
+    height: 100%;
     background-image: url("assets/map/map.png");
     background-size: 100% 100%;
     background-position: center;
@@ -51,14 +62,21 @@
     top: 0;
     left: 0;
     cursor: inherit;
-    z-index: 2;
-    
-    transform-origin: top left;
+    z-index: 1; /* fond */
 }
 
 /* ================================
    SYSTÈMES STELLAIRES
 ================================ */
+
+#systems-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6144px;
+    height: 4096px;
+    z-index: 5; /* AU-DESSUS du fog */
+}
 
 .system {
     width: 28px;
@@ -73,7 +91,7 @@
         0 0 20px #4ab3ff,
         0 0 40px #4ab3ff;
     transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 5;
+    z-index: 6; /* AU-DESSUS de tout le fog */
 }
 
 .system:hover {
@@ -115,23 +133,9 @@
     opacity: 1;
 }
 
-.fog-cell {
-    position: absolute;
-    width: 128px;
-    height: 128px;
-    background: rgba(0, 0, 0, 0.95);
-    transition: background 0.3s, opacity 0.5s;
-    pointer-events: none;
-    z-index: 10;
-}
-
-.fog-exploring {
-    background: rgba(255, 0, 0, 0.7);
-}
-
-.fog-revealed {
-    opacity: 0;
-}
+/* ================================
+   FOG OF WAR
+================================ */
 
 #fog-layer {
     position: absolute;
@@ -139,6 +143,30 @@
     left: 0;
     width: 6144px;
     height: 4096px;
-    z-index: 9999; /* AU-DESSUS DE TOUT */
+    z-index: 3; /* sous les systèmes, au-dessus de la carte */
     pointer-events: none;
 }
+
+.fog-cell {
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    background: rgba(0, 0, 0, 0.95);
+    transition: background 0.3s, opacity 0.5s;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.fog-exploring {
+    background: rgba(255, 0, 0, 0.7);
+    z-index: 4; /* case rouge au-dessus du fog */
+}
+
+.fog-revealed {
+    display: none !important;
+}
+
+.fog-cell {
+    background: rgba(255, 0, 0, 0.5) !important;
+}
+

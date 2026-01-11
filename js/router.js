@@ -1,5 +1,5 @@
 // ===============================
-// ROUTER SPA
+// ROUTER SPA — VERSION FINALE
 // ===============================
 
 import { injectHUD, updateGlobalUnitHUD, removeHUD } from "./layout.js";
@@ -13,6 +13,7 @@ import { buildings, GameData } from "./gameData.js";
 import { initLabo } from "./labo.js";
 import { initTrade } from "./trade.js";
 import { initRecherche } from "./recherche.js";
+import { initMap, resetMapInitialization } from "./map.js";
 
 
 // ===============================
@@ -41,19 +42,19 @@ function updateBackground(pageId) {
         "page-missions": "bg-missions",
         "page-labo": "bg-labo",
         "page-trade": "bg-trade",
-        "page-recherche": "bg-recherche"
+        "page-recherche": "bg-recherche",
+        "page-map": "bg-map"
     };
 
-    // Retirer tous les fonds connus
     document.body.classList.remove(
         "bg-profil",
         "bg-missions",
         "bg-labo",
         "bg-trade",
-        "bg-recherche"
+        "bg-recherche",
+        "bg-map"
     );
 
-    // Appliquer celui de la page
     if (backgrounds[pageId]) {
         document.body.classList.add(backgrounds[pageId]);
     }
@@ -72,18 +73,23 @@ export function showPage(id) {
     // 2. Cacher toutes les pages
     document.querySelectorAll(".spa-page").forEach(p => p.style.display = "none");
 
-    // 3. Afficher la page demandée
+    // 3. Réinitialiser la Map si on QUITTE la page Map
+    if (id !== "page-map") {
+        resetMapInitialization();
+    }
+
+    // 4. Afficher la page demandée
     const page = document.getElementById(id);
     if (page) page.style.display = "block";
     else console.warn("Page introuvable :", id);
 
-    // 4. Classe spéciale pour la connexion
+    // 5. Classe spéciale pour la connexion
     document.body.classList.toggle("show-connexion", id === "page-connexion");
 
-    // 5. Fonds dynamiques
+    // 6. Fonds dynamiques
     updateBackground(id);
 
-    // 6. Initialisations spécifiques
+    // 7. Initialisations spécifiques
     switch (id) {
 
         case "page-batiments":
@@ -119,15 +125,24 @@ export function showPage(id) {
         case "page-recherche":
             initRecherche();
             break;
+
+        case "page-map":
+            // ⭐ Patch critique : attendre que la page soit visible AVANT d'initialiser la Map
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    initMap();
+                });
+            });
+            break;
     }
 
-    // 7. Injecter le HUD si nécessaire
+    // 8. Injecter le HUD si nécessaire
     if (pagesAvecHUD.includes(id)) {
         injectHUD();
         updateGlobalUnitHUD();
     }
 
-    // 8. Bouton Retour
+    // 9. Bouton Retour
     updateBackButtonVisibility(id);
 }
 

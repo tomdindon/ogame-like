@@ -1,3 +1,5 @@
+import { GameData } from "./gameData.js";
+
 // ===============================
 // LAYOUT.JS - GESTION GLOBALE DU HUD
 // ===============================
@@ -18,16 +20,26 @@ export function injectHUD() {
             <p>📡 Données : <span id="data">0</span></p>
             <p id="unit-count-display">Unités : 0 / 0</p>
 
-            <button class="btn-map" onclick="location.hash='page-map'">
+            <button class="btn-map" id="btn-map">
                 🌌 Carte Galactique
             </button>
         </div>
     `;
 
-    // 🔥 Correction : injecter le HUD dans #app, pas dans <body>
+    // Injecter dans #app
     const app = document.getElementById("app");
     if (app) {
         app.prepend(nav);
+    }
+
+    // ⭐ Correction : empêcher le reload si on est déjà sur la Map
+    const btnMap = document.getElementById("btn-map");
+    if (btnMap) {
+        btnMap.addEventListener("click", () => {
+            if (location.hash !== "#page-map") {
+                location.hash = "page-map";
+            }
+        });
     }
 }
 
@@ -36,15 +48,13 @@ export function injectHUD() {
 // ===============================
 
 export function getUnitCapacity() {
-    if (typeof GameData === "undefined") return 0;
     const hangarLevel = GameData.units["hangar"]?.level ?? 1;
     return hangarLevel * 50;
 }
 
 export function getTotalUnits() {
-    if (typeof GameData === "undefined") return 0;
     return Object.values(GameData.units)
-        .filter(u => u.count)
+        .filter(u => typeof u.count === "number")
         .reduce((sum, u) => sum + u.count, 0);
 }
 
