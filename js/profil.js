@@ -1,4 +1,10 @@
 // ===============================
+// PROFIL.JS
+// ===============================
+
+import { GameData } from "./gameData.js";
+
+// ===============================
 // CONFIGURATION DES RANGS
 // ===============================
 
@@ -30,7 +36,7 @@ export const rankIcons = [
 ];
 
 // ===============================
-// RANG
+// UTILITAIRES
 // ===============================
 
 function getRankFromXP(xpValue) {
@@ -40,6 +46,16 @@ function getRankFromXP(xpValue) {
     }
     return index;
 }
+
+function safeGetElement(id) {
+    const el = document.getElementById(id);
+    if (!el) console.warn(`⚠️ Élément introuvable : ${id}`);
+    return el;
+}
+
+// ===============================
+// MISE À JOUR DU RANG
+// ===============================
 
 function updateRankProgress(rankIndex, xp) {
     const minXP = rankThresholds[rankIndex];
@@ -51,32 +67,46 @@ function updateRankProgress(rankIndex, xp) {
         percent = Math.floor(((xp - minXP) / (maxXP - minXP)) * 100);
     }
 
-    document.getElementById("rank-progress-text").textContent = percent + "%";
-    document.getElementById("rank-progress").style.width = percent + "%";
+    const progressText = safeGetElement("rank-progress-text");
+    const progressBar = safeGetElement("rank-progress");
+
+    if (progressText) progressText.textContent = percent + "%";
+    if (progressBar) progressBar.style.width = percent + "%";
 }
 
 function updateRankDisplay(GameData) {
     const xp = GameData.xp || 0;
     const rankIndex = getRankFromXP(xp);
 
-    document.getElementById("rank-current").textContent = rankNames[rankIndex];
-    document.getElementById("rank-prev").textContent =
-        rankIndex > 0 ? "Rang précédent : " + rankNames[rankIndex - 1] : "Aucun rang précédent";
-    document.getElementById("rank-next").textContent =
-        rankIndex < rankNames.length - 1 ? "Rang suivant : " + rankNames[rankIndex + 1] : "Rang maximum atteint";
+    const rankCurrent = safeGetElement("rank-current");
+    const rankPrev = safeGetElement("rank-prev");
+    const rankNext = safeGetElement("rank-next");
+    const rankIcon = safeGetElement("rank-icon");
 
-    document.getElementById("rank-icon").src = "assets/ranks/" + rankIcons[rankIndex];
+    if (rankCurrent) rankCurrent.textContent = rankNames[rankIndex];
+    
+    if (rankPrev) {
+        rankPrev.textContent = rankIndex > 0 
+            ? "Rang précédent : " + rankNames[rankIndex - 1] 
+            : "Aucun rang précédent";
+    }
+    
+    if (rankNext) {
+        rankNext.textContent = rankIndex < rankNames.length - 1 
+            ? "Rang suivant : " + rankNames[rankIndex + 1] 
+            : "Rang maximum atteint";
+    }
+
+    if (rankIcon) rankIcon.src = "assets/ranks/" + rankIcons[rankIndex];
 
     updateRankProgress(rankIndex, xp);
 }
 
 // ===============================
-// UNITÉS
+// MISE À JOUR DES UNITÉS
 // ===============================
 
 function updateProfileUnits(GameData) {
-    const U = GameData.units;
-
     const units = [
         { id: "drone_recuperateur", text: "drone-level", bar: "drone-fill" },
         { id: "fregate", text: "frigate-level", bar: "frigate-fill" },
@@ -89,20 +119,27 @@ function updateProfileUnits(GameData) {
     let total = 0;
 
     units.forEach(u => {
-        const level = U[u.id]?.level ?? 1;
+        const level = GameData.units[u.id]?.level || 1;
         total += level;
 
-        document.getElementById(u.text).textContent = `${level} / 10`;
-        document.getElementById(u.bar).style.width = `${(level / 10) * 100}%`;
+        const textEl = safeGetElement(u.text);
+        const barEl = safeGetElement(u.bar);
+
+        if (textEl) textEl.textContent = `${level} / 10`;
+        if (barEl) barEl.style.width = `${(level / 10) * 100}%`;
     });
 
     const percent = Math.floor((total / (units.length * 10)) * 100);
-    document.getElementById("troops-total-text").textContent = percent + "%";
-    document.getElementById("troops-total-fill").style.width = percent + "%";
+    
+    const totalText = safeGetElement("troops-total-text");
+    const totalBar = safeGetElement("troops-total-fill");
+
+    if (totalText) totalText.textContent = percent + "%";
+    if (totalBar) totalBar.style.width = percent + "%";
 }
 
 // ===============================
-// BÂTIMENTS
+// MISE À JOUR DES BÂTIMENTS
 // ===============================
 
 function updateBuildingBars(GameData) {
@@ -115,9 +152,13 @@ function updateBuildingBars(GameData) {
     ];
 
     buildingList.forEach(b => {
-        const level = GameData.buildings[b.id].level;
-        document.getElementById(b.text).textContent = `${level} / 10`;
-        document.getElementById(b.bar).style.width = `${(level / 10) * 100}%`;
+        const level = GameData.buildings[b.id]?.level || 1;
+        
+        const textEl = safeGetElement(b.text);
+        const barEl = safeGetElement(b.bar);
+
+        if (textEl) textEl.textContent = `${level} / 10`;
+        if (barEl) barEl.style.width = `${(level / 10) * 100}%`;
     });
 }
 
@@ -131,12 +172,17 @@ function updateBuildingsTotal(GameData) {
     ];
 
     let total = 0;
-    ids.forEach(id => total += GameData.buildings[id].level);
+    ids.forEach(id => {
+        total += GameData.buildings[id]?.level || 1;
+    });
 
     const percent = Math.floor((total / (ids.length * 10)) * 100);
 
-    document.getElementById("buildings-total-text").textContent = percent + "%";
-    document.getElementById("buildings-total-fill").style.width = percent + "%";
+    const totalText = safeGetElement("buildings-total-text");
+    const totalBar = safeGetElement("buildings-total-fill");
+
+    if (totalText) totalText.textContent = percent + "%";
+    if (totalBar) totalBar.style.width = percent + "%";
 }
 
 function updateBuildingNames(buildings) {
@@ -150,7 +196,11 @@ function updateBuildingNames(buildings) {
 
     list.forEach(b => {
         const data = buildings.find(x => x.id === b.id);
-        if (data) document.getElementById(b.nameId).textContent = data.name;
+        const nameEl = safeGetElement(b.nameId);
+        
+        if (data && nameEl) {
+            nameEl.textContent = data.name;
+        }
     });
 }
 
@@ -159,6 +209,8 @@ function updateBuildingNames(buildings) {
 // ===============================
 
 export function updateProfil(GameData, buildings) {
+    console.log("👤 Mise à jour du profil");
+    
     updateRankDisplay(GameData);
     updateProfileUnits(GameData);
     updateBuildingBars(GameData);

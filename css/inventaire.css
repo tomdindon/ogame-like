@@ -1,66 +1,95 @@
-/* ============================
-   PAGE INVENTAIRE
-============================ */
+/* ============================================
+   INVENTAIRE.CSS
+   ============================================ */
 
-/* Fond spécifique */
 #page-inventaire {
-    background-image: url("../assets/Logo/salle.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh;
+    padding: 2rem;
 }
 
-
-/* Titre */
-.page-title {
-    text-align: center;
-    color: #7fffd4;
-    margin-top: 20px;
-}
-
-/* Grille des ressources */
 .inventory-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
-    padding: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
 }
 
-
-/* Carte ressource */
 .inventory-item {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 20px;
+    padding: 2rem 1.5rem;
     text-align: center;
-    backdrop-filter: blur(4px);
-    transition: 0.25s;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.inventory-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.inventory-item:hover::before {
+    opacity: 1;
 }
 
 .inventory-item:hover {
-    transform: translateY(-4px);
-    background: rgba(0, 0, 0, 0.45);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    border-color: rgba(102, 126, 234, 0.4);
 }
 
-/* Emoji */
 .inventory-item .emoji {
-    font-size: 40px;
+    font-size: 4rem;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
 }
 
-/* Nom de ressource */
 .item-name {
-    font-size: 1.2em;
-    color: #7fffd4;
-    margin: 5px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    color: #667eea;
+    position: relative;
+    z-index: 1;
 }
 
-/* Valeur */
 .item-value {
-    font-size: 1.4em;
-    color: #ffffff;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #764ba2;
+    margin: 0.5rem 0 0 0;
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .inventory-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+
+    .inventory-item {
+        padding: 1.5rem 1rem;
+    }
+
+    .inventory-item .emoji {
+        font-size: 3rem;
+    }
+
+    .item-value {
+        font-size: 1.5rem;
+    }
 }

@@ -1,197 +1,89 @@
-/* ============================
-   LABORATOIRE DE TRANSMUTATION
-============================ */
+/* ============================================
+   LABO.CSS
+   ============================================ */
 
-/* Fond spécifique */
-.bg-labo {
-    background-image: url("../assets/Logo/labo.png");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    font-family: Arial, sans-serif;
-    color: #eee;
-    padding: 20px;
+#page-labo {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-
-/* Titre */
-h1 {
+#page-labo h1 {
     text-align: center;
-    color: #ff7a18;
-    text-shadow: 0 0 10px rgba(255, 122, 24, 0.6);
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.subtitle {
-    text-align: center;
-    color: #ccc;
-    margin-bottom: 30px;
-}
-
-/* Grille 2 colonnes */
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 25px;
+    gap: 2rem;
+    margin: 2rem 0;
 }
 
-/* Colonnes */
-.col {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 15px;
-    backdrop-filter: blur(3px);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 15px;
-}
-
-/* Titres centrés */
 .col h3 {
-    color: #ff7a18;
-    margin: 0;
-    text-align: center;
+    color: #667eea;
+    margin-bottom: 1rem;
 }
 
-/* Bloc contenant select + emoji */
 .col-content {
-    display: flex;
-    flex-direction: column; /* emoji SOUS le select */
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-}
-
-/* Select centré */
-select {
-    padding: 6px;
-    font-size: 16px;
-    background: #222;
-    color: #eee;
-    border: 1px solid #555;
-    border-radius: 6px;
-    margin: 0 auto;
-    min-width: 80px;
-    text-align: center;
-}
-
-/* Emoji affiché sous le select */
-.emoji-display {
-    font-size: 7rem;
-    line-height: 1;
-    text-align: center;
-}
-
-/* Bouton centré */
-.center {
-    text-align: center;
-}
-
-button {
-    padding: 12px;
-    font-size: 18px;
-    width: 20%;
-    background: #ff7a18;
-    border: none;
-    border-radius: 8px;
-    color: #111;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-button:disabled {
-    background: #444;
-    cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-    background: #ffa64d;
-}
-
-/* Zone de statut */
-.status-box {
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 20px;
-    backdrop-filter: blur(4px);
-    min-height: 40px;
-}
-#outputDisplay {
+    padding: 2rem;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 1rem;
 }
 
-#outputEmoji {
-    font-size: 7rem;
-    line-height: 1;
-    text-align: center;
+.emoji-display {
+    font-size: 4rem;
+    margin: 1rem 0;
 }
+
 .result-name {
     font-size: 1.2rem;
-    font-weight: bold;
-    color: #eee;
-    padding: 6px 12px;
-    background: #222;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    text-align: center;
-    min-width: 160px;
-    display: inline-block; /* indispensable */
-}
-
-.cost-gain {
-    display: flex;
-    justify-content: center;
-    gap: 80px;
-    margin-top: 10px;
+    font-weight: 600;
+    color: #764ba2;
 }
 
 .cost-item {
-    font-size: 1.1rem;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 8px 14px;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
-    min-width: 180px;
+    font-weight: 600;
+}
+
+.status-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
     text-align: center;
-}
-
-/* Centrage du HUD uniquement sur la page labo */
-.bg-labo .global-hud .resources {
+    font-size: 1.1rem;
+    min-height: 80px;
     display: flex;
-    flex-direction: row;
-    justify-content: center; /* 🔥 centre horizontalement */
     align-items: center;
-    gap: 25px;
-    white-space: nowrap;
+    justify-content: center;
+}
+
+#inputSelect {
     width: 100%;
-}
-/* Style spécifique du bouton Carte Galactique sur la page labo */
-.bg-labo .btn-map {
-    display: inline-block;
-    width: auto;
-    padding: 10px 18px;
-    background: rgba(0,0,0,0.7);
-    color: white;
-    border: 2px solid #4ab3ff;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.2s;
-    white-space: nowrap;
+    max-width: 300px;
 }
 
-.bg-labo .btn-map:hover {
-    background: rgba(0,0,0,0.9);
-    box-shadow: 0 0 10px #4ab3ff;
-}
+@media (max-width: 768px) {
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
 
+    .emoji-display {
+        font-size: 3rem;
+    }
+}

@@ -1,5 +1,5 @@
 // ===============================
-// ROUTER SPA — VERSION FINALE
+// ROUTER SPA - VERSION CORRIGÉE
 // ===============================
 
 import { injectHUD, updateGlobalUnitHUD, removeHUD } from "./layout.js";
@@ -15,82 +15,89 @@ import { initTrade } from "./trade.js";
 import { initRecherche } from "./recherche.js";
 import { initMap, resetMapInitialization } from "./map.js";
 
-
-// ===============================
-// PAGES AVEC HUD
-// ===============================
-
+// ✅ AJOUTER page-dashboard ICI
 const pagesAvecHUD = [
+    "page-dashboard",      // ⭐ AJOUT
     "page-batiments",
     "page-unites",
     "page-labo",
     "page-trade",
     "page-recherche",
-    "page-missions"
+    "page-missions",
+    "page-inventaire",     // ⭐ Ajoute aussi inventaire si tu veux
+    "page-profil"          // ⭐ Et profil si tu veux
 ];
 
-
 // ===============================
-// GESTION DES FONDS DYNAMIQUES
+// INITIALISATION DU DASHBOARD
 // ===============================
 
-function updateBackground(pageId) {
+function initDashboard() {
+    console.log("📊 Initialisation du Dashboard");
 
-    const backgrounds = {
-        "page-unites": "bg-profil",
-        "page-profil": "bg-profil",
-        "page-missions": "bg-missions",
-        "page-labo": "bg-labo",
-        "page-trade": "bg-trade",
-        "page-recherche": "bg-recherche",
-        "page-map": "bg-map"
-    };
-
-    document.body.classList.remove(
-        "bg-profil",
-        "bg-missions",
-        "bg-labo",
-        "bg-trade",
-        "bg-recherche",
-        "bg-map"
-    );
-
-    if (backgrounds[pageId]) {
-        document.body.classList.add(backgrounds[pageId]);
+    const cards = document.querySelectorAll(".dashboard-card");
+    
+    if (cards.length === 0) {
+        console.warn("⚠️ Aucune carte dashboard trouvée");
+        return;
     }
-}
 
+    cards.forEach(card => {
+        const targetPage = card.dataset.page;
+        
+        if (!targetPage) {
+            console.warn("⚠️ Carte sans data-page :", card);
+            return;
+        }
+
+        card.style.cursor = "pointer";
+
+        const newCard = card.cloneNode(true);
+        card.parentNode.replaceChild(newCard, card);
+
+        newCard.addEventListener("click", () => {
+            console.log("🎯 Navigation vers :", targetPage);
+            location.hash = targetPage;
+        });
+    });
+
+    console.log("✅", cards.length, "cartes dashboard initialisées");
+}
 
 // ===============================
 // AFFICHAGE DES PAGES
 // ===============================
 
 export function showPage(id) {
+    console.log("📄 Affichage de la page :", id);
 
     // 1. Retirer le HUD
     removeHUD();
 
     // 2. Cacher toutes les pages
-    document.querySelectorAll(".spa-page").forEach(p => p.style.display = "none");
+    document.querySelectorAll(".spa-page").forEach(p => {
+        p.classList.remove("active");
+    });
 
-    // 3. Réinitialiser la Map si on QUITTE la page Map
+    // 3. Réinitialiser la Map si on quitte
     if (id !== "page-map") {
         resetMapInitialization();
     }
 
     // 4. Afficher la page demandée
     const page = document.getElementById(id);
-    if (page) page.style.display = "block";
-    else console.warn("Page introuvable :", id);
+    if (!page) {
+        console.error("❌ Page introuvable :", id);
+        return;
+    }
 
-    // 5. Classe spéciale pour la connexion
-    document.body.classList.toggle("show-connexion", id === "page-connexion");
+    page.classList.add("active");
 
-    // 6. Fonds dynamiques
-    updateBackground(id);
-
-    // 7. Initialisations spécifiques
+    // 5. Initialisations spécifiques
     switch (id) {
+        case "page-dashboard":
+            initDashboard();
+            break;
 
         case "page-batiments":
             initBatiments();
@@ -127,7 +134,6 @@ export function showPage(id) {
             break;
 
         case "page-map":
-            // ⭐ Patch critique : attendre que la page soit visible AVANT d'initialiser la Map
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
                     initMap();
@@ -136,23 +142,26 @@ export function showPage(id) {
             break;
     }
 
-    // 8. Injecter le HUD si nécessaire
+    // 6. Injecter le HUD si nécessaire
     if (pagesAvecHUD.includes(id)) {
         injectHUD();
         updateGlobalUnitHUD();
+        console.log("✅ HUD injecté pour :", id);
     }
 
-    // 9. Bouton Retour
+    // 7. Bouton Retour
     updateBackButtonVisibility(id);
 }
-
 
 // ===============================
 // ROUTAGE PAR HASH
 // ===============================
 
 function resolvePage() {
-    const page = location.hash.replace("#", "") || "page-connexion";
+    const hash = location.hash.replace("#", "");
+    const page = hash || "page-dashboard";
+    
+    console.log("🔍 Hash détecté :", hash, "→ Page :", page);
     showPage(page);
 }
 

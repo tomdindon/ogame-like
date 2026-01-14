@@ -1,24 +1,23 @@
 // ===============================
-// DONNÉES GLOBALES DU JEU (gameData.js)
+// DONNÉES GLOBALES DU JEU
 // ===============================
 
 export let GameData = {
-    // --- DEV MODE ---
-    devMultiplier: 1, 
-    // ----------------
-
+    devMultiplier: 1,
+    
     resources: { 
-    scrap: 0, 
-    energy: 0, 
-    nano: 0, 
-    data: 0,
-    acier: 0,
-    nanites: 0,
-    module: 0,
-    fragment: 0
-},
+        scrap: 0, 
+        energy: 0, 
+        nano: 0, 
+        data: 0,
+        acier: 0,
+        nanites: 0,
+        module: 0,
+        fragment: 0
+    },
 
     xp: 0,
+    
     buildings: {
         extracteur_ferraille: { level: 1 },
         reacteur_instable: { level: 1 },
@@ -26,20 +25,21 @@ export let GameData = {
         archives_fracturees: { level: 1 },
         atelier_reparation: { level: 1 }
     },
+    
     units: {
-        hangar:              { level: 1, count: 0 },
-        drone_recuperateur:  { level: 1, count: 0 },
-        fregate:             { level: 1, count: 0 },
-        sentinelle:          { level: 1, count: 0 },
-        cargo:               { level: 1, count: 0 },
-        chasseur:            { level: 1, count: 0 }
+        hangar: { level: 1, count: 0 },
+        drone_recuperateur: { level: 1, count: 0 },
+        fregate: { level: 1, count: 0 },
+        sentinelle: { level: 1, count: 0 },
+        cargo: { level: 1, count: 0 },
+        chasseur: { level: 1, count: 0 }
     }
 };
 
 // ===============================
 // DÉFINITION DES BÂTIMENTS
 // ===============================
-// J'ai ajouté "imageBase" ici 👇
+
 export const buildings = [
     { 
         id: "extracteur_ferraille", 
@@ -54,7 +54,7 @@ export const buildings = [
         id: "reacteur_instable", 
         name: "Réacteur instable", 
         maxLevel: 10,
-         description: "Fournit une énergie instable mais puissante.", 
+        description: "Fournit une énergie instable mais puissante.", 
         cost: { scrap: 300, energy: 120 }, 
         production: { resource: "energy", base: 3 },
         imageBase: "assets/batiments/reacteur_instable"
@@ -63,7 +63,7 @@ export const buildings = [
         id: "extracteur_nanocomposants", 
         name: "Extracteur de nano", 
         maxLevel: 10, 
-         description: "Permet de récupérer des nano‑composantsrares.",
+        description: "Permet de récupérer des nano‑composants rares.",
         cost: { scrap: 250, energy: 200 }, 
         production: { resource: "nano", base: 1 },
         imageBase: "assets/batiments/extracteur_nanocomposants"
@@ -81,26 +81,17 @@ export const buildings = [
         id: "atelier_reparation", 
         name: "Atelier de réparation", 
         maxLevel: 10, 
-         description: "Répare les unités endommagées.",
+        description: "Répare les unités endommagées.",
         cost: { scrap: 180, energy: 80 },
         imageBase: "assets/batiments/atelier"
-        // Pas de production
-    },
-    {
-    id: "hangar",
-    name: "Hangar",
-    maxLevel: 10,
-    description: "Augmente la capacité maximale de vos unités.",
-    cost: { scrap: 300, energy: 150 },
-    capacityPerLevel: 10,   // ⭐ 10 unités par niveau
-    imageBase: "assets/batiments/hangar"
     }
-
+    
 ];
 
 // ===============================
-// CHARGEMENT & INIT
+// CHARGEMENT & SAUVEGARDE
 // ===============================
+
 const saved = localStorage.getItem("CosmicEmpiresSave");
 if (saved) {
     try {
@@ -113,7 +104,9 @@ if (saved) {
             buildings: { ...GameData.buildings, ...(parsed.buildings || {}) }, 
             units: { ...GameData.units, ...(parsed.units || {}) } 
         };
-    } catch (e) { console.warn("Sauvegarde corrompue", e); }
+    } catch (e) { 
+        console.warn("Sauvegarde corrompue", e); 
+    }
 }
 
 // Init Hangar
@@ -125,19 +118,18 @@ export function saveGame() {
 }
 
 // ===============================
-// MISE À JOUR DU HUD (Ressources)
+// HUD UPDATE
 // ===============================
+
 function updateHUD() {
-    // Si layout.js est présent, il s'en occupe via updateGlobalHUD s'il contient les IDs
-    // Sinon on met à jour manuellement si les IDs existent sur la page
     const ids = ["scrap", "energy", "nano", "data"];
     ids.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = Math.floor(GameData.resources[id]);
     });
     
-    if (typeof updateGlobalUnitHUD === "function") {
-        updateGlobalUnitHUD();
+    if (typeof window.updateGlobalUnitHUD === "function") {
+        window.updateGlobalUnitHUD();
     }
 }
 
@@ -145,11 +137,10 @@ export function addResource(type, amount) {
     if (GameData.resources[type] !== undefined) {
         GameData.resources[type] += amount;
         updateHUD();
-        updateInventory(); // 🔥 AJOUT ICI
+        updateInventory();
         saveGame();
     }
 }
-
 
 export function spendResource(type, amount) {
     if (GameData.resources[type] >= amount) {
@@ -162,32 +153,27 @@ export function spendResource(type, amount) {
 }
 
 export function updateInventory() {
-    const invScrap  = document.getElementById("invScrap");
-    const invEnergy = document.getElementById("invEnergy");
-    const invNano   = document.getElementById("invNano");
-    const invData   = document.getElementById("invData");
+    const mapping = {
+        invScrap: 'scrap',
+        invEnergy: 'energy',
+        invNano: 'nano',
+        invData: 'data',
+        invAcier: 'acier',
+        invNanites: 'nanites',
+        invModule: 'module',
+        invFragment: 'fragment'
+    };
 
-    const invAcier    = document.getElementById("invAcier");
-    const invNanites  = document.getElementById("invNanites");
-    const invModule   = document.getElementById("invModule");
-    const invFragment = document.getElementById("invFragment");
-
-    if (invScrap)     invScrap.textContent     = Math.floor(GameData.resources.scrap);
-    if (invEnergy)    invEnergy.textContent    = Math.floor(GameData.resources.energy);
-    if (invNano)      invNano.textContent      = Math.floor(GameData.resources.nano);
-    if (invData)      invData.textContent      = Math.floor(GameData.resources.data);
-
-    if (invAcier)     invAcier.textContent     = Math.floor(GameData.resources.acier);
-    if (invNanites)   invNanites.textContent   = Math.floor(GameData.resources.nanites);
-    if (invModule)    invModule.textContent    = Math.floor(GameData.resources.module);
-    if (invFragment)  invFragment.textContent  = Math.floor(GameData.resources.fragment);
+    Object.entries(mapping).forEach(([id, resource]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = Math.floor(GameData.resources[resource]);
+    });
 }
-
-
 
 // ===============================
 // BOUCLE DE JEU
 // ===============================
+
 setInterval(() => {
     const multiplier = GameData.devMultiplier || 1;
     buildings.forEach(b => {

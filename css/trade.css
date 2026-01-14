@@ -1,121 +1,133 @@
-/* ============================
-   PAGE TRADE
-============================ */
+/* ============================================
+   TRADE.CSS
+   ============================================ */
 
-.bg-trade {
-    background-image: url("../assets/Logo/trade.png");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    font-family: Arial, sans-serif;
-    color: #eee;
-    padding: 20px;
+#page-trade {
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
-.trade-title {
-    text-align: center;
-    color: #7fffd4;
-    margin-top: 10px;
-    text-shadow: 0 0 10px rgba(127,255,212,0.4);
-}
-
-.trade-subtitle {
-    text-align: center;
-    color: #d0d4d8;
-    margin-bottom: 30px;
-}
-
-/* GRID PRINCIPALE : 1 colonne */
 .trade-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 25px;
-    width: 90%;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
 }
 
-/* Ligne 1 : Bouclier centré */
 .trade-shield {
     text-align: center;
-    margin-top: 20px; 
+    margin-bottom: 2rem;
 }
 
 .shield-emoji {
-    font-size: 140px;
-    text-shadow: 0 0 20px rgba(127,255,212,0.4);
+    font-size: 5rem;
+    animation: pulse 2s infinite;
 }
 
-/* Lignes 2 & 3 : 8 ressources en 2 lignes de 4 */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
 .trade-resources {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
 }
 
-/* Carte ressource */
-.resource-card {
-    background: rgba(0,0,0,0.45);
-    border: 1px solid rgba(255,255,255,0.15);
-    padding: 15px;
-    border-radius: 10px;
+.resource-trade {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
     text-align: center;
-    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
 }
 
-.resource-card .emoji {
-    font-size: 32px;
-    margin-bottom: 8px;
+.resource-trade:hover {
+    border-color: rgba(102, 126, 234, 0.4);
+    transform: translateY(-2px);
 }
 
-.resource-controls {
+.resource-trade.selected {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.15);
+}
+
+.resource-emoji {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.resource-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #667eea;
+}
+
+.resource-amount {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.trade-input {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
 }
 
-.resource-controls button {
-    padding: 6px 10px;
-    background: rgba(127,255,212,0.25);
-    border: 1px solid rgba(127,255,212,0.4);
-    color: #7fffd4;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.25s;
+.trade-input button {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    font-size: 1.2rem;
 }
 
-.resource-controls button:hover {
-    background: rgba(127,255,212,0.4);
-}
-
-/* Ligne 4 : Résultat */
-.trade-result {
-    background: rgba(0,0,0,0.45);
-    border: 1px solid rgba(255,255,255,0.15);
-    padding: 20px;
-    border-radius: 10px;
+.trade-input input {
+    width: 60px;
     text-align: center;
-    backdrop-filter: blur(4px);
+    padding: 0.5rem;
+}
+
+.trade-result {
+    margin-top: 2rem;
+    text-align: center;
 }
 
 .shield-time {
-    margin-top: 10px;
-    font-size: 1.3em;
-    color: #7fffd4;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #764ba2;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(118, 75, 162, 0.1);
+    border-radius: 8px;
 }
 
 .trade-confirm {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: rgba(127,255,212,0.25);
-    border: 1px solid rgba(127,255,212,0.4);
-    color: #7fffd4;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.25s;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
 }
 
-.trade-confirm:hover {
-    background: rgba(127,255,212,0.4);
-    transform: translateY(-2px);
+@media (max-width: 768px) {
+    .trade-resources {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .shield-emoji {
+        font-size: 4rem;
+    }
 }

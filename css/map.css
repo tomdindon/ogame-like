@@ -1,172 +1,105 @@
-/* ================================
-   PAGE CARTE (isolation totale)
-================================ */
+/* ============================================
+   MAP.CSS
+   ============================================ */
 
 #page-map {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: #000;
+    padding: 0;
     position: relative;
+    overflow: hidden;
 }
-
-/* Empêche le style global du jeu d'affecter la carte */
-#page-map * {
-    box-sizing: border-box;
-    font-family: inherit;
-}
-
-/* ================================
-   CONTENEUR (CAMÉRA)
-================================ */
 
 #map-container {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
+    position: relative;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1e 100%);
     overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: grab;
-    z-index: 1;
 }
-
-#map-container.dragging {
-    cursor: grabbing;
-}
-
-/* ======================================
-   CONTENU DE LA MAP (carte + fog + systèmes)
-====================================== */
 
 #map-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 6144px;
-    height: 4096px;
-    transform-origin: top left;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
-
-/* ================================
-   CARTE GALACTIQUE
-================================ */
 
 #map {
     width: 100%;
     height: 100%;
-    background-image: url("assets/map/map.png");
-    background-size: 100% 100%;
-    background-position: center;
     position: absolute;
     top: 0;
     left: 0;
-    cursor: inherit;
-    z-index: 1; /* fond */
 }
-
-/* ================================
-   SYSTÈMES STELLAIRES
-================================ */
-
-#systems-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 6144px;
-    height: 4096px;
-    z-index: 5; /* AU-DESSUS du fog */
-}
-
-.system {
-    width: 28px;
-    height: 28px;
-    background: radial-gradient(circle, #ffffff, #4ab3ff 60%, #003b66);
-    border-radius: 50%;
-    position: absolute;
-    cursor: pointer;
-    border: 2px solid rgba(255,255,255,0.8);
-    box-shadow:
-        0 0 10px #4ab3ff,
-        0 0 20px #4ab3ff,
-        0 0 40px #4ab3ff;
-    transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 6; /* AU-DESSUS de tout le fog */
-}
-
-.system:hover {
-    transform: scale(1.3);
-    box-shadow:
-        0 0 15px #4ab3ff,
-        0 0 30px #4ab3ff,
-        0 0 60px #4ab3ff;
-}
-
-/* ================================
-   TOOLTIP XXL
-================================ */
-
-.system::after {
-    content: attr(data-icon) "  " attr(data-name);
-    position: absolute;
-    top: -70px;
-    left: 60px;
-    background: rgba(0, 0, 0, 0.92);
-    padding: 14px 22px;
-    border-radius: 10px;
-    color: white;
-    font-size: 32px;
-    font-weight: 700;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    white-space: nowrap;
-    box-shadow:
-        0 0 12px rgba(0,0,0,0.9),
-        0 0 25px rgba(0,0,0,0.8),
-        0 0 40px rgba(0,150,255,0.4);
-    border: 3px solid rgba(0,150,255,0.5);
-    z-index: 10;
-}
-
-.system:hover::after {
-    opacity: 1;
-}
-
-/* ================================
-   FOG OF WAR
-================================ */
 
 #fog-layer {
     position: absolute;
     top: 0;
     left: 0;
-    width: 6144px;
-    height: 4096px;
-    z-index: 3; /* sous les systèmes, au-dessus de la carte */
+    width: 100%;
+    height: 100%;
     pointer-events: none;
+    background: radial-gradient(
+        circle at center,
+        transparent 30%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
 }
 
-.fog-cell {
+#systems-layer {
     position: absolute;
-    width: 128px;
-    height: 128px;
-    background: rgba(0, 0, 0, 0.95);
-    transition: background 0.3s, opacity 0.5s;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
-    z-index: 3;
 }
 
-.fog-exploring {
-    background: rgba(255, 0, 0, 0.7);
-    z-index: 4; /* case rouge au-dessus du fog */
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 3s infinite;
 }
 
-.fog-revealed {
-    display: none !important;
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
-.fog-cell {
-    background: rgba(255, 0, 0, 0.5) !important;
+.system {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #667eea, #764ba2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
 }
 
+.system:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+}
+
+.system.explored {
+    border-color: #2ecc71;
+}
+
+.system-label {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.8rem;
+    color: white;
+    text-shadow: 0 0 5px black;
+}

@@ -1,193 +1,192 @@
 // ===============================
-// UNITES.JS - VERSION SPA CORRIGÉE
+// UNITES.JS - VERSION CORRIGÉE
 // ===============================
 
-import { GameData, spendResource } from "./gameData.js";
+import { GameData, spendResource, saveGame } from "./gameData.js";
 import { getUnitCapacity, getTotalUnits, updateGlobalUnitHUD } from "./layout.js";
 
-
-// ===============================
-// SYNC MISSIONS
-// ===============================
-function syncUnitsToSave() {
-    const save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
-
-    save.droneCount = GameData.units["drone_recuperateur"]?.count || 0;
-    save.chasseurCount = GameData.units["chasseur"]?.count || 0;
-
-    localStorage.setItem("cosmicSave", JSON.stringify(save));
-}
-
-
-// ===============================
-// CONFIG DES UNITÉS
-// ===============================
-const unitsConfig = [
-    {
-        id: "hangar",
-        name: "Hangar",
-        maxLevel: 10,
-        attack: 0,
-        defense: 0,
-        speed: 0,
-        description: "Augmente la capacité maximale d'unités.",
-        capacityPerLevel: 50, // ⭐ CAPACITÉ PAR NIVEAU
-        cost: { metal: 120, crystal: 40 },
-        time: "20s",
-        image: "assets/units/hangar.png"
-    },
+const unitsData = [
     {
         id: "drone_recuperateur",
         name: "Drone récupérateur",
+        emoji: "🤖",
         maxLevel: 10,
-        attack: 3,
-        defense: 1,
-        speed: 12,
-        description: "Un drone léger conçu pour l'exploration.",
-        cost: { metal: 120, crystal: 40 },
-        time: "20s",
-        image: "assets/units/drone_recuperateur.png"
+        cost: { scrap: 50, energy: 20 },
+        stats: { vitesse: 5, cargo: 10 }
     },
     {
         id: "fregate",
         name: "Frégate",
+        emoji: "🚀",
         maxLevel: 10,
-        attack: 8,
-        defense: 5,
-        speed: 6,
-        description: "Un vaisseau ancien mais encore fonctionnel.",
-        cost: { metal: 300, crystal: 150 },
-        time: "45s",
-        image: "assets/units/fregate.png"
+        cost: { scrap: 100, energy: 50 },
+        stats: { attaque: 15, defense: 20 }
     },
     {
         id: "sentinelle",
         name: "Sentinelle",
+        emoji: "🛡️",
         maxLevel: 10,
-        attack: 5,
-        defense: 8,
-        speed: 3,
-        description: "Unité défensive bricolée.",
-        cost: { metal: 200, crystal: 100 },
-        time: "35s",
-        image: "assets/units/sentinelle.png"
+        cost: { scrap: 80, energy: 40 },
+        stats: { defense: 30, detection: 10 }
     },
     {
         id: "cargo",
         name: "Cargo",
+        emoji: "📦",
         maxLevel: 10,
-        attack: 5,
-        defense: 8,
-        speed: 3,
-        description: "Unité de récupération de ressources.",
-        cost: { metal: 200, crystal: 100 },
-        time: "35s",
-        image: "assets/units/cargo.png"
+        cost: { scrap: 120, energy: 30 },
+        stats: { cargo: 50, vitesse: 3 }
     },
     {
         id: "chasseur",
         name: "Chasseur",
+        emoji: "⚔️",
         maxLevel: 10,
-        attack: 5,
-        defense: 8,
-        speed: 3,
-        description: "Unité d'attaque.",
-        cost: { metal: 200, crystal: 100 },
-        time: "35s",
-        image: "assets/units/chasseur.png"
+        cost: { scrap: 150, energy: 80 },
+        stats: { attaque: 40, vitesse: 8 }
+    },
+    {
+        id: "hangar",
+        name: "Hangar",
+        emoji: "🏗️",
+        maxLevel: 20,
+        description: "Augmente la capacité maximale de vos unités.",
+        cost: { scrap: 300, energy: 150 },
+        stats: { capacité: 50 }, // ✅ AJOUT DES STATS
+        isBuilding: true // ✅ Marquer comme bâtiment spécial
     }
 ];
 
-
-// ===============================
-// INITIALISATION POUR LA SPA
-// ===============================
 export function initUnites() {
+    const container = document.getElementById("units-container");
+    if (!container) {
+        console.error("❌ Conteneur units-container introuvable");
+        return;
+    }
 
-    const containerUnits = document.getElementById("units-container");
-    if (!containerUnits) return;
+    container.innerHTML = "";
+    console.log("🚀 Initialisation des unités");
 
-    // Reset propre à chaque ouverture de la page
-    containerUnits.innerHTML = "";
-
-    unitsConfig.forEach(u => {
-
-        const level = GameData.units[u.id]?.level ?? 1;
-        const count = GameData.units[u.id]?.count ?? 0;
+    unitsData.forEach(unit => {
+        const data = GameData.units[unit.id];
+        const level = data?.level || 1;
+        const count = data?.count || 0;
 
         const card = document.createElement("div");
         card.className = "unit-card";
 
+        // ✅ Vérifier si unit.stats existe avant Object.entries
+        const statsHTML = unit.stats 
+            ? Object.entries(unit.stats).map(([key, val]) => `
+                <div class="stat-line">
+                    <span class="stat-label">${key}</span>
+                    <span class="stat-value">${val * level}</span>
+                </div>
+            `).join('')
+            : '<p class="no-stats">Aucune statistique</p>';
+
+        // ✅ Affichage différent pour le Hangar
+        const actionsHTML = unit.isBuilding 
+            ? `
+                <div class="unit-actions">
+                    <button class="btn-upgrade" data-id="${unit.id}">
+                        ${level >= unit.maxLevel ? 'Niveau max' : 'Améliorer'}
+                    </button>
+                </div>
+            `
+            : `
+                <div class="unit-count">Possédés : ${count}</div>
+                <div class="unit-actions">
+                    <button class="btn-build" data-id="${unit.id}">Construire</button>
+                    <button class="btn-upgrade" data-id="${unit.id}">
+                        ${level >= unit.maxLevel ? 'Max' : 'Améliorer'}
+                    </button>
+                </div>
+            `;
+
         card.innerHTML = `
-            <img src="${u.image}" class="unit-image" alt="${u.name}">
-            <div class="unit-name">${u.name}</div>
-            <div class="unit-description">${u.description}</div>
-            <div class="unit-level">Niveau : ${level} / ${u.maxLevel}</div>
-
-            ${u.id !== "hangar" ? `<div class="unit-available">Disponible : ${count}</div>` : ""}
-
-            <div class="unit-stats">ATK : ${u.attack} | DEF : ${u.defense} | VIT : ${u.speed}</div>
-            <div class="unit-cost">Coût : ${u.cost.metal} métal, ${u.cost.crystal} cristal</div>
-            <div class="unit-time">Temps : ${u.time}</div>
-
-            <button class="unit-button">Améliorer</button>
-            ${u.id !== "hangar" ? `<button class="unit-create">Créer</button>` : ""}
+            <div class="unit-header">
+                <h3>${unit.name}</h3>
+                <span class="unit-emoji">${unit.emoji}</span>
+            </div>
+            <div class="unit-level">
+                <span>Niveau ${level} / ${unit.maxLevel}</span>
+            </div>
+            ${unit.description ? `<p class="unit-description">${unit.description}</p>` : ''}
+            <div class="unit-stats">
+                ${statsHTML}
+            </div>
+            <div class="unit-cost">
+                <div class="cost-item">🔩 ${unit.cost.scrap}</div>
+                <div class="cost-item">⚡ ${unit.cost.energy}</div>
+            </div>
+            ${actionsHTML}
         `;
 
-        containerUnits.appendChild(card);
+        container.appendChild(card);
 
-
-        // ===============================
-        // AMÉLIORATION
-        // ===============================
-        const upgradeBtn = card.querySelector(".unit-button");
-        upgradeBtn.addEventListener("click", () => {
-
-            if (spendResource("scrap", u.cost.metal)) {
-
-                GameData.units[u.id].level++;
-
-                card.querySelector(".unit-level").textContent =
-                    `Niveau : ${GameData.units[u.id].level} / ${u.maxLevel}`;
-
-                // Si on améliore le hangar → mise à jour du HUD
-                if (u.id === "hangar") {
-                    updateGlobalUnitHUD();
-                    syncUnitsToSave();
-                }
+        // ✅ Événements uniquement si ce n'est PAS un bâtiment
+        if (!unit.isBuilding) {
+            const btnBuild = card.querySelector(".btn-build");
+            if (btnBuild) {
+                btnBuild.addEventListener("click", () => buildUnit(unit));
             }
-        });
+        }
 
-
-        // ===============================
-        // CRÉATION D’UNITÉS
-        // ===============================
-        if (u.id !== "hangar") {
-
-            const createBtn = card.querySelector(".unit-create");
-
-            createBtn.addEventListener("click", () => {
-
-                const total = getTotalUnits();
-                const capacity = getUnitCapacity();
-
-                if (total >= capacity) {
-                    alert("Hangar plein !");
-                    return;
-                }
-
-                if (spendResource("scrap", u.cost.metal)) {
-
-                    GameData.units[u.id].count =
-                        (GameData.units[u.id].count || 0) + 1;
-
-                    card.querySelector(".unit-available").textContent =
-                        "Disponible : " + GameData.units[u.id].count;
-
-                    syncUnitsToSave();
-                    updateGlobalUnitHUD();
-                }
-            });
+        const btnUpgrade = card.querySelector(".btn-upgrade");
+        if (btnUpgrade) {
+            if (level >= unit.maxLevel) {
+                btnUpgrade.disabled = true;
+            } else {
+                btnUpgrade.addEventListener("click", () => upgradeUnit(unit));
+            }
         }
     });
+
+    console.log("✅ Unités initialisées");
+}
+
+function buildUnit(unit) {
+    const capacity = getUnitCapacity();
+    const total = getTotalUnits();
+
+    if (total >= capacity) {
+        alert("Capacité maximale atteinte ! Améliorez votre Hangar.");
+        return;
+    }
+
+    if (spendResource("scrap", unit.cost.scrap) && spendResource("energy", unit.cost.energy)) {
+        if (!GameData.units[unit.id]) {
+            GameData.units[unit.id] = { level: 1, count: 0 };
+        }
+        GameData.units[unit.id].count++;
+        saveGame();
+        updateGlobalUnitHUD();
+        initUnites();
+        console.log("✅ Unité construite :", unit.name);
+    } else {
+        alert("Ressources insuffisantes !");
+    }
+}
+
+function upgradeUnit(unit) {
+    const level = GameData.units[unit.id]?.level || 1;
+    
+    if (level >= unit.maxLevel) return;
+
+    const upgradeCost = {
+        scrap: unit.cost.scrap * 2,
+        energy: unit.cost.energy * 2
+    };
+
+    if (spendResource("scrap", upgradeCost.scrap) && spendResource("energy", upgradeCost.energy)) {
+        GameData.units[unit.id].level++;
+        saveGame();
+        updateGlobalUnitHUD(); // ✅ Mise à jour du HUD pour le Hangar
+        initUnites();
+        console.log("✅ Unité améliorée :", unit.name);
+    } else {
+        alert("Ressources insuffisantes !");
+    }
 }

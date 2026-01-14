@@ -1,12 +1,10 @@
 import { GameData } from "./gameData.js";
 
 // ===============================
-// LAYOUT.JS - GESTION GLOBALE DU HUD
+// GESTION GLOBALE DU HUD
 // ===============================
 
-// 1. INJECTION DU HTML
 export function injectHUD() {
-    // Vérifie si le HUD existe déjà pour éviter les doublons
     if (document.querySelector(".global-hud")) return;
 
     const nav = document.createElement("nav");
@@ -19,20 +17,13 @@ export function injectHUD() {
             <p>🧬 Nano : <span id="nano">0</span></p>
             <p>📡 Données : <span id="data">0</span></p>
             <p id="unit-count-display">Unités : 0 / 0</p>
-
-            <button class="btn-map" id="btn-map">
-                🌌 Carte Galactique
-            </button>
+            <button class="btn-map" id="btn-map">🌌 Carte Galactique</button>
         </div>
     `;
 
-    // Injecter dans #app
     const app = document.getElementById("app");
-    if (app) {
-        app.prepend(nav);
-    }
+    if (app) app.prepend(nav);
 
-    // ⭐ Correction : empêcher le reload si on est déjà sur la Map
     const btnMap = document.getElementById("btn-map");
     if (btnMap) {
         btnMap.addEventListener("click", () => {
@@ -42,10 +33,6 @@ export function injectHUD() {
         });
     }
 }
-
-// ===============================
-// LOGIQUE GLOBALE
-// ===============================
 
 export function getUnitCapacity() {
     const hangarLevel = GameData.units["hangar"]?.level ?? 1;
@@ -69,10 +56,8 @@ export function updateGlobalUnitHUD() {
 
     if (total >= capacity) {
         unitDisplay.style.color = "#ff4a4a";
-        unitDisplay.style.borderColor = "#ff4a4a";
     } else {
         unitDisplay.style.color = "#7fffd4";
-        unitDisplay.style.borderColor = "rgba(127, 255, 212, 0.3)";
     }
 }
 

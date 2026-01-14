@@ -1,17 +1,17 @@
 // ===============================
-// IMPORTS
+// LABO.JS - Transmutation
 // ===============================
-import { spendResource, addResource } from "./gameData.js";
 
+import { GameData, spendResource, addResource, saveGame } from "./gameData.js";
 
 // ===============================
-// TABLE DES TRANSMUTATIONS
+// CONFIGURATION DES TRANSMUTATIONS
 // ===============================
 
 const transmutations = {
     scrap: {
         inputKey: "scrap",
-        cout: 1000000,
+        cout: 1000,
         duree: 30,
         resultat: "Acier renforcé",
         outputKey: "acier",
@@ -19,7 +19,7 @@ const transmutations = {
     },
     energie: {
         inputKey: "energy",
-        cout: 1000000,
+        cout: 1000,
         duree: 60,
         resultat: "Nanites synthétiques",
         outputKey: "nanites",
@@ -27,7 +27,7 @@ const transmutations = {
     },
     nano: {
         inputKey: "nano",
-        cout: 1000000,
+        cout: 1000,
         duree: 45,
         resultat: "Module cybernétique",
         outputKey: "module",
@@ -35,18 +35,13 @@ const transmutations = {
     },
     data: {
         inputKey: "data",
-        cout: 1000000,
+        cout: 1000,
         duree: 50,
-        resultat: "Fragment d’IA oubliée",
+        resultat: "Fragment d'IA oubliée",
         outputKey: "fragment",
         emoji: "🧠"
     }
 };
-
-
-// ===============================
-// TABLES D'AFFICHAGE
-// ===============================
 
 const emojiMap = {
     scrap: "🔩",
@@ -62,35 +57,35 @@ const inputLabels = {
     data: "Données anciennes"
 };
 
-
 // ===============================
-// VARIABLES INTERNES
+// VARIABLES GLOBALES
 // ===============================
 
 let currentRecipe = null;
 let timer = null;
 
-
 // ===============================
-// INITIALISATION DE LA PAGE LABO
+// INITIALISATION
 // ===============================
 
 export function initLabo() {
+    console.log("🧪 Initialisation du Labo");
 
-    // Sélecteurs DOM
     const inputSelect = document.getElementById("inputSelect");
-    const inputEmoji  = document.getElementById("inputEmoji");
+    const inputEmoji = document.getElementById("inputEmoji");
     const outputEmoji = document.getElementById("outputEmoji");
-    const outputText  = document.getElementById("outputText");
-    const inputCost   = document.getElementById("inputCost");
-    const outputGain  = document.getElementById("outputGain");
-    const startBtn    = document.getElementById("startBtn");
-    const statusBox   = document.getElementById("statusBox");
+    const outputText = document.getElementById("outputText");
+    const inputCost = document.getElementById("inputCost");
+    const outputGain = document.getElementById("outputGain");
+    const startBtn = document.getElementById("startBtn");
+    const statusBox = document.getElementById("statusBox");
 
-    // ===============================
-    // RESET COMPLET À CHAQUE ENTRÉE
-    // ===============================
+    if (!inputSelect || !startBtn || !statusBox) {
+        console.error("❌ Éléments DOM du Labo introuvables !");
+        return;
+    }
 
+    // Reset
     if (timer) {
         clearInterval(timer);
         timer = null;
@@ -98,95 +93,107 @@ export function initLabo() {
 
     inputSelect.disabled = false;
     startBtn.disabled = true;
-
     inputSelect.value = "";
-    inputEmoji.textContent = "";
-    outputEmoji.textContent = "";
-    outputText.textContent = "Sélectionnez une ressource.";
-    inputCost.textContent = "Coût : -";
-    outputGain.textContent = "Gain : -";
+    
+    if (inputEmoji) inputEmoji.textContent = "";
+    if (outputEmoji) outputEmoji.textContent = "";
+    if (outputText) outputText.textContent = "Sélectionnez une ressource.";
+    if (inputCost) inputCost.textContent = "Coût : -";
+    if (outputGain) outputGain.textContent = "Gain : -";
     statusBox.textContent = "Aucune transmutation en cours.";
 
     currentRecipe = null;
 
-
     // ===============================
-    // CHOIX DE LA RESSOURCE
+    // ÉVÉNEMENT : Choix de ressource
     // ===============================
 
-    inputSelect.onchange = () => {
+    inputSelect.addEventListener("change", () => {
         const value = inputSelect.value;
+        console.log("📝 Ressource sélectionnée :", value);
 
         if (!value) {
-            inputEmoji.textContent = "";
-            outputEmoji.textContent = "";
-            outputText.textContent = "Sélectionnez une ressource.";
-            inputCost.textContent = "Coût : -";
-            outputGain.textContent = "Gain : -";
+            if (inputEmoji) inputEmoji.textContent = "";
+            if (outputEmoji) outputEmoji.textContent = "";
+            if (outputText) outputText.textContent = "Sélectionnez une ressource.";
+            if (inputCost) inputCost.textContent = "Coût : -";
+            if (outputGain) outputGain.textContent = "Gain : -";
             startBtn.disabled = true;
             currentRecipe = null;
             return;
         }
 
         const r = transmutations[value];
+        if (!r) {
+            console.error("❌ Recette introuvable pour :", value);
+            return;
+        }
+
         currentRecipe = r;
 
-        // Emoji entrée
-        inputEmoji.textContent = emojiMap[value];
+        if (inputEmoji) inputEmoji.textContent = emojiMap[value];
+        if (outputEmoji) outputEmoji.textContent = r.emoji;
+        if (outputText) outputText.textContent = r.resultat;
 
-        // Résultat
-        outputEmoji.textContent = r.emoji;
-        outputText.textContent = r.resultat;
-
-        // Coût & gain
         const label = inputLabels[value];
-        inputCost.textContent = `Coût : ${r.cout.toLocaleString("fr-FR")} ${label}`;
-        outputGain.textContent = `Gain : 1 ${r.resultat}`;
+        if (inputCost) inputCost.textContent = `Coût : ${r.cout.toLocaleString("fr-FR")} ${label}`;
+        if (outputGain) outputGain.textContent = `Gain : 1 ${r.resultat}`;
 
         startBtn.disabled = false;
-    };
-
+    });
 
     // ===============================
-    // LANCER LA TRANSMUTATION
+    // ÉVÉNEMENT : Lancer transmutation
     // ===============================
 
-    startBtn.onclick = () => {
-        if (!currentRecipe) return;
+    startBtn.addEventListener("click", () => {
+        console.log("🚀 Lancement de la transmutation");
+
+        if (!currentRecipe) {
+            console.warn("⚠️ Aucune recette sélectionnée");
+            return;
+        }
 
         const r = currentRecipe;
 
         // Vérification des ressources
-        const ok = spendResource(r.inputKey, r.cout);
-        if (!ok) {
-            statusBox.innerHTML = "❌ Ressources insuffisantes.";
+        const hasEnough = GameData.resources[r.inputKey] >= r.cout;
+        
+        if (!hasEnough) {
+            statusBox.textContent = "❌ Ressources insuffisantes.";
+            console.warn("⚠️ Pas assez de", r.inputKey);
+            return;
+        }
+
+        // Dépense
+        if (!spendResource(r.inputKey, r.cout)) {
+            statusBox.textContent = "❌ Erreur lors de la dépense.";
             return;
         }
 
         let timeLeft = r.duree;
-
-        statusBox.innerHTML = `Transmutation en cours... (${timeLeft}s restantes)`;
+        statusBox.textContent = `Transmutation en cours... (${timeLeft}s restantes)`;
 
         startBtn.disabled = true;
         inputSelect.disabled = true;
 
         timer = setInterval(() => {
             timeLeft--;
-            statusBox.innerHTML = `Transmutation en cours... (${timeLeft}s restantes)`;
+            statusBox.textContent = `Transmutation en cours... (${timeLeft}s restantes)`;
 
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 timer = null;
 
-                // Ajout du résultat
                 addResource(r.outputKey, 1);
 
-                statusBox.innerHTML =
-                    `✔️ Transmutation terminée ! Vous obtenez : <strong>${r.resultat}</strong>`;
+                statusBox.innerHTML = `✅ Transmutation terminée ! Vous obtenez : <strong>${r.resultat}</strong>`;
 
                 startBtn.disabled = false;
                 inputSelect.disabled = false;
+
+                console.log("✅ Transmutation terminée !");
             }
         }, 1000);
-    };
+    });
 }
