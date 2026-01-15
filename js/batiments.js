@@ -39,7 +39,7 @@ export function initBatiments() {
         let resourceIcon = "";
         
         if (b.id === "extracteur_ferraille") {
-            productionText = `${data?.production || 0} / sec`;
+            productionText = `${data?.production || 10} / sec`;
             resourceIcon = "🔩";
         } else if (b.id === "reacteur_instable") {
             productionText = `${data?.production || 0} / sec`;
