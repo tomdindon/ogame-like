@@ -1,8 +1,8 @@
 /* ===============================
-   ROUTER SPA - VERSION MODERNE
+   ROUTER SPA - AVEC NAVIGATION
    =============================== */
 
-import { injectHUD, updateGlobalUnitHUD, removeHUD } from "./layout.js";
+import { injectHUD, updateGlobalUnitHUD, removeHUD, injectNav, updateActiveNavLink } from "./layout.js";
 import { initBatiments } from "./batiments.js";
 import { onPageChange } from './main.js';
 import { initUnites } from "./unites.js";
@@ -15,11 +15,7 @@ import { initTrade } from "./trade.js";
 import { initRecherche } from "./recherche.js";
 import { initMap, getGalaxyMap } from "./map.js";
 
-// ===============================
-// CONFIGURATION
-// ===============================
-
-// Pages avec HUD (barre de ressources)
+// Pages avec HUD
 const pagesAvecHUD = [
     "page-dashboard",
     "page-batiments",
@@ -33,6 +29,15 @@ const pagesAvecHUD = [
 ];
 
 let currentMapInstance = null;
+
+// ===============================
+// INITIALISATION
+// ===============================
+
+function init() {
+    // Injecter la navigation (toujours visible)
+    injectNav();
+}
 
 // ===============================
 // INITIALISATION DU DASHBOARD
@@ -58,7 +63,6 @@ function initDashboard() {
 
         card.style.cursor = "pointer";
 
-        // Cloner pour supprimer les anciens listeners
         const newCard = card.cloneNode(true);
         card.parentNode.replaceChild(newCard, card);
 
@@ -136,7 +140,6 @@ export function showPage(id) {
             break;
 
         case "page-map":
-            // Initialiser la carte avec un délai pour s'assurer que le DOM est prêt
             setTimeout(() => {
                 if (!currentMapInstance) {
                     initMap();
@@ -154,10 +157,13 @@ export function showPage(id) {
         console.log("✅ HUD injecté pour :", id);
     }
 
-    // 6. Notifier le changement de page (pour main.js)
+    // 6. Mettre à jour le lien actif dans la nav
+    updateActiveNavLink();
+
+    // 7. Notifier le changement de page
     onPageChange(id);
 
-    // 7. Scroll en haut
+    // 8. Scroll en haut
     window.scrollTo(0, 0);
 }
 
@@ -178,7 +184,9 @@ function resolvePage() {
 // ===============================
 
 window.addEventListener("hashchange", resolvePage);
-window.addEventListener("DOMContentLoaded", resolvePage);
+window.addEventListener("DOMContentLoaded", () => {
+    init();
+    resolvePage();
+});
 
-// Export pour accès externe si besoin
 export { resolvePage };

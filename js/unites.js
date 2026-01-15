@@ -1,5 +1,5 @@
 /* ===============================
-   UNITES.JS - VERSION COMPLÈTE
+   UNITES.JS - AVEC IMAGES
    =============================== */
 
 import { GameData, spendResource, saveGame } from "./gameData.js";
@@ -10,6 +10,7 @@ const unitsData = [
         id: "drone_recuperateur",
         name: "Drone récupérateur",
         emoji: "🤖",
+        image: "assets/units/drone_recuperateur.png", // ⭐ AJOUT
         maxLevel: 10,
         cost: { scrap: 50, energy: 20 },
         stats: { vitesse: 5, cargo: 10 }
@@ -18,6 +19,7 @@ const unitsData = [
         id: "fregate",
         name: "Frégate",
         emoji: "🚀",
+        image: "assets/units/fregate.png", // ⭐ AJOUT
         maxLevel: 10,
         cost: { scrap: 100, energy: 50 },
         stats: { attaque: 15, defense: 20 }
@@ -26,6 +28,7 @@ const unitsData = [
         id: "sentinelle",
         name: "Sentinelle",
         emoji: "🛡️",
+        image: "assets/units/sentinelle.png", // ⭐ AJOUT
         maxLevel: 10,
         cost: { scrap: 80, energy: 40 },
         stats: { defense: 30, detection: 10 }
@@ -34,6 +37,7 @@ const unitsData = [
         id: "cargo",
         name: "Cargo",
         emoji: "📦",
+        image: "assets/units/cargo.png", // ⭐ AJOUT
         maxLevel: 10,
         cost: { scrap: 120, energy: 30 },
         stats: { cargo: 50, vitesse: 3 }
@@ -42,6 +46,7 @@ const unitsData = [
         id: "chasseur",
         name: "Chasseur",
         emoji: "⚔️",
+        image: "assets/units/chasseur.png", // ⭐ AJOUT (attention à l'orthographe)
         maxLevel: 10,
         cost: { scrap: 150, energy: 80 },
         stats: { attaque: 40, vitesse: 8 }
@@ -50,6 +55,7 @@ const unitsData = [
         id: "hangar",
         name: "Hangar",
         emoji: "🏗️",
+        image: "assets/units/hangar.png", // ⭐ AJOUT
         maxLevel: 20,
         description: "Augmente la capacité maximale de vos unités.",
         cost: { scrap: 300, energy: 150 },
@@ -72,7 +78,7 @@ export function initUnites() {
     container.innerHTML = "";
     console.log("🚀 Initialisation des unités");
 
-    // Afficher la capacité globale en haut
+    // Barre de capacité globale
     const capacityInfo = document.createElement("div");
     capacityInfo.className = "capacity-info";
     capacityInfo.innerHTML = `
@@ -131,25 +137,32 @@ export function initUnites() {
             `;
 
         card.innerHTML = `
-            <div class="unit-header">
-                <h3>${unit.name}</h3>
-                <span class="unit-emoji">${unit.emoji}</span>
-            </div>
-            <div class="unit-level">
-                <span>Niveau ${level} / ${unit.maxLevel}</span>
-                <div class="level-progress">
-                    <div class="level-fill" style="width: ${(level / unit.maxLevel) * 100}%"></div>
+            <div class="unit-image-container">
+                <img src="${unit.image}" alt="${unit.name}" class="unit-image" />
+                <div class="unit-image-overlay">
+                    <span class="unit-emoji-large">${unit.emoji}</span>
                 </div>
             </div>
-            ${unit.description ? `<p class="unit-description">${unit.description}</p>` : ''}
-            <div class="unit-stats">
-                ${statsHTML}
+            <div class="unit-content">
+                <div class="unit-header">
+                    <h3>${unit.name}</h3>
+                </div>
+                <div class="unit-level">
+                    <span>Niveau ${level} / ${unit.maxLevel}</span>
+                    <div class="level-progress">
+                        <div class="level-fill" style="width: ${(level / unit.maxLevel) * 100}%"></div>
+                    </div>
+                </div>
+                ${unit.description ? `<p class="unit-description">${unit.description}</p>` : ''}
+                <div class="unit-stats">
+                    ${statsHTML}
+                </div>
+                <div class="unit-cost">
+                    <div class="cost-item">🔩 ${unit.cost.scrap}</div>
+                    <div class="cost-item">⚡ ${unit.cost.energy}</div>
+                </div>
+                ${actionsHTML}
             </div>
-            <div class="unit-cost">
-                <div class="cost-item">🔩 ${unit.cost.scrap}</div>
-                <div class="cost-item">⚡ ${unit.cost.energy}</div>
-            </div>
-            ${actionsHTML}
         `;
 
         container.appendChild(card);

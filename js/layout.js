@@ -1,10 +1,117 @@
 /* ============================================
-   LAYOUT.JS - Gestion du HUD (VERSION COMPLÈTE)
+   LAYOUT.JS - Avec navigation globale
    ============================================ */
 
 import { GameData } from "./gameData.js";
 
 let hudInjected = false;
+let navInjected = false;
+
+// ===============================
+// INJECTION DE LA NAVIGATION
+// ===============================
+
+export function injectNav() {
+    if (navInjected) return;
+
+    const existing = document.getElementById("main-nav");
+    if (existing) {
+        existing.remove();
+    }
+
+    const nav = document.createElement("nav");
+    nav.id = "main-nav";
+    nav.innerHTML = `
+        <div class="nav-wrapper">
+            <div class="nav-brand">
+                <a href="#page-dashboard">
+                    <span class="nav-logo">🌌</span>
+                    <span class="nav-title">Cosmic Empires</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#page-dashboard" class="nav-link" data-page="page-dashboard">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Accueil</span>
+                </a>
+                <a href="#page-batiments" class="nav-link" data-page="page-batiments">
+                    <span class="nav-icon">🏗️</span>
+                    <span class="nav-text">Bâtiments</span>
+                </a>
+                <a href="#page-unites" class="nav-link" data-page="page-unites">
+                    <span class="nav-icon">🚀</span>
+                    <span class="nav-text">Unités</span>
+                </a>
+                <a href="#page-recherche" class="nav-link" data-page="page-recherche">
+                    <span class="nav-icon">🔬</span>
+                    <span class="nav-text">Recherche</span>
+                </a>
+                <a href="#page-missions" class="nav-link" data-page="page-missions">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-text">Missions</span>
+                </a>
+                <a href="#page-map" class="nav-link" data-page="page-map">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-text">Carte</span>
+                </a>
+                <a href="#page-trade" class="nav-link" data-page="page-trade">
+                    <span class="nav-icon">💱</span>
+                    <span class="nav-text">Commerce</span>
+                </a>
+                <a href="#page-profil" class="nav-link" data-page="page-profil">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Profil</span>
+                </a>
+            </div>
+            
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    `;
+
+    document.body.prepend(nav);
+    navInjected = true;
+
+    // Ajouter le toggle mobile
+    const navToggle = document.getElementById("nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    
+    if (navToggle && navLinks) {
+        navToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            navToggle.classList.toggle("active");
+        });
+
+        // Fermer le menu au clic sur un lien
+        document.querySelectorAll(".nav-link").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+                navToggle.classList.remove("active");
+            });
+        });
+    }
+
+    updateActiveNavLink();
+}
+
+// ===============================
+// MISE À JOUR DU LIEN ACTIF
+// ===============================
+
+export function updateActiveNavLink() {
+    const currentHash = location.hash.replace("#", "") || "page-dashboard";
+    
+    document.querySelectorAll(".nav-link").forEach(link => {
+        link.classList.remove("active");
+        if (link.dataset.page === currentHash) {
+            link.classList.add("active");
+        }
+    });
+}
 
 // ===============================
 // INJECTION DU HUD
@@ -63,15 +170,11 @@ export function injectHUD() {
                 <div class="hud-units" id="hud-unit-count">
                     Unités : <span id="hud-units-value">0 / 700</span>
                 </div>
-                
-                <button class="hud-button btn-galaxy-map" onclick="location.hash='page-map'">
-                    🗺️ Carte Galactique
-                </button>
             </div>
         </div>
     `;
 
-    document.body.prepend(hud);
+    document.body.appendChild(hud);
     hudInjected = true;
 
     updateHUDResources();
@@ -98,10 +201,6 @@ export function updateHUDResources() {
 // GESTION DES UNITÉS
 // ===============================
 
-/**
- * Calcule la capacité maximale d'unités
- * Base : 100 + (niveau Hangar × 50)
- */
 export function getUnitCapacity() {
     const hangarData = GameData.units?.hangar;
     const hangarLevel = hangarData?.level || 1;
@@ -111,25 +210,16 @@ export function getUnitCapacity() {
     return baseCapacity + (hangarLevel * capacityPerLevel);
 }
 
-/**
- * Compte le nombre total d'unités possédées
- */
 export function getTotalUnits() {
     let total = 0;
     
     for (const [unitId, data] of Object.entries(GameData.units || {})) {
-        // Ignorer le hangar dans le compte (c'est un bâtiment)
         if (unitId === 'hangar') continue;
-        
         total += data.count || 0;
     }
     
     return total;
 }
-
-// ===============================
-// MISE À JOUR DU HUD UNITÉS
-// ===============================
 
 export function updateGlobalUnitHUD() {
     const unitsValueEl = document.getElementById("hud-units-value");
@@ -140,28 +230,23 @@ export function updateGlobalUnitHUD() {
     
     unitsValueEl.textContent = `${total} / ${max}`;
 
-    // Changer la couleur selon le remplissage
     const unitsContainer = document.getElementById("hud-unit-count");
     if (unitsContainer) {
         const ratio = total / max;
         
         if (ratio >= 1) {
-            // Capacité maximale atteinte (rouge)
             unitsContainer.style.borderColor = "rgba(239, 68, 68, 0.8)";
             unitsContainer.style.background = "rgba(239, 68, 68, 0.3)";
             unitsContainer.style.color = "#fca5a5";
         } else if (ratio >= 0.9) {
-            // Presque plein (orange)
             unitsContainer.style.borderColor = "rgba(251, 191, 36, 0.8)";
             unitsContainer.style.background = "rgba(251, 191, 36, 0.3)";
             unitsContainer.style.color = "#fcd34d";
         } else if (ratio >= 0.7) {
-            // Moyennement rempli (jaune)
             unitsContainer.style.borderColor = "rgba(251, 191, 36, 0.6)";
             unitsContainer.style.background = "rgba(251, 191, 36, 0.2)";
             unitsContainer.style.color = "#fde68a";
         } else {
-            // Encore de la place (violet par défaut)
             unitsContainer.style.borderColor = "rgba(168, 85, 247, 0.4)";
             unitsContainer.style.background = "rgba(168, 85, 247, 0.2)";
             unitsContainer.style.color = "white";
@@ -185,4 +270,4 @@ export function removeHUD() {
 // EXPORTS
 // ===============================
 
-export { hudInjected };
+export { hudInjected, navInjected };
