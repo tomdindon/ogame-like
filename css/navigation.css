@@ -1,0 +1,243 @@
+/* ============================================
+   NAVIGATION.CSS - Barre de navigation moderne
+   ============================================ */
+
+#main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0.98) 0%, rgba(10, 10, 15, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    gap: 20px;
+}
+
+/* === Brand / Logo === */
+.nav-brand a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.nav-logo {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.6));
+    animation: rotate-logo 20s linear infinite;
+}
+
+@keyframes rotate-logo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.nav-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.05em;
+}
+
+.nav-brand a:hover .nav-logo {
+    animation-duration: 2s;
+    filter: drop-shadow(0 0 20px rgba(0, 217, 255, 1));
+}
+
+/* === Liens de navigation === */
+.nav-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(168, 85, 247, 0.1));
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.nav-link:hover::before {
+    opacity: 1;
+}
+
+.nav-link:hover {
+    color: white;
+    border-color: rgba(0, 217, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+    transition: transform var(--transition-base);
+}
+
+.nav-link:hover .nav-icon {
+    transform: scale(1.2);
+}
+
+/* Lien actif */
+.nav-link.active {
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(168, 85, 247, 0.2));
+    border-color: var(--color-accent-cyan);
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+}
+
+.nav-link.active .nav-icon {
+    filter: drop-shadow(0 0 8px rgba(0, 217, 255, 0.8));
+}
+
+/* === Toggle mobile (hamburger) === */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 10001;
+}
+
+.nav-toggle span {
+    width: 28px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-purple));
+    border-radius: 3px;
+    transition: all var(--transition-base);
+}
+
+.nav-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* === Responsive === */
+@media (max-width: 1200px) {
+    .nav-links {
+        gap: 6px;
+    }
+    
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .nav-text {
+        display: none;
+    }
+    
+    .nav-icon {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 65px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 15, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 20px;
+        gap: 12px;
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+        transition: all var(--transition-base);
+        border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .nav-link {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 14px 20px;
+    }
+    
+    .nav-text {
+        display: block;
+    }
+}
+
+/* === Ajustements globaux === */
+#hud-container {
+    top: 65px; /* Positionné sous la nav */
+}
+
+.spa-page {
+    padding-top: 140px; /* Nav (65px) + HUD (75px) */
+}
+
+.spa-page#page-dashboard {
+    padding-top: 140px;
+}
+
+.spa-page#page-map {
+    padding-top: 65px; /* Seulement la nav */
+}
+
+/* Cacher l'ancien bouton retour */
+#back-button-wrapper {
+    display: none !important;
+}

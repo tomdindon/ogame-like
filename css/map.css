@@ -1,172 +1,277 @@
-/* ================================
-   PAGE CARTE (isolation totale)
-================================ */
+/* ============================================
+   MAP.CSS - Carte interactive avec brouillard
+   ============================================ */
 
 #page-map {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: #000;
+    padding: 0;
     position: relative;
+    overflow: hidden;
 }
-
-/* Empêche le style global du jeu d'affecter la carte */
-#page-map * {
-    box-sizing: border-box;
-    font-family: inherit;
-}
-
-/* ================================
-   CONTENEUR (CAMÉRA)
-================================ */
 
 #map-container {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
+    position: relative;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 100%);
     overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    cursor: grab;
-    z-index: 1;
 }
-
-#map-container.dragging {
-    cursor: grabbing;
-}
-
-/* ======================================
-   CONTENU DE LA MAP (carte + fog + systèmes)
-====================================== */
 
 #map-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 6144px;
-    height: 4096px;
-    transform-origin: top left;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
-
-/* ================================
-   CARTE GALACTIQUE
-================================ */
 
 #map {
     width: 100%;
     height: 100%;
-    background-image: url("assets/map/map.png");
-    background-size: 100% 100%;
-    background-position: center;
     position: absolute;
     top: 0;
     left: 0;
-    cursor: inherit;
-    z-index: 1; /* fond */
 }
 
-/* ================================
-   SYSTÈMES STELLAIRES
-================================ */
-
-#systems-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 6144px;
-    height: 4096px;
-    z-index: 5; /* AU-DESSUS du fog */
-}
-
-.system {
-    width: 28px;
-    height: 28px;
-    background: radial-gradient(circle, #ffffff, #4ab3ff 60%, #003b66);
-    border-radius: 50%;
-    position: absolute;
-    cursor: pointer;
-    border: 2px solid rgba(255,255,255,0.8);
-    box-shadow:
-        0 0 10px #4ab3ff,
-        0 0 20px #4ab3ff,
-        0 0 40px #4ab3ff;
-    transition: transform 0.2s, box-shadow 0.2s;
-    z-index: 6; /* AU-DESSUS de tout le fog */
-}
-
-.system:hover {
-    transform: scale(1.3);
-    box-shadow:
-        0 0 15px #4ab3ff,
-        0 0 30px #4ab3ff,
-        0 0 60px #4ab3ff;
-}
-
-/* ================================
-   TOOLTIP XXL
-================================ */
-
-.system::after {
-    content: attr(data-icon) "  " attr(data-name);
-    position: absolute;
-    top: -70px;
-    left: 60px;
-    background: rgba(0, 0, 0, 0.92);
-    padding: 14px 22px;
-    border-radius: 10px;
-    color: white;
-    font-size: 32px;
-    font-weight: 700;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    white-space: nowrap;
-    box-shadow:
-        0 0 12px rgba(0,0,0,0.9),
-        0 0 25px rgba(0,0,0,0.8),
-        0 0 40px rgba(0,150,255,0.4);
-    border: 3px solid rgba(0,150,255,0.5);
-    z-index: 10;
-}
-
-.system:hover::after {
-    opacity: 1;
-}
-
-/* ================================
-   FOG OF WAR
-================================ */
-
+/* === Fog of War Layer === */
 #fog-layer {
     position: absolute;
     top: 0;
     left: 0;
-    width: 6144px;
-    height: 4096px;
-    z-index: 3; /* sous les systèmes, au-dessus de la carte */
+    width: 100%;
+    height: 100%;
     pointer-events: none;
+    z-index: 10;
 }
 
 .fog-cell {
     position: absolute;
-    width: 128px;
-    height: 128px;
-    background: rgba(0, 0, 0, 0.95);
-    transition: background 0.3s, opacity 0.5s;
+    background: radial-gradient(
+        circle at center,
+        rgba(10, 10, 15, 0.7) 0%,
+        rgba(10, 10, 15, 0.95) 70%,
+        rgba(10, 10, 15, 1) 100%
+    );
+    transition: opacity 1.2s ease-out;
+    backdrop-filter: blur(8px);
+}
+
+.fog-cell.revealed {
+    opacity: 0;
     pointer-events: none;
-    z-index: 3;
 }
 
-.fog-exploring {
-    background: rgba(255, 0, 0, 0.7);
-    z-index: 4; /* case rouge au-dessus du fog */
+.fog-cell.revealing {
+    animation: fogReveal 1.5s ease-out forwards;
 }
 
-.fog-revealed {
-    display: none !important;
+@keyframes fogReveal {
+    0% {
+        opacity: 1;
+        filter: blur(8px);
+    }
+    50% {
+        opacity: 0.5;
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 0;
+        filter: blur(0px);
+    }
 }
 
-.fog-cell {
-    background: rgba(255, 0, 0, 0.5) !important;
+/* === Stars Background === */
+.star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle 3s ease-in-out infinite;
 }
 
+.star.small {
+    width: 1px;
+    height: 1px;
+}
+
+.star.medium {
+    width: 2px;
+    height: 2px;
+}
+
+.star.large {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 4px white;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* === Planets/Systems === */
+#systems-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.planet {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.planet.discovered {
+    opacity: 1;
+    transform: scale(1);
+    animation: planetPulse 4s ease-in-out infinite;
+}
+
+@keyframes planetPulse {
+    0%, 100% {
+        box-shadow: 
+            0 0 20px currentColor,
+            0 0 40px rgba(0, 217, 255, 0.4);
+    }
+    50% {
+        box-shadow: 
+            0 0 30px currentColor,
+            0 0 60px rgba(0, 217, 255, 0.6),
+            0 0 80px rgba(168, 85, 247, 0.3);
+    }
+}
+
+/* Types de planètes */
+.planet.type-desert {
+    background: radial-gradient(circle at 30% 30%, #f4a460, #cd853f);
+    color: #f4a460;
+}
+
+.planet.type-ice {
+    background: radial-gradient(circle at 30% 30%, #87ceeb, #4682b4);
+    color: #87ceeb;
+}
+
+.planet.type-volcanic {
+    background: radial-gradient(circle at 30% 30%, #ff6347, #8b0000);
+    color: #ff6347;
+}
+
+.planet.type-ocean {
+    background: radial-gradient(circle at 30% 30%, #00bfff, #0066cc);
+    color: #00bfff;
+}
+
+.planet.type-forest {
+    background: radial-gradient(circle at 30% 30%, #228b22, #006400);
+    color: #228b22;
+}
+
+.planet.type-gas-giant {
+    background: radial-gradient(circle at 30% 30%, #dda0dd, #9370db);
+    color: #dda0dd;
+}
+
+.planet:hover {
+    transform: scale(1.2);
+    z-index: 100;
+}
+
+/* Label planète */
+.planet-label {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 
+        0 0 8px rgba(0, 217, 255, 0.8),
+        0 2px 4px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+}
+
+.planet:hover .planet-label,
+.planet.discovered .planet-label {
+    opacity: 1;
+}
+
+/* === Exploration UI === */
+.exploration-info {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 20px 24px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    z-index: 1000;
+}
+
+.exploration-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: var(--color-accent-cyan);
+}
+
+.exploration-stat {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.exploration-stat strong {
+    color: white;
+}
+
+/* === Controls === */
+.map-controls {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.map-controls button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    padding: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .exploration-info {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 16px;
+    }
+    
+    .map-controls {
+        bottom: 20px;
+        right: 20px;
+        flex-direction: column;
+    }
+}

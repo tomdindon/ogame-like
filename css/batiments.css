@@ -1,182 +1,150 @@
-/* ============================
-   PAGE BÂTIMENTS
-============================ */
+/* ============================================
+   BATIMENTS.CSS - AVEC IMAGES
+   ============================================ */
 
-#page-batiments {
-    background-image: url("../assets/Logo/batiments.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    min-height: 100vh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-}
-
-
-
-/* Grille des slots */
-.building-slots {
-    width: 90%;
-    margin: 30px auto;
+#buildings-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
-}
-
-/* Slot */
-.slot {
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
     padding: 20px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-
-    backdrop-filter: blur(6px);
-
-    min-height: 380px;
 }
 
-.slot.empty {
-    color: #888;
-    font-size: 1.2em;
-    font-style: italic;
-}
-
-/* Carte bâtiment */
 .building-card {
-    width: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all var(--transition-base);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+}
+
+.building-card:hover {
+    border-color: rgba(0, 217, 255, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 
+        0 20px 40px rgba(0, 217, 255, 0.2),
+        0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+/* === Image du bâtiment === */
+.building-image-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
 }
 
 .building-image {
     width: 100%;
-    max-height: 160px;
-    object-fit: contain;
-    margin-bottom: 10px;
+    height: 100%;
+    object-fit: contain; /* ⭐ CONTAIN pour voir l'entièreté */
+    object-position: center;
+    transition: transform var(--transition-base);
 }
 
-.building-name {
-    font-size: 1.3em;
-    color: #7fffd4;
+.building-card:hover .building-image {
+    transform: scale(1.05);
 }
 
-.building-description {
-    color: #d0d4d8;
-    font-size: 0.95em;
+/* Fallback si image manquante */
+.building-image-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
+}
+
+.building-emoji-large {
+    font-size: 4rem;
+    filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));
+}
+
+/* === Contenu === */
+.building-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.building-header h3 {
+    font-size: 1.3rem;
+    margin: 0;
+    color: white;
 }
 
 .building-level {
-    color: #fff;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.building-bonus {
-    color: #a0ffd4;
+.building-level span {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.building-production {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.production-icon {
+    font-size: 1.5rem;
+}
+
+.production-value {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    color: var(--color-accent-purple);
+    font-size: 1.1rem;
 }
 
 .building-cost {
-    color: #ffd86b;
-}
-
-.building-time {
-    color: #ffb84a;
-}
-
-.building-button {
-    margin-top: 10px;
-    padding: 10px 15px;
-
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 8px;
-
-    color: #fff;
-    font-size: 1em;
-    font-weight: 600;
-
-    cursor: pointer;
-    transition: 0.25s;
-    backdrop-filter: blur(4px);
-}
-
-.building-button:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-}
-
-
-
-/* HUD style Missions */
-.hud-missions-style {
-    width: 90%;
-    margin: 20px auto;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-    backdrop-filter: blur(6px);
-
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.hud-left p {
-    margin: 4px 0;
-    color: #d0d4d8;
-    font-size: 1.1em;
-}
-
-/* Conteneur des slots */
-.building-slots {
-    width: 90%;
-    margin: 30px auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
-}
-
-/* Slot vide ou rempli */
-.slot {
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    padding: 20px;
-
-    display: flex;
+    gap: 12px;
     justify-content: center;
-    align-items: flex-start; /* important */
-    flex-direction: column; /* pour empiler proprement */
-
-    backdrop-filter: blur(6px);
-    transition: 0.25s;
-
-    min-height: 380px; /* augmente la hauteur minimale */
-    height: auto; /* laisse le contenu décider */
 }
 
-
-/* Apparence d’un slot vide */
-.slot.empty {
-    color: #888;
-    font-size: 1.2em;
-    font-style: italic;
-}
-
-/* Carte bâtiment dans un slot */
-.slot .building-card {
+.btn-upgrade-building {
     width: 100%;
-    height: 100%;
-    padding: 0;
-    background: transparent;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-pink));
     border: none;
-    box-shadow: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    margin-top: 8px;
+}
+
+.btn-upgrade-building:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+}
+
+@media (max-width: 768px) {
+    #buildings-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 15px;
+    }
+    
+    .building-image-container {
+        height: 200px;
+    }
 }

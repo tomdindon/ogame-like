@@ -1,103 +1,242 @@
-/* ============================
-   LAYOUT GLOBAL
-============================ */
+/* ============================================
+   LAYOUT.CSS - HUD et structure générale
+   ============================================ */
 
-.main-layout {
-    display: flex;
-    gap: 40px;
-}
-
-.column {
-    flex: 1;
-    padding: 15px;
-    border-radius: 12px;
-
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(4px);
-
-    color: #d0d4d8;
-}
-
-.column h2 {
-    color: #7fffd4;
-    margin-bottom: 15px;
-}
-
-/* Backgrounds globaux */
-
-
-/* ============================
-   HUD GLOBAL
-============================ */
-
-.global-hud {
+/* === HUD Container === */
+#hud-container {
     position: fixed;
-    top: 0;
+    top: 65px; /* Sous la nav */
     left: 0;
-    width: 100%;
-    z-index: 1000;
-
-    background: rgba(10, 15, 30, 0.95);
-    border-bottom: 1px solid rgba(127, 255, 212, 0.3);
-    padding: 10px 0;
+    right: 0;
+    z-index: 9998;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.85) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    padding: 12px 20px;
 }
 
-
-.resources {
+/* === HUD Wrapper === */
+#hud-wrapper {
     display: flex;
-    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    margin: 0 auto;
+    gap: 16px; /* 👈 RÉDUIT de 20px à 16px */
+    flex-wrap: wrap;
+}
+
+/* === Ressources Grid === */
+.hud-resources {
+    display: flex;
+    gap: 12px; /* 👈 RÉDUIT de 16px à 12px */
     flex-wrap: wrap;
     align-items: center;
 }
 
-.resources p {
-    margin: 0;
-    color: #d0d4d8;
-    font-size: 0.95em;
-    white-space: nowrap;
+.hud-resource-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px; /* 👈 RÉDUIT de 10px 18px à 8px 16px */
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px; /* 👈 RÉDUIT de 10px à 8px */
+    transition: all var(--transition-base);
+    font-size: 0.9rem; /* 👈 RÉDUIT de 0.95rem */
 }
 
-.resources span {
-    color: #fff;
-    font-weight: bold;
-    margin-left: 5px;
+.hud-resource-item:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(0, 217, 255, 0.4);
+    transform: translateY(-1px); /* 👈 RÉDUIT de -2px */
 }
 
-#unit-count-display {
-    color: #7fffd4;
-    border: 1px solid rgba(127, 255, 212, 0.3);
-    padding: 4px 10px;
-    border-radius: 4px;
-    background: rgba(127, 255, 212, 0.05);
-    margin-left: 10px;
-    font-weight: bold;
+.hud-resource-icon {
+    font-size: 1.2rem; /* 👈 RÉDUIT de 1.3rem */
 }
 
+.hud-resource-label {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem; /* 👈 RÉDUIT de 0.8rem */
+}
+
+.hud-resource-value {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    color: var(--color-accent-cyan);
+    font-size: 0.9rem; /* 👈 RÉDUIT de 0.95rem */
+}
+
+/* === Actions HUD === */
+.hud-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.hud-button {
+    padding: 8px 20px; /* 👈 RÉDUIT de 10px 24px */
+    background: linear-gradient(135deg, var(--color-accent-cyan) 0%, var(--color-accent-purple) 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem; /* 👈 RÉDUIT de 0.9rem */
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 10px rgba(0, 217, 255, 0.3);
+}
+
+.hud-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.5);
+}
+
+/* === Compteur d'unités === */
+.hud-units {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px; /* 👈 RÉDUIT */
+    background: rgba(168, 85, 247, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem; /* 👈 RÉDUIT */
+}
+
+/* === Responsive === */
+@media (max-width: 1200px) {
+    #hud-wrapper {
+        gap: 12px;
+    }
+    
+    .hud-resources {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    #hud-container {
+        padding: 10px 15px; /* 👈 Encore plus compact sur mobile */
+    }
+    
+    #hud-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hud-resources {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    
+    .hud-resource-item {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .hud-button {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+    }
+}
+
+/* === Bouton Retour === */
 #back-button-wrapper {
     position: fixed;
-    top: 70px; /* juste sous le HUD */
-    right: 20px;
-    z-index: 99999;
-    display: none; /* caché par défaut */
+    top: 70px; /* ⭐ AJUSTÉ pour être visible sous le HUD */
+    left: 20px;
+    z-index: 9999;
+    transition: all var(--transition-base);
 }
 
 #btn-retour {
-    padding: 10px 18px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid rgba(127, 255, 212, 0.4);
-
-    background: rgba(0, 0, 0, 0.45);
-    color: #7fffd4;
-
-    backdrop-filter: blur(6px);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: 0.25s;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#btn-retour::before {
+    content: '←';
+    font-size: 1.2rem;
 }
 
 #btn-retour:hover {
-    background: rgba(127, 255, 212, 0.2);
-    border-color: rgba(127, 255, 212, 0.6);
-    transform: translateY(-2px);
+    background: rgba(30, 41, 59, 0.7);
+    border-color: var(--color-accent-cyan);
+    transform: translateX(-4px);
+    box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    #back-button-wrapper {
+        top: 140px; /* Plus bas sur mobile car le HUD prend plus de place */
+        left: 15px;
+    }
+    
+    #btn-retour {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+}
+
+
+
+.spa-page {
+    padding-top: 165px; /* Nav (65px) + HUD (75px) + Padding (25px) */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 40px;
+    min-height: 100vh;
+}
+
+.spa-page#page-dashboard {
+    padding-top: 165px;
+}
+
+.spa-page#page-map {
+    padding-top: 65px; /* Seulement la nav pour la carte */
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .spa-page {
+        padding-top: 180px; /* Plus d'espace sur mobile */
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+/* === Carte Galactique (pour le bouton dans le HUD) === */
+.btn-galaxy-map {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.btn-galaxy-map:hover {
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5) !important;
 }

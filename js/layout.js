@@ -1,82 +1,273 @@
+/* ============================================
+   LAYOUT.JS - Avec navigation globale
+   ============================================ */
+
 import { GameData } from "./gameData.js";
 
+let hudInjected = false;
+let navInjected = false;
+
 // ===============================
-// LAYOUT.JS - GESTION GLOBALE DU HUD
+// INJECTION DE LA NAVIGATION
 // ===============================
 
-// 1. INJECTION DU HTML
-export function injectHUD() {
-    // Vérifie si le HUD existe déjà pour éviter les doublons
-    if (document.querySelector(".global-hud")) return;
+export function injectNav() {
+    if (navInjected) return;
+
+    const existing = document.getElementById("main-nav");
+    if (existing) {
+        existing.remove();
+    }
 
     const nav = document.createElement("nav");
-    nav.className = "global-hud";
-
+    nav.id = "main-nav";
     nav.innerHTML = `
-        <div class="resources">
-            <p>🔩 Ferraille : <span id="scrap">0</span></p>
-            <p>⚡ Énergie : <span id="energy">0</span></p>
-            <p>🧬 Nano : <span id="nano">0</span></p>
-            <p>📡 Données : <span id="data">0</span></p>
-            <p id="unit-count-display">Unités : 0 / 0</p>
-
-            <button class="btn-map" id="btn-map">
-                🌌 Carte Galactique
+        <div class="nav-wrapper">
+            <div class="nav-brand">
+                <a href="#page-dashboard">
+                    <span class="nav-logo">🌌</span>
+                    <span class="nav-title">Cosmic Empires</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#page-dashboard" class="nav-link" data-page="page-dashboard">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Accueil</span>
+                </a>
+                <a href="#page-batiments" class="nav-link" data-page="page-batiments">
+                    <span class="nav-icon">🏗️</span>
+                    <span class="nav-text">Bâtiments</span>
+                </a>
+                <a href="#page-unites" class="nav-link" data-page="page-unites">
+                    <span class="nav-icon">🚀</span>
+                    <span class="nav-text">Unités</span>
+                </a>
+                <a href="#page-recherche" class="nav-link" data-page="page-recherche">
+                    <span class="nav-icon">🔬</span>
+                    <span class="nav-text">Recherche</span>
+                </a>
+                <a href="#page-missions" class="nav-link" data-page="page-missions">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-text">Missions</span>
+                </a>
+                <a href="#page-map" class="nav-link" data-page="page-map">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-text">Carte</span>
+                </a>
+                <a href="#page-trade" class="nav-link" data-page="page-trade">
+                    <span class="nav-icon">💱</span>
+                    <span class="nav-text">Commerce</span>
+                </a>
+                <a href="#page-profil" class="nav-link" data-page="page-profil">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Profil</span>
+                </a>
+            </div>
+            
+            <button class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
         </div>
     `;
 
-    // Injecter dans #app
-    const app = document.getElementById("app");
-    if (app) {
-        app.prepend(nav);
-    }
+    document.body.prepend(nav);
+    navInjected = true;
 
-    // ⭐ Correction : empêcher le reload si on est déjà sur la Map
-    const btnMap = document.getElementById("btn-map");
-    if (btnMap) {
-        btnMap.addEventListener("click", () => {
-            if (location.hash !== "#page-map") {
-                location.hash = "page-map";
-            }
+    // Ajouter le toggle mobile
+    const navToggle = document.getElementById("nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    
+    if (navToggle && navLinks) {
+        navToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            navToggle.classList.toggle("active");
+        });
+
+        // Fermer le menu au clic sur un lien
+        document.querySelectorAll(".nav-link").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+                navToggle.classList.remove("active");
+            });
         });
     }
+
+    updateActiveNavLink();
 }
 
 // ===============================
-// LOGIQUE GLOBALE
+// MISE À JOUR DU LIEN ACTIF
+// ===============================
+
+export function updateActiveNavLink() {
+    const currentHash = location.hash.replace("#", "") || "page-dashboard";
+    
+    document.querySelectorAll(".nav-link").forEach(link => {
+        link.classList.remove("active");
+        if (link.dataset.page === currentHash) {
+            link.classList.add("active");
+        }
+    });
+}
+
+// ===============================
+// INJECTION DU HUD
+// ===============================
+
+export function injectHUD() {
+    if (hudInjected) {
+        updateGlobalUnitHUD();
+        return;
+    }
+
+    const existing = document.getElementById("hud-container");
+    if (existing) {
+        existing.remove();
+    }
+
+    const hud = document.createElement("div");
+    hud.id = "hud-container";
+    hud.innerHTML = `
+        <div id="hud-wrapper">
+            <div class="hud-resources">
+                <div class="hud-resource-item">
+                    <span class="hud-resource-icon">🔩</span>
+                    <div>
+                        <div class="hud-resource-label">Ferraille</div>
+                        <div class="hud-resource-value" id="hud-scrap">0</div>
+                    </div>
+                </div>
+                
+                <div class="hud-resource-item">
+                    <span class="hud-resource-icon">⚡</span>
+                    <div>
+                        <div class="hud-resource-label">Énergie</div>
+                        <div class="hud-resource-value" id="hud-energy">0</div>
+                    </div>
+                </div>
+                
+                <div class="hud-resource-item">
+                    <span class="hud-resource-icon">🧬</span>
+                    <div>
+                        <div class="hud-resource-label">Nano</div>
+                        <div class="hud-resource-value" id="hud-nano">0</div>
+                    </div>
+                </div>
+                
+                <div class="hud-resource-item">
+                    <span class="hud-resource-icon">📡</span>
+                    <div>
+                        <div class="hud-resource-label">Données</div>
+                        <div class="hud-resource-value" id="hud-data">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hud-actions">
+                <div class="hud-units" id="hud-unit-count">
+                    Unités : <span id="hud-units-value">0 / 700</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(hud);
+    hudInjected = true;
+
+    updateHUDResources();
+    updateGlobalUnitHUD();
+}
+
+// ===============================
+// MISE À JOUR DES RESSOURCES
+// ===============================
+
+export function updateHUDResources() {
+    const scrapEl = document.getElementById("hud-scrap");
+    const energyEl = document.getElementById("hud-energy");
+    const nanoEl = document.getElementById("hud-nano");
+    const dataEl = document.getElementById("hud-data");
+
+    if (scrapEl) scrapEl.textContent = Math.floor(GameData.resources.scrap || 0).toLocaleString();
+    if (energyEl) energyEl.textContent = Math.floor(GameData.resources.energy || 0).toLocaleString();
+    if (nanoEl) nanoEl.textContent = Math.floor(GameData.resources.nano || 0).toLocaleString();
+    if (dataEl) dataEl.textContent = Math.floor(GameData.resources.data || 0).toLocaleString();
+}
+
+// ===============================
+// GESTION DES UNITÉS
 // ===============================
 
 export function getUnitCapacity() {
-    const hangarLevel = GameData.units["hangar"]?.level ?? 1;
-    return hangarLevel * 50;
+    const hangarData = GameData.units?.hangar;
+    const hangarLevel = hangarData?.level || 1;
+    const baseCapacity = 100;
+    const capacityPerLevel = 50;
+    
+    return baseCapacity + (hangarLevel * capacityPerLevel);
 }
 
 export function getTotalUnits() {
-    return Object.values(GameData.units)
-        .filter(u => typeof u.count === "number")
-        .reduce((sum, u) => sum + u.count, 0);
+    let total = 0;
+    
+    for (const [unitId, data] of Object.entries(GameData.units || {})) {
+        if (unitId === 'hangar') continue;
+        total += data.count || 0;
+    }
+    
+    return total;
 }
 
 export function updateGlobalUnitHUD() {
-    const unitDisplay = document.getElementById("unit-count-display");
-    if (!unitDisplay) return;
+    const unitsValueEl = document.getElementById("hud-units-value");
+    if (!unitsValueEl) return;
 
     const total = getTotalUnits();
-    const capacity = getUnitCapacity();
+    const max = getUnitCapacity();
+    
+    unitsValueEl.textContent = `${total} / ${max}`;
 
-    unitDisplay.textContent = `Unités : ${total} / ${capacity}`;
-
-    if (total >= capacity) {
-        unitDisplay.style.color = "#ff4a4a";
-        unitDisplay.style.borderColor = "#ff4a4a";
-    } else {
-        unitDisplay.style.color = "#7fffd4";
-        unitDisplay.style.borderColor = "rgba(127, 255, 212, 0.3)";
+    const unitsContainer = document.getElementById("hud-unit-count");
+    if (unitsContainer) {
+        const ratio = total / max;
+        
+        if (ratio >= 1) {
+            unitsContainer.style.borderColor = "rgba(239, 68, 68, 0.8)";
+            unitsContainer.style.background = "rgba(239, 68, 68, 0.3)";
+            unitsContainer.style.color = "#fca5a5";
+        } else if (ratio >= 0.9) {
+            unitsContainer.style.borderColor = "rgba(251, 191, 36, 0.8)";
+            unitsContainer.style.background = "rgba(251, 191, 36, 0.3)";
+            unitsContainer.style.color = "#fcd34d";
+        } else if (ratio >= 0.7) {
+            unitsContainer.style.borderColor = "rgba(251, 191, 36, 0.6)";
+            unitsContainer.style.background = "rgba(251, 191, 36, 0.2)";
+            unitsContainer.style.color = "#fde68a";
+        } else {
+            unitsContainer.style.borderColor = "rgba(168, 85, 247, 0.4)";
+            unitsContainer.style.background = "rgba(168, 85, 247, 0.2)";
+            unitsContainer.style.color = "white";
+        }
     }
 }
 
+// ===============================
+// RETRAIT DU HUD
+// ===============================
+
 export function removeHUD() {
-    const hud = document.querySelector(".global-hud");
-    if (hud) hud.remove();
+    const hud = document.getElementById("hud-container");
+    if (hud) {
+        hud.remove();
+        hudInjected = false;
+    }
 }
+
+// ===============================
+// EXPORTS
+// ===============================
+
+export { hudInjected, navInjected };

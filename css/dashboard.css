@@ -1,40 +1,145 @@
+/* ============================================
+   DASHBOARD.CSS - Page d'accueil moderne
+   ============================================ */
+
+#page-dashboard {
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+#page-dashboard header {
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+#page-dashboard h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple), var(--color-accent-pink));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.4));
+    }
+    50% {
+        filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6));
+    }
+}
+
+/* === Grille des cartes === */
 .dashboard-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .dashboard-card {
-    background: rgba(20, 20, 20, 0.8);
-    border: 1px solid #444;
-    padding: 20px;
-    border-radius: 8px;
     cursor: pointer;
-    transition: 0.2s;
+    position: relative;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
 }
 
-.dashboard-card:hover {
-    background: rgba(40, 40, 40, 0.9);
-    transform: translateY(-4px);
+/* Effet de bordure animée au hover */
+.dashboard-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple), var(--color-accent-pink));
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.dashboard-card:hover::after {
+    opacity: 1;
 }
 
 .dashboard-card h2 {
-    margin-top: 0;
-    color: #00bcd4;
+    font-size: 1.5rem;
+    margin: 0;
+    background: linear-gradient(135deg, white, var(--color-text-secondary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-#page-dashboard {
-    background-image: url("../assets/Logo/tableau.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    min-height: 100vh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
+.dashboard-card p {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 90%;
 }
 
+/* Icônes emoji stylisés */
+.dashboard-card::before {
+    content: attr(data-icon);
+    font-size: 3rem;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.5));
+    transition: all var(--transition-base);
+}
 
+.dashboard-card:hover::before {
+    transform: scale(1.2) rotate(5deg);
+    filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.8));
+}
 
+/* Animation d'apparition */
+.dashboard-card {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Délais d'animation décalés */
+.dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+.dashboard-card:nth-child(2) { animation-delay: 0.15s; }
+.dashboard-card:nth-child(3) { animation-delay: 0.2s; }
+.dashboard-card:nth-child(4) { animation-delay: 0.25s; }
+.dashboard-card:nth-child(5) { animation-delay: 0.3s; }
+.dashboard-card:nth-child(6) { animation-delay: 0.35s; }
+.dashboard-card:nth-child(7) { animation-delay: 0.4s; }
+.dashboard-card:nth-child(8) { animation-delay: 0.45s; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+    }
+    
+    .dashboard-card {
+        min-height: 160px;
+    }
+}

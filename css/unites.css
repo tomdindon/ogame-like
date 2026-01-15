@@ -1,163 +1,246 @@
-/* ============================
-   PAGE UNITÉS
-============================ */
+/* ============================================
+   UNITES.CSS - AVEC IMAGES
+   ============================================ */
 
-#page-unites {
-    background-image: url("../assets/Logo/unite.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    min-height: 100vh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-}
-
-
-header h1 {
-    text-align: center;
-    color: #7fffd4;
-    margin-top: 20px;
-    text-shadow: 0 0 10px rgba(127, 255, 212, 0.4);
-}
-
-/* Grille des unités */
-.units-container {
-    width: 90%;
-    margin: 30px auto;
+#units-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    padding: 20px;
 }
 
-/* Carte unité */
+/* === Carte d'unité === */
 .unit-card {
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    padding: 20px;
-    backdrop-filter: blur(6px);
-    transition: 0.25s;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
 }
 
 .unit-card:hover {
+    border-color: rgba(0, 217, 255, 0.4);
     transform: translateY(-4px);
-    box-shadow: 0 0 12px rgba(127, 255, 212, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(0, 217, 255, 0.2),
+        0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+/* === Container image === */
+.unit-image-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(168, 85, 247, 0.1));
 }
 
 .unit-image {
     width: 100%;
-    height: 140px;
-    object-fit: contain;
-    margin-bottom: 15px;
+    height: 100%;
+    object-fit: contain; /* ⭐ CONTAIN pour voir l'entièreté */
+    object-position: center;
+    transition: transform var(--transition-base);
 }
 
-.unit-name {
-    font-size: 1.3em;
-    color: #7fffd4;
-    margin-bottom: 10px;
+.unit-card:hover .unit-image {
+    transform: scale(1.05);
 }
 
-.unit-description {
-    color: #d0d4d8;
-    font-size: 0.95em;
-    margin-bottom: 12px;
+/* Overlay avec emoji */
+.unit-image-overlay {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.unit-emoji-large {
+    font-size: 1.8rem;
+}
+
+/* === Contenu de la carte === */
+.unit-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.unit-header h3 {
+    font-size: 1.3rem;
+    margin: 0;
+    color: white;
 }
 
 .unit-level {
-    color: #ffffff;
-    font-weight: bold;
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.unit-stats {
-    color: #a0ffd4;
-    margin-bottom: 10px;
+.unit-level span {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
 }
 
-.unit-cost {
-    color: #ffd86b;
-    margin-bottom: 10px;
-}
-
-.unit-time {
-    color: #ffb84a;
-    margin-bottom: 15px;
-}
-
-.unit-button {
+.level-progress {
     width: 100%;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.25s;
+    height: 6px;
+    background: rgba(15, 15, 30, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.unit-button:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
+.level-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-purple));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 8px var(--color-accent-cyan);
 }
 
-/* HUD style Missions */
-.hud-missions-style {
-    width: 90%;
-    margin: 20px auto;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-    backdrop-filter: blur(6px);
+.unit-description {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+    margin: 0;
+    font-style: italic;
+}
 
+/* Stats */
+.unit-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(15, 15, 30, 0.4);
+    border-radius: 8px;
+}
+
+.stat-line {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    font-size: 0.9rem;
 }
 
-.hud-left p {
-    margin: 4px 0;
-    color: #d0d4d8;
-    font-size: 1.1em;
+.stat-label {
+    color: var(--color-text-secondary);
+    text-transform: capitalize;
 }
 
-.unit-available {
-    color: #ffffff;
-    background: rgba(127, 255, 212, 0.15);
-    border: 1px solid rgba(127, 255, 212, 0.3);
-    padding: 6px 10px;
-    border-radius: 6px;
+.stat-value {
+    color: var(--color-accent-cyan);
+    font-weight: 700;
+    font-family: 'Orbitron', monospace;
+}
+
+/* Coûts */
+.unit-cost {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.cost-item {
+    padding: 8px 16px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Compteur */
+.unit-count {
     text-align: center;
-    font-weight: bold;
-    margin: 10px 0;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    padding: 8px;
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: 8px;
 }
 
-.unit-create {
-    display: block;
-    width: 70%;
-    margin: 10px auto 0 auto;
-    padding: 10px;
-    background: rgba(127, 255, 212, 0.2);
-    border: 1px solid rgba(127, 255, 212, 0.4);
-    border-radius: 6px;
-    font-weight: bold;
-    color: #7fffd4;
+.unit-count strong {
+    color: var(--color-accent-purple);
+    font-family: 'Orbitron', monospace;
+}
+
+/* Actions */
+.unit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.btn-build,
+.btn-upgrade {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
     cursor: pointer;
-    text-align: center;
-    transition: 0.25s;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
 }
 
-.unit-create:hover {
-    background: rgba(127, 255, 212, 0.35);
+.btn-build:hover,
+.btn-upgrade:hover {
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 217, 255, 0.5);
 }
 
-.unit-image {
-    width: 100% !important;
-    height: 140px !important;
-    object-fit: contain !important;
-    display: block;
+.btn-build:disabled,
+.btn-upgrade:disabled {
+    background: var(--color-bg-tertiary);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Info bâtiment (Hangar) */
+.unit-info-building {
+    text-align: center;
+    padding: 12px;
+    background: rgba(0, 217, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+.unit-info-building p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+}
+
+.unit-info-building strong {
+    color: var(--color-accent-cyan);
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #units-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 15px;
+    }
+    
+    .unit-image-container {
+        height: 180px;
+    }
 }

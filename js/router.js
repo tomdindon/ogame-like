@@ -1,10 +1,10 @@
-// ===============================
-// ROUTER SPA — VERSION FINALE
-// ===============================
+/* ===============================
+   ROUTER SPA - AVEC NAVIGATION
+   =============================== */
 
-import { injectHUD, updateGlobalUnitHUD, removeHUD } from "./layout.js";
+import { injectHUD, updateGlobalUnitHUD, removeHUD, injectNav, updateActiveNavLink } from "./layout.js";
 import { initBatiments } from "./batiments.js";
-import { updateBackButtonVisibility } from "./main.js";
+import { onPageChange } from './main.js';
 import { initUnites } from "./unites.js";
 import { renderMissionsList, updateMissionLogDisplay, startGlobalTimer } from "./missions.js";
 import { updateInventory } from "./gameData.js";
@@ -13,84 +13,97 @@ import { buildings, GameData } from "./gameData.js";
 import { initLabo } from "./labo.js";
 import { initTrade } from "./trade.js";
 import { initRecherche } from "./recherche.js";
-import { initMap, resetMapInitialization } from "./map.js";
+import { initMap, getGalaxyMap } from "./map.js";
 
-
-// ===============================
-// PAGES AVEC HUD
-// ===============================
-
+// Pages avec HUD
 const pagesAvecHUD = [
+    "page-dashboard",
     "page-batiments",
     "page-unites",
     "page-labo",
     "page-trade",
     "page-recherche",
-    "page-missions"
+    "page-missions",
+    "page-inventaire",
+    "page-profil"
 ];
 
+let currentMapInstance = null;
 
 // ===============================
-// GESTION DES FONDS DYNAMIQUES
+// INITIALISATION
 // ===============================
 
-function updateBackground(pageId) {
-
-    const backgrounds = {
-        "page-unites": "bg-profil",
-        "page-profil": "bg-profil",
-        "page-missions": "bg-missions",
-        "page-labo": "bg-labo",
-        "page-trade": "bg-trade",
-        "page-recherche": "bg-recherche",
-        "page-map": "bg-map"
-    };
-
-    document.body.classList.remove(
-        "bg-profil",
-        "bg-missions",
-        "bg-labo",
-        "bg-trade",
-        "bg-recherche",
-        "bg-map"
-    );
-
-    if (backgrounds[pageId]) {
-        document.body.classList.add(backgrounds[pageId]);
-    }
+function init() {
+    // Injecter la navigation (toujours visible)
+    injectNav();
 }
 
+// ===============================
+// INITIALISATION DU DASHBOARD
+// ===============================
+
+function initDashboard() {
+    console.log("📊 Initialisation du Dashboard");
+
+    const cards = document.querySelectorAll(".dashboard-card");
+    
+    if (cards.length === 0) {
+        console.warn("⚠️ Aucune carte dashboard trouvée");
+        return;
+    }
+
+    cards.forEach(card => {
+        const targetPage = card.dataset.page;
+        
+        if (!targetPage) {
+            console.warn("⚠️ Carte sans data-page :", card);
+            return;
+        }
+
+        card.style.cursor = "pointer";
+
+        const newCard = card.cloneNode(true);
+        card.parentNode.replaceChild(newCard, card);
+
+        newCard.addEventListener("click", () => {
+            console.log("🎯 Navigation vers :", targetPage);
+            location.hash = targetPage;
+        });
+    });
+
+    console.log("✅", cards.length, "cartes dashboard initialisées");
+}
 
 // ===============================
 // AFFICHAGE DES PAGES
 // ===============================
 
 export function showPage(id) {
+    console.log("📄 Affichage de la page :", id);
 
-    // 1. Retirer le HUD
+    // 1. Retirer le HUD de l'ancienne page
     removeHUD();
 
     // 2. Cacher toutes les pages
-    document.querySelectorAll(".spa-page").forEach(p => p.style.display = "none");
+    document.querySelectorAll(".spa-page").forEach(p => {
+        p.classList.remove("active");
+    });
 
-    // 3. Réinitialiser la Map si on QUITTE la page Map
-    if (id !== "page-map") {
-        resetMapInitialization();
+    // 3. Afficher la page demandée
+    const page = document.getElementById(id);
+    if (!page) {
+        console.error("❌ Page introuvable :", id);
+        return;
     }
 
-    // 4. Afficher la page demandée
-    const page = document.getElementById(id);
-    if (page) page.style.display = "block";
-    else console.warn("Page introuvable :", id);
+    page.classList.add("active");
 
-    // 5. Classe spéciale pour la connexion
-    document.body.classList.toggle("show-connexion", id === "page-connexion");
-
-    // 6. Fonds dynamiques
-    updateBackground(id);
-
-    // 7. Initialisations spécifiques
+    // 4. Initialisations spécifiques par page
     switch (id) {
+        case "page-dashboard":
+            initDashboard();
+            break;
 
         case "page-batiments":
             initBatiments();
@@ -127,34 +140,53 @@ export function showPage(id) {
             break;
 
         case "page-map":
-            // ⭐ Patch critique : attendre que la page soit visible AVANT d'initialiser la Map
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
+            setTimeout(() => {
+                if (!currentMapInstance) {
                     initMap();
-                });
-            });
+                    currentMapInstance = getGalaxyMap();
+                    console.log("🗺️ Carte galactique initialisée");
+                }
+            }, 100);
             break;
     }
 
-    // 8. Injecter le HUD si nécessaire
+    // 5. Injecter le HUD si nécessaire
     if (pagesAvecHUD.includes(id)) {
         injectHUD();
         updateGlobalUnitHUD();
+        console.log("✅ HUD injecté pour :", id);
     }
 
-    // 9. Bouton Retour
-    updateBackButtonVisibility(id);
-}
+    // 6. Mettre à jour le lien actif dans la nav
+    updateActiveNavLink();
 
+    // 7. Notifier le changement de page
+    onPageChange(id);
+
+    // 8. Scroll en haut
+    window.scrollTo(0, 0);
+}
 
 // ===============================
 // ROUTAGE PAR HASH
 // ===============================
 
 function resolvePage() {
-    const page = location.hash.replace("#", "") || "page-connexion";
+    const hash = location.hash.replace("#", "");
+    const page = hash || "page-dashboard";
+    
+    console.log("🔍 Hash détecté :", hash, "→ Page :", page);
     showPage(page);
 }
 
+// ===============================
+// ÉCOUTEURS D'ÉVÉNEMENTS
+// ===============================
+
 window.addEventListener("hashchange", resolvePage);
-window.addEventListener("DOMContentLoaded", resolvePage);
+window.addEventListener("DOMContentLoaded", () => {
+    init();
+    resolvePage();
+});
+
+export { resolvePage };
