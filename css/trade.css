@@ -8,6 +8,8 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    padding-top: 150px; 
+    padding-left: 519px;
 }
 
 .trade-grid {
