@@ -1,205 +1,213 @@
 /* ============================================
-   LAYOUT.CSS - Structures de mise en page
+   LAYOUT.CSS - HUD et structure générale
    ============================================ */
 
-/* Container principal */
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-/* Headers */
-header {
-    text-align: center;
-    padding: 2rem 0;
-}
-
-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
-}
-
-/* Grilles flexibles */
-.grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin: 2rem 0;
-}
-
-.grid-3 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-.grid-4 {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-/* Layout deux colonnes pour missions */
-.main-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.column {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.column h2 {
-    margin-bottom: 1rem;
-    color: #667eea;
-}
-
-/* Sections */
-.section {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.section.center {
-    text-align: center;
-}
-
-/* Responsive */
-@media (max-width: 968px) {
-    .main-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .grid-2,
-    .grid-3 {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 0 1rem;
-    }
-
-    header h1 {
-        font-size: 2rem;
-    }
-}
-
-/* ============================================
-   HUD GLOBAL - Barre de ressources
-   ============================================ */
-
-.global-hud {
+/* === HUD Container === */
+#hud-container {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    background: linear-gradient(135deg, rgba(15, 12, 41, 0.95), rgba(48, 43, 99, 0.95));
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid rgba(102, 126, 234, 0.3);
-    padding: 1rem 2rem;
-    z-index: 999;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    right: 0;
+    z-index: 9998;
+    background: linear-gradient(180deg, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.85) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    padding: 12px 20px; /* 👈 RÉDUIT de 20px à 12px */
 }
 
-.global-hud .resources {
+/* === HUD Wrapper === */
+#hud-wrapper {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 2rem;
-    max-width: 1400px;
+    align-items: center;
+    max-width: 1600px;
     margin: 0 auto;
+    gap: 16px; /* 👈 RÉDUIT de 20px à 16px */
     flex-wrap: wrap;
 }
 
-.global-hud .resources p {
-    margin: 0;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
+/* === Ressources Grid === */
+.hud-resources {
+    display: flex;
+    gap: 12px; /* 👈 RÉDUIT de 16px à 12px */
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.hud-resource-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px; /* 👈 RÉDUIT de 10px 18px à 8px 16px */
+    background: rgba(30, 41, 59, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px; /* 👈 RÉDUIT de 10px à 8px */
+    transition: all var(--transition-base);
+    font-size: 0.9rem; /* 👈 RÉDUIT de 0.95rem */
+}
+
+.hud-resource-item:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(0, 217, 255, 0.4);
+    transform: translateY(-1px); /* 👈 RÉDUIT de -2px */
+}
+
+.hud-resource-icon {
+    font-size: 1.2rem; /* 👈 RÉDUIT de 1.3rem */
+}
+
+.hud-resource-label {
     font-weight: 600;
-    font-size: 0.95rem;
-    white-space: nowrap;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem; /* 👈 RÉDUIT de 0.8rem */
 }
 
-.global-hud .resources p span {
-    color: #667eea;
+.hud-resource-value {
+    font-family: 'Orbitron', monospace;
     font-weight: 700;
-    margin-left: 0.5rem;
+    color: var(--color-accent-cyan);
+    font-size: 0.9rem; /* 👈 RÉDUIT de 0.95rem */
 }
 
-#unit-count-display {
-    padding: 0.5rem 1rem;
-    background: rgba(127, 255, 212, 0.1);
-    border: 1px solid rgba(127, 255, 212, 0.3);
-    border-radius: 8px;
-    color: #7fffd4;
-    font-weight: 700;
+/* === Actions HUD === */
+.hud-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
-.btn-map {
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+.hud-button {
+    padding: 8px 20px; /* 👈 RÉDUIT de 10px 24px */
+    background: linear-gradient(135deg, var(--color-accent-cyan) 0%, var(--color-accent-purple) 100%);
     border: none;
     border-radius: 8px;
     color: white;
     font-weight: 600;
+    font-size: 0.85rem; /* 👈 RÉDUIT de 0.9rem */
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    font-size: 0.95rem;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 10px rgba(0, 217, 255, 0.3);
 }
 
-.btn-map:hover {
+.hud-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.5);
 }
 
-/* Espacer le contenu en dessous du HUD */
+/* === Compteur d'unités === */
+.hud-units {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px; /* 👈 RÉDUIT */
+    background: rgba(168, 85, 247, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem; /* 👈 RÉDUIT */
+}
+
+/* === Responsive === */
+@media (max-width: 1200px) {
+    #hud-wrapper {
+        gap: 12px;
+    }
+    
+    .hud-resources {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    #hud-container {
+        padding: 10px 15px; /* 👈 Encore plus compact sur mobile */
+    }
+    
+    #hud-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .hud-resources {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    
+    .hud-resource-item {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .hud-button {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+    }
+}
+
+/* === Bouton Retour === */
+#back-button-wrapper {
+    position: fixed;
+    top: 80px; /* 👈 RÉDUIT de 100px à 80px pour compenser le HUD plus petit */
+    left: 20px;
+    z-index: 9999;
+    transition: all var(--transition-base);
+}
+
+#btn-retour {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    padding: 10px 20px; /* 👈 RÉDUIT de 12px 24px */
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem; /* 👈 RÉDUIT */
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#btn-retour::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+#btn-retour:hover {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: var(--color-accent-cyan);
+    transform: translateX(-4px);
+    box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+}
+
+/* === Ajustement du contenu principal === */
 .spa-page {
-    padding-top: 5rem !important;
+    padding-top: 80px; /* 👈 RÉDUIT de 100px à 80px */
+    min-height: 100vh;
 }
 
-
-
-/* Responsive */
-@media (max-width: 968px) {
-    .global-hud .resources {
-        gap: 1rem;
-        font-size: 0.85rem;
-    }
-
-    .btn-map {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.85rem;
-    }
+.spa-page#page-dashboard {
+    padding-top: 80px; /* 👈 Pareil pour le dashboard */
 }
 
-@media (max-width: 600px) {
-    .global-hud {
-        padding: 0.75rem 1rem;
-    }
+.spa-page#page-map {
+    padding-top: 0; /* 👈 Map en plein écran */
+}
 
-    .global-hud .resources {
-        gap: 0.5rem;
-    }
+/* === Carte Galactique (pour le bouton dans le HUD) === */
+.btn-galaxy-map {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
 
-    .global-hud .resources p {
-        padding: 0.4rem 0.75rem;
-        font-size: 0.8rem;
-    }
+.btn-galaxy-map:hover {
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5) !important;
 }

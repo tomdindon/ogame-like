@@ -1,10 +1,10 @@
-// ===============================
-// ROUTER SPA - VERSION CORRIGÉE
-// ===============================
+/* ===============================
+   ROUTER SPA - VERSION MODERNE
+   =============================== */
 
 import { injectHUD, updateGlobalUnitHUD, removeHUD } from "./layout.js";
 import { initBatiments } from "./batiments.js";
-import { updateBackButtonVisibility } from "./main.js";
+import { onPageChange } from './main.js';
 import { initUnites } from "./unites.js";
 import { renderMissionsList, updateMissionLogDisplay, startGlobalTimer } from "./missions.js";
 import { updateInventory } from "./gameData.js";
@@ -13,20 +13,26 @@ import { buildings, GameData } from "./gameData.js";
 import { initLabo } from "./labo.js";
 import { initTrade } from "./trade.js";
 import { initRecherche } from "./recherche.js";
-import { initMap, resetMapInitialization } from "./map.js";
+import { initMap, getGalaxyMap } from "./map.js";
 
-// ✅ AJOUTER page-dashboard ICI
+// ===============================
+// CONFIGURATION
+// ===============================
+
+// Pages avec HUD (barre de ressources)
 const pagesAvecHUD = [
-    "page-dashboard",      // ⭐ AJOUT
+    "page-dashboard",
     "page-batiments",
     "page-unites",
     "page-labo",
     "page-trade",
     "page-recherche",
     "page-missions",
-    "page-inventaire",     // ⭐ Ajoute aussi inventaire si tu veux
-    "page-profil"          // ⭐ Et profil si tu veux
+    "page-inventaire",
+    "page-profil"
 ];
+
+let currentMapInstance = null;
 
 // ===============================
 // INITIALISATION DU DASHBOARD
@@ -52,6 +58,7 @@ function initDashboard() {
 
         card.style.cursor = "pointer";
 
+        // Cloner pour supprimer les anciens listeners
         const newCard = card.cloneNode(true);
         card.parentNode.replaceChild(newCard, card);
 
@@ -71,7 +78,7 @@ function initDashboard() {
 export function showPage(id) {
     console.log("📄 Affichage de la page :", id);
 
-    // 1. Retirer le HUD
+    // 1. Retirer le HUD de l'ancienne page
     removeHUD();
 
     // 2. Cacher toutes les pages
@@ -79,12 +86,7 @@ export function showPage(id) {
         p.classList.remove("active");
     });
 
-    // 3. Réinitialiser la Map si on quitte
-    if (id !== "page-map") {
-        resetMapInitialization();
-    }
-
-    // 4. Afficher la page demandée
+    // 3. Afficher la page demandée
     const page = document.getElementById(id);
     if (!page) {
         console.error("❌ Page introuvable :", id);
@@ -93,7 +95,7 @@ export function showPage(id) {
 
     page.classList.add("active");
 
-    // 5. Initialisations spécifiques
+    // 4. Initialisations spécifiques par page
     switch (id) {
         case "page-dashboard":
             initDashboard();
@@ -134,23 +136,29 @@ export function showPage(id) {
             break;
 
         case "page-map":
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
+            // Initialiser la carte avec un délai pour s'assurer que le DOM est prêt
+            setTimeout(() => {
+                if (!currentMapInstance) {
                     initMap();
-                });
-            });
+                    currentMapInstance = getGalaxyMap();
+                    console.log("🗺️ Carte galactique initialisée");
+                }
+            }, 100);
             break;
     }
 
-    // 6. Injecter le HUD si nécessaire
+    // 5. Injecter le HUD si nécessaire
     if (pagesAvecHUD.includes(id)) {
         injectHUD();
         updateGlobalUnitHUD();
         console.log("✅ HUD injecté pour :", id);
     }
 
-    // 7. Bouton Retour
-    updateBackButtonVisibility(id);
+    // 6. Notifier le changement de page (pour main.js)
+    onPageChange(id);
+
+    // 7. Scroll en haut
+    window.scrollTo(0, 0);
 }
 
 // ===============================
@@ -165,5 +173,12 @@ function resolvePage() {
     showPage(page);
 }
 
+// ===============================
+// ÉCOUTEURS D'ÉVÉNEMENTS
+// ===============================
+
 window.addEventListener("hashchange", resolvePage);
 window.addEventListener("DOMContentLoaded", resolvePage);
+
+// Export pour accès externe si besoin
+export { resolvePage };

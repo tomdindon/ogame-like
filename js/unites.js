@@ -1,6 +1,6 @@
-// ===============================
-// UNITES.JS - VERSION CORRIGÉE
-// ===============================
+/* ===============================
+   UNITES.JS - VERSION COMPLÈTE
+   =============================== */
 
 import { GameData, spendResource, saveGame } from "./gameData.js";
 import { getUnitCapacity, getTotalUnits, updateGlobalUnitHUD } from "./layout.js";
@@ -53,10 +53,14 @@ const unitsData = [
         maxLevel: 20,
         description: "Augmente la capacité maximale de vos unités.",
         cost: { scrap: 300, energy: 150 },
-        stats: { capacité: 50 }, // ✅ AJOUT DES STATS
-        isBuilding: true // ✅ Marquer comme bâtiment spécial
+        stats: { capacité: 50 },
+        isBuilding: true
     }
 ];
+
+// ===============================
+// INITIALISATION DES UNITÉS
+// ===============================
 
 export function initUnites() {
     const container = document.getElementById("units-container");
@@ -68,6 +72,24 @@ export function initUnites() {
     container.innerHTML = "";
     console.log("🚀 Initialisation des unités");
 
+    // Afficher la capacité globale en haut
+    const capacityInfo = document.createElement("div");
+    capacityInfo.className = "capacity-info";
+    capacityInfo.innerHTML = `
+        <div class="capacity-bar-container">
+            <div class="capacity-header">
+                <h3>📊 Capacité de Flotte</h3>
+                <span class="capacity-numbers">${getTotalUnits()} / ${getUnitCapacity()}</span>
+            </div>
+            <div class="capacity-bar">
+                <div class="capacity-fill" style="width: ${(getTotalUnits() / getUnitCapacity()) * 100}%"></div>
+            </div>
+            <p class="capacity-tip">💡 Améliorez le Hangar pour augmenter la capacité</p>
+        </div>
+    `;
+    container.appendChild(capacityInfo);
+
+    // Afficher les unités
     unitsData.forEach(unit => {
         const data = GameData.units[unit.id];
         const level = data?.level || 1;
@@ -76,7 +98,7 @@ export function initUnites() {
         const card = document.createElement("div");
         card.className = "unit-card";
 
-        // ✅ Vérifier si unit.stats existe avant Object.entries
+        // Stats
         const statsHTML = unit.stats 
             ? Object.entries(unit.stats).map(([key, val]) => `
                 <div class="stat-line">
@@ -86,21 +108,24 @@ export function initUnites() {
             `).join('')
             : '<p class="no-stats">Aucune statistique</p>';
 
-        // ✅ Affichage différent pour le Hangar
+        // Actions différentes pour le Hangar
         const actionsHTML = unit.isBuilding 
             ? `
+                <div class="unit-info-building">
+                    <p>🏗️ Capacité actuelle : <strong>${getUnitCapacity()}</strong></p>
+                </div>
                 <div class="unit-actions">
                     <button class="btn-upgrade" data-id="${unit.id}">
-                        ${level >= unit.maxLevel ? 'Niveau max' : 'Améliorer'}
+                        ${level >= unit.maxLevel ? '✅ Niveau max' : '⬆️ Améliorer'}
                     </button>
                 </div>
             `
             : `
-                <div class="unit-count">Possédés : ${count}</div>
+                <div class="unit-count">Possédés : <strong>${count}</strong></div>
                 <div class="unit-actions">
-                    <button class="btn-build" data-id="${unit.id}">Construire</button>
+                    <button class="btn-build" data-id="${unit.id}">🔨 Construire</button>
                     <button class="btn-upgrade" data-id="${unit.id}">
-                        ${level >= unit.maxLevel ? 'Max' : 'Améliorer'}
+                        ${level >= unit.maxLevel ? '✅ Max' : '⬆️ Améliorer'}
                     </button>
                 </div>
             `;
@@ -112,6 +137,9 @@ export function initUnites() {
             </div>
             <div class="unit-level">
                 <span>Niveau ${level} / ${unit.maxLevel}</span>
+                <div class="level-progress">
+                    <div class="level-fill" style="width: ${(level / unit.maxLevel) * 100}%"></div>
+                </div>
             </div>
             ${unit.description ? `<p class="unit-description">${unit.description}</p>` : ''}
             <div class="unit-stats">
@@ -126,7 +154,7 @@ export function initUnites() {
 
         container.appendChild(card);
 
-        // ✅ Événements uniquement si ce n'est PAS un bâtiment
+        // Événements
         if (!unit.isBuilding) {
             const btnBuild = card.querySelector(".btn-build");
             if (btnBuild) {
@@ -147,12 +175,16 @@ export function initUnites() {
     console.log("✅ Unités initialisées");
 }
 
+// ===============================
+// CONSTRUIRE UNE UNITÉ
+// ===============================
+
 function buildUnit(unit) {
     const capacity = getUnitCapacity();
     const total = getTotalUnits();
 
     if (total >= capacity) {
-        alert("Capacité maximale atteinte ! Améliorez votre Hangar.");
+        alert("⚠️ Capacité maximale atteinte !\n\nAméliorez votre Hangar pour construire plus d'unités.");
         return;
     }
 
@@ -166,9 +198,13 @@ function buildUnit(unit) {
         initUnites();
         console.log("✅ Unité construite :", unit.name);
     } else {
-        alert("Ressources insuffisantes !");
+        alert("❌ Ressources insuffisantes !");
     }
 }
+
+// ===============================
+// AMÉLIORER UNE UNITÉ
+// ===============================
 
 function upgradeUnit(unit) {
     const level = GameData.units[unit.id]?.level || 1;
@@ -176,17 +212,21 @@ function upgradeUnit(unit) {
     if (level >= unit.maxLevel) return;
 
     const upgradeCost = {
-        scrap: unit.cost.scrap * 2,
-        energy: unit.cost.energy * 2
+        scrap: Math.floor(unit.cost.scrap * Math.pow(1.5, level)),
+        energy: Math.floor(unit.cost.energy * Math.pow(1.5, level))
     };
 
     if (spendResource("scrap", upgradeCost.scrap) && spendResource("energy", upgradeCost.energy)) {
+        if (!GameData.units[unit.id]) {
+            GameData.units[unit.id] = { level: 1, count: 0 };
+        }
         GameData.units[unit.id].level++;
         saveGame();
-        updateGlobalUnitHUD(); // ✅ Mise à jour du HUD pour le Hangar
+        updateGlobalUnitHUD();
         initUnites();
-        console.log("✅ Unité améliorée :", unit.name);
+        console.log("✅ Unité améliorée :", unit.name, "→ Niveau", GameData.units[unit.id].level);
     } else {
-        alert("Ressources insuffisantes !");
+        alert("❌ Ressources insuffisantes !\n\n" +
+              `Requis : ${upgradeCost.scrap} Ferraille, ${upgradeCost.energy} Énergie`);
     }
 }

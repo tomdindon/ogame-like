@@ -160,3 +160,49 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Styles supplémentaires pour les missions d'exploration */
+
+.exploration-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(168, 85, 247, 0.2));
+    border: 1px solid rgba(0, 217, 255, 0.4);
+    color: var(--color-accent-cyan);
+    margin-left: 8px;
+}
+
+.mission-log-entry {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(15, 15, 30, 0.4);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--color-accent-cyan);
+}
+
+.mission-log-icon {
+    font-size: 1.5rem;
+}
+
+.mission-log-name {
+    flex: 1;
+    font-weight: 600;
+}
+
+.mission-log-time {
+    font-family: 'Orbitron', monospace;
+    color: var(--color-accent-cyan);
+    font-weight: 700;
+}
+
+#missionStatus.exploration-success {
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(168, 85, 247, 0.2));
+    border-color: var(--color-accent-cyan);
+    animation: glow 2s ease-in-out infinite;
+}

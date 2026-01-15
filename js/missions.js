@@ -1,23 +1,30 @@
-// ===============================
-// MISSIONS.JS
-// ===============================
+/* ===============================
+   MISSIONS.JS - Avec système d'exploration
+   =============================== */
 
 import { GameData, addResource, saveGame } from "./gameData.js";
+import { triggerExploration } from "./main.js";
+
+// ===============================
+// DÉFINITION DES MISSIONS
+// ===============================
 
 const MISSIONS = {
     exploration: {
         key: "exploration",
         name: "Exploration spatiale",
         emoji: "🔭",
-        duration: 300,
+        duration: 300, // 5 minutes
+        type: "exploration", // ⭐ TYPE IMPORTANT
         reward: { scrap: 1000, xp: 50 },
         prereq: { drone_recuperateur: 5 }
     },
     reconnaissance: {
         key: "reconnaissance",
-        name: "Reconnaissance",
+        name: "Reconnaissance sectorielle",
         emoji: "📡",
-        duration: 120,
+        duration: 120, // 2 minutes
+        type: "exploration", // ⭐ TYPE IMPORTANT
         reward: { data: 50, xp: 30 },
         prereq: { drone_recuperateur: 3 }
     },
@@ -25,7 +32,7 @@ const MISSIONS = {
         key: "sauvetage",
         name: "Mission de sauvetage",
         emoji: "🛟",
-        duration: 600,
+        duration: 600, // 10 minutes
         reward: { nano: 20, xp: 80 },
         prereq: { drone_recuperateur: 8 }
     },
@@ -33,9 +40,18 @@ const MISSIONS = {
         key: "combat",
         name: "Patrouille de combat",
         emoji: "⚔️",
-        duration: 180,
+        duration: 180, // 3 minutes
         reward: { energy: 100, xp: 60 },
         prereq: { chasseur: 5 }
+    },
+    deep_exploration: {
+        key: "deep_exploration",
+        name: "Exploration profonde",
+        emoji: "🌌",
+        duration: 480, // 8 minutes
+        type: "exploration", // ⭐ TYPE IMPORTANT
+        reward: { nano: 30, data: 100, xp: 120 },
+        prereq: { drone_recuperateur: 10, chasseur: 3 }
     }
 };
 
@@ -102,18 +118,29 @@ export function renderMissionsList() {
         }
 
         let rewardText = [];
-        if (mission.reward.scrap) rewardText.push(`${mission.reward.scrap} Ferraille`);
-        if (mission.reward.energy) rewardText.push(`${mission.reward.energy} Énergie`);
-        if (mission.reward.nano) rewardText.push(`${mission.reward.nano} Nano`);
-        if (mission.reward.data) rewardText.push(`${mission.reward.data} Données`);
-        if (mission.reward.xp) rewardText.push(`${mission.reward.xp} XP`);
+        if (mission.reward.scrap) rewardText.push(`🔩 ${mission.reward.scrap} Ferraille`);
+        if (mission.reward.energy) rewardText.push(`⚡ ${mission.reward.energy} Énergie`);
+        if (mission.reward.nano) rewardText.push(`🧬 ${mission.reward.nano} Nano`);
+        if (mission.reward.data) rewardText.push(`📡 ${mission.reward.data} Données`);
+        if (mission.reward.xp) rewardText.push(`⭐ ${mission.reward.xp} XP`);
+
+        // Badge pour les missions d'exploration
+        const explorationBadge = mission.type === "exploration" 
+            ? '<span class="badge exploration-badge">🗺️ Exploration</span>' 
+            : '';
 
         div.innerHTML = `
             <div class="mission-header">
-                <h3>${mission.name}</h3>
+                <div>
+                    <h3>${mission.name}</h3>
+                    ${explorationBadge}
+                </div>
                 <span class="mission-emoji">${mission.emoji}</span>
             </div>
-            <p class="mission-description">Durée : ${Math.floor(mission.duration / 60)} minutes</p>
+            <p class="mission-description">
+                Durée : ${Math.floor(mission.duration / 60)} minutes
+                ${mission.type === "exploration" ? '<br><small>🌟 Révèle de nouvelles zones sur la carte</small>' : ''}
+            </p>
             <div class="mission-requirements">
                 <h4>Prérequis</h4>
                 <p>${prereqText.length ? prereqText.join(", ") : "Aucun"}</p>
@@ -122,7 +149,7 @@ export function renderMissionsList() {
                 ${rewardText.map(r => `<div class="reward-item">${r}</div>`).join('')}
             </div>
             <button class="btn-mission" data-key="${mission.key}">
-                ${active ? 'En cours...' : hasReq ? 'Lancer' : 'Prérequis manquants'}
+                ${active ? '⏳ En cours...' : hasReq ? '🚀 Lancer' : '🔒 Prérequis manquants'}
             </button>
         `;
 
@@ -135,6 +162,8 @@ export function renderMissionsList() {
 
         container.appendChild(div);
     });
+
+    console.log("✅ Liste des missions mise à jour");
 }
 
 // ===============================
@@ -148,7 +177,12 @@ export function updateMissionLogDisplay() {
     const activeMissions = loadActiveMissions();
 
     if (activeMissions.length === 0) {
-        log.textContent = "Aucune mission en cours.";
+        log.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: var(--color-text-secondary);">
+                <p>📋 Aucune mission en cours.</p>
+                <p style="font-size: 0.9rem; margin-top: 8px;">Lancez une mission pour commencer !</p>
+            </div>
+        `;
         return;
     }
 
@@ -156,10 +190,17 @@ export function updateMissionLogDisplay() {
     const lines = activeMissions.map(m => {
         const mission = MISSIONS[m.key];
         const remaining = Math.floor((m.endTime - now) / 1000);
-        return `${mission.name} : ${formatTime(remaining)}`;
+        const explorationIcon = mission.type === "exploration" ? "🗺️ " : "";
+        return `
+            <div class="mission-log-entry">
+                <span class="mission-log-icon">${mission.emoji}</span>
+                <span class="mission-log-name">${explorationIcon}${mission.name}</span>
+                <span class="mission-log-time">${formatTime(remaining)}</span>
+            </div>
+        `;
     });
 
-    log.textContent = lines.join("\n");
+    log.innerHTML = lines.join("");
 }
 
 // ===============================
@@ -184,6 +225,18 @@ function startMission(missionKey) {
     renderMissionsList();
     updateMissionLogDisplay();
     startGlobalTimer();
+
+    // Message de confirmation
+    const status = document.getElementById("missionStatus");
+    if (status) {
+        status.textContent = `🚀 Mission "${mission.name}" lancée !`;
+        status.className = "info";
+        setTimeout(() => {
+            status.textContent = "";
+        }, 3000);
+    }
+
+    console.log(`🚀 Mission lancée : ${mission.name}`);
 }
 
 // ===============================
@@ -196,6 +249,8 @@ export function startGlobalTimer() {
     globalMissionTimer = setInterval(() => {
         tickMissions();
     }, 1000);
+
+    console.log("⏱️ Timer de missions démarré");
 }
 
 function stopGlobalTimerIfNeeded() {
@@ -203,6 +258,7 @@ function stopGlobalTimerIfNeeded() {
     if (activeMissions.length === 0 && globalMissionTimer) {
         clearInterval(globalMissionTimer);
         globalMissionTimer = null;
+        console.log("⏹️ Timer de missions arrêté");
     }
 }
 
@@ -243,6 +299,7 @@ function finishMission(missionKey) {
 
     const reward = mission.reward;
 
+    // Donner les récompenses
     if (reward.scrap) addResource("scrap", reward.scrap);
     if (reward.energy) addResource("energy", reward.energy);
     if (reward.nano) addResource("nano", reward.nano);
@@ -252,11 +309,39 @@ function finishMission(missionKey) {
         saveGame();
     }
 
-    const status = document.getElementById("missionStatus");
-    if (status) {
-        status.textContent = `Mission "${mission.name}" terminée !`;
-        status.className = "success";
+    // ⭐ SI C'EST UNE MISSION D'EXPLORATION, RÉVÉLER LA CARTE
+    if (mission.type === "exploration") {
+        const explored = triggerExploration();
+        if (explored) {
+            console.log("🗺️ Nouvelle zone découverte sur la carte galactique !");
+            
+            const status = document.getElementById("missionStatus");
+            if (status) {
+                status.innerHTML = `
+                    ✅ Mission "${mission.name}" terminée !<br>
+                    🗺️ Nouvelle zone découverte sur la carte !
+                `;
+                status.className = "success exploration-success";
+            }
+        }
+    } else {
+        const status = document.getElementById("missionStatus");
+        if (status) {
+            status.textContent = `✅ Mission "${mission.name}" terminée !`;
+            status.className = "success";
+        }
     }
+
+    // Effacer le message après 5 secondes
+    setTimeout(() => {
+        const status = document.getElementById("missionStatus");
+        if (status) {
+            status.textContent = "";
+            status.className = "";
+        }
+    }, 5000);
+
+    console.log(`✅ Mission terminée : ${mission.name}`);
 }
 
 // ===============================
@@ -267,5 +352,9 @@ window.addEventListener("load", () => {
     const activeMissions = loadActiveMissions();
     if (activeMissions.length > 0) {
         startGlobalTimer();
+        console.log(`🔄 Reprise de ${activeMissions.length} mission(s) en cours`);
     }
 });
+
+// Export pour tests
+export { MISSIONS };
