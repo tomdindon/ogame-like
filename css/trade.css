@@ -11,14 +11,14 @@
 }
 
 .trade-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 25px;
-    width: 90%;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
 }
 
-/* Ligne 1 : Bouclier centré */
 .trade-shield {
     text-align: center;
     margin-bottom: 2rem;
