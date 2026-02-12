@@ -1,7 +1,8 @@
 /* ============================================
-   UNITES.CSS - AVEC IMAGES
+   UNITS.CSS - VERSION FINALE
    ============================================ */
 
+/* Grille des unités */
 #units-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -9,7 +10,7 @@
     padding: 20px;
 }
 
-/* === Carte d'unité === */
+/* Carte d'unité */
 .unit-card {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
@@ -24,12 +25,12 @@
 .unit-card:hover {
     border-color: rgba(0, 217, 255, 0.4);
     transform: translateY(-4px);
-    box-shadow: 
+    box-shadow:
         0 20px 40px rgba(0, 217, 255, 0.2),
         0 0 20px rgba(168, 85, 247, 0.1);
 }
 
-/* === Container image === */
+/* Image */
 .unit-image-container {
     position: relative;
     width: 100%;
@@ -41,7 +42,7 @@
 .unit-image {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* ⭐ CONTAIN pour voir l'entièreté */
+    object-fit: contain;
     object-position: center;
     transition: transform var(--transition-base);
 }
@@ -50,7 +51,7 @@
     transform: scale(1.05);
 }
 
-/* Overlay avec emoji */
+/* Emoji overlay */
 .unit-image-overlay {
     position: absolute;
     top: 12px;
@@ -70,7 +71,7 @@
     font-size: 1.8rem;
 }
 
-/* === Contenu de la carte === */
+/* Contenu */
 .unit-content {
     padding: 20px;
     display: flex;
@@ -84,12 +85,7 @@
     color: white;
 }
 
-.unit-level {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
+/* Niveau */
 .unit-level span {
     font-size: 0.9rem;
     color: var(--color-text-secondary);
@@ -112,6 +108,7 @@
     box-shadow: 0 0 8px var(--color-accent-cyan);
 }
 
+/* Description */
 .unit-description {
     font-size: 0.85rem;
     color: var(--color-text-secondary);
@@ -138,7 +135,6 @@
 
 .stat-label {
     color: var(--color-text-secondary);
-    text-transform: capitalize;
 }
 
 .stat-value {
@@ -211,7 +207,7 @@
     box-shadow: none;
 }
 
-/* Info bâtiment (Hangar) */
+/* Info bâtiment */
 .unit-info-building {
     text-align: center;
     padding: 12px;
@@ -220,16 +216,9 @@
     border: 1px solid rgba(0, 217, 255, 0.2);
 }
 
-.unit-info-building p {
-    margin: 0;
-    font-size: 0.95rem;
-    color: var(--color-text-secondary);
-}
-
 .unit-info-building strong {
     color: var(--color-accent-cyan);
     font-family: 'Orbitron', monospace;
-    font-size: 1.1rem;
 }
 
 /* Responsive */
@@ -239,8 +228,73 @@
         gap: 16px;
         padding: 15px;
     }
-    
+
     .unit-image-container {
         height: 180px;
     }
 }
+
+.capacity-slot {
+    background: rgba(0, 0, 0, 0.55); /* plus sombre */
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centrage */
+    gap: 6px;
+
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.55);
+}
+
+/* Ligne 1 : Capacité */
+.capacity-line1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    opacity: 0.95;
+    text-align: center;
+}
+
+/* Ligne 2 : Hangar attaque / défense */
+.capacity-line2 {
+    font-size: 1.05em;
+    opacity: 0.85;
+    text-align: center;
+}
+
+/* Ligne 3 : vide (espacement) */
+.capacity-line3 {
+    height: 10px;
+}
+
+/* Ligne 4 : valeur */
+.capacity-line4 {
+    font-size: 1.3em;
+    font-weight: 700;
+    text-align: center;
+    color: #ffffff;
+}
+
+.unit-actions-horizontal {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.cost-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.cost-item {
+    font-size: 0.9em;
+}
+
+
+
+

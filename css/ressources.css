@@ -1,0 +1,200 @@
+/* ============================
+   GRILLE DES RESSOURCES
+============================ */
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* 8 ressources sur une ligne */
+    gap: 25px;
+    padding: 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ============================
+   CARTE RESSOURCE
+============================ */
+
+.inventory-item {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    transition: 0.25s;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inventory-item:hover {
+    transform: translateY(-4px);
+    background: rgba(0, 0, 0, 0.45);
+}
+
+/* ============================
+   EMOJI
+============================ */
+
+.inventory-item .emoji {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* ============================
+   NOM DE LA RESSOURCE
+============================ */
+
+.item-name {
+    font-size: 1.2em;
+    color: #7fffd4;
+    margin: 5px 0;
+    font-weight: 600;
+}
+
+/* ============================
+   VALEUR
+============================ */
+
+.item-value {
+    font-size: 1.4em;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* ============================
+   ZONE DE TRADE
+============================ */
+
+#trade-zone {
+    margin-top: 40px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+    min-height: 150px; /* espace réservé */
+}
+
+/* ============================
+   ZONE DE TRADE
+============================ */
+
+#trade-zone {
+    margin-top: 40px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+}
+
+.trade-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Bloc gauche et droite */
+.trade-block {
+    width: 30%;
+    text-align: center;
+}
+
+/* Titre */
+.trade-title {
+    font-size: 1.3em;
+    color: #7fffd4;
+    margin-bottom: 10px;
+}
+
+/* Icône ressource */
+.trade-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+/* Sélecteurs */
+#sell-select,
+#buy-select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Quantité */
+#sell-amount {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Résultat */
+#buy-result {
+    font-size: 1.4em;
+    color: #ffd86b;
+    margin-top: 10px;
+}
+
+/* Bouton échange */
+.trade-center {
+    width: 20%;
+    text-align: center;
+}
+
+#trade-button {
+    padding: 12px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.15);
+    color: white;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#trade-button:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-3px);
+}
+
+/* ============================
+   MENUS DÉROULANTS
+============================ */
+
+#sell-select,
+#buy-select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.3);
+
+    background: rgba(0, 0, 0, 0.35); /* gris transparent */
+    color: white;
+
+    appearance: none; /* enlève le style natif */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    cursor: pointer;
+}
+
+/* Couleur du texte dans les options */
+#sell-select option,
+#buy-select option {
+    background: rgba(20, 20, 20, 0.9);
+    color: white;
+}

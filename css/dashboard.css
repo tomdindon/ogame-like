@@ -1,145 +1,212 @@
-/* ============================================
-   DASHBOARD.CSS - Page d'accueil moderne
-   ============================================ */
+/* Import police Orbitron */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-#page-dashboard {
-    padding: 40px 20px;
-    min-height: 100vh;
+/* === BACKGROUND COCKPIT === */
+body.dashboard-bg {
+    background-image: url("../assets/Logo/tableau.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-#page-dashboard header {
-    text-align: center;
-    margin-bottom: 60px;
-    position: relative;
+/* === ÉTOILES ANIMÉES (VERSION PLUS VISIBLE) === */
+
+#starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 2; /* au-dessus du cockpit */
+    pointer-events: none;
 }
 
-#page-dashboard h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple), var(--color-accent-pink));
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
-    animation: titleGlow 3s ease-in-out infinite;
-}
-
-@keyframes titleGlow {
-    0%, 100% {
-        filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.4));
-    }
-    50% {
-        filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6));
-    }
-}
-
-/* === Grille des cartes === */
-.dashboard-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.dashboard-card {
-    cursor: pointer;
-    position: relative;
-    min-height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 12px;
-}
-
-/* Effet de bordure animée au hover */
-.dashboard-card::after {
-    content: '';
+/* Couches d'étoiles */
+.stars, .stars2, .stars3 {
     position: absolute;
     inset: 0;
-    border-radius: 16px;
-    padding: 2px;
-    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple), var(--color-accent-pink));
-    -webkit-mask: 
-        linear-gradient(#fff 0 0) content-box, 
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity var(--transition-base);
+    background-repeat: repeat;
+    background-size: 300px 300px; /* étoiles plus denses */
 }
 
-.dashboard-card:hover::after {
+/* Couche 1 : petites étoiles très visibles */
+.stars {
+    background-image:
+        radial-gradient(3px 3px at 20px 30px, white, transparent),
+        radial-gradient(3px 3px at 80px 120px, white, transparent),
+        radial-gradient(3px 3px at 200px 50px, white, transparent),
+        radial-gradient(3px 3px at 300px 200px, white, transparent),
+        radial-gradient(3px 3px at 500px 80px, white, transparent),
+        radial-gradient(3px 3px at 150px 250px, white, transparent),
+        radial-gradient(3px 3px at 400px 300px, white, transparent);
+    opacity: 0.7; /* beaucoup plus visible */
+    animation: starScroll1 25s linear infinite;
+}
+
+/* Couche 2 : étoiles moyennes */
+.stars2 {
+    background-image:
+        radial-gradient(4px 4px at 40px 60px, white, transparent),
+        radial-gradient(4px 4px at 160px 240px, white, transparent),
+        radial-gradient(4px 4px at 400px 100px, white, transparent),
+        radial-gradient(4px 4px at 600px 300px, white, transparent),
+        radial-gradient(4px 4px at 250px 180px, white, transparent);
+    opacity: 0.9; /* très visible */
+    animation: starScroll2 40s linear infinite;
+}
+
+/* Couche 3 : grosses étoiles */
+.stars3 {
+    background-image:
+        radial-gradient(6px 6px at 100px 150px, white, transparent),
+        radial-gradient(6px 6px at 300px 400px, white, transparent),
+        radial-gradient(6px 6px at 700px 200px, white, transparent),
+        radial-gradient(6px 6px at 500px 350px, white, transparent);
+    opacity: 1; /* maximum */
+    animation: starScroll3 60s linear infinite;
+}
+
+/* Animations */
+@keyframes starScroll1 {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-800px); }
+}
+
+@keyframes starScroll2 {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-800px); }
+}
+
+@keyframes starScroll3 {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-800px); }
+}
+
+
+/* === HUD === */
+#hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(5, 10, 25, 0.65);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 25px;
+    z-index: 10; /* AU-DESSUS des étoiles */
+    border-bottom: 1px solid rgba(0, 200, 255, 0.25);
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Gauche */
+#hud-left {
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#game-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #8beaff;
+    text-shadow: 0 0 10px #00eaff;
+    letter-spacing: 2px;
+}
+
+/* Centre */
+#hud-center {
+    display: flex;
+    gap: 28px;
+    position: relative;
+    z-index: 12;
+}
+
+.hud-btn {
+    font-size: 34px;
+    cursor: pointer;
+    color: #8beaff;
+    opacity: 0.9;
+    transition: 0.25s ease;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+}
+
+.hud-btn:hover {
+    transform: scale(1.25);
     opacity: 1;
+    color: #b8f7ff;
+    text-shadow: 0 0 14px #00eaff;
 }
 
-.dashboard-card h2 {
-    font-size: 1.5rem;
-    margin: 0;
-    background: linear-gradient(135deg, white, var(--color-text-secondary));
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.hud-btn.active {
+    border: 1px solid #00eaff;
+    box-shadow: 0 0 12px #00eaff;
+    background: rgba(0, 150, 255, 0.15);
 }
 
-.dashboard-card p {
-    color: var(--color-text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    max-width: 90%;
+/* Droite */
+#hud-right {
+    position: absolute;
+    right: 120px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column; /* OBLIGE l'ouverture vers le bas */
+    align-items: flex-end; /* aligne le dropdown à droite */
+    z-index: 11;
 }
 
-/* Icônes emoji stylisés */
-.dashboard-card::before {
-    content: attr(data-icon);
-    font-size: 3rem;
-    margin-bottom: 8px;
-    filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.5));
-    transition: all var(--transition-base);
+#res-dropdown {
+    position: absolute;
+    top: 100%; /* s’ouvre SOUS la ressource principale */
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.dashboard-card:hover::before {
-    transform: scale(1.2) rotate(5deg);
-    filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.8));
+.res-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-/* Animation d'apparition */
-.dashboard-card {
-    opacity: 0;
-    animation: fadeInUp 0.6s ease-out forwards;
+.res-icon {
+    font-size: 20px;
+    color: #8beaff;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.res-value {
+    font-size: 14px;
+    color: #b8f7ff;
 }
 
-/* Délais d'animation décalés */
-.dashboard-card:nth-child(1) { animation-delay: 0.1s; }
-.dashboard-card:nth-child(2) { animation-delay: 0.15s; }
-.dashboard-card:nth-child(3) { animation-delay: 0.2s; }
-.dashboard-card:nth-child(4) { animation-delay: 0.25s; }
-.dashboard-card:nth-child(5) { animation-delay: 0.3s; }
-.dashboard-card:nth-child(6) { animation-delay: 0.35s; }
-.dashboard-card:nth-child(7) { animation-delay: 0.4s; }
-.dashboard-card:nth-child(8) { animation-delay: 0.45s; }
+/* Décalage du contenu */
+main {
+    margin-top: 100px;
+}
 
-/* Responsive */
-@media (max-width: 768px) {
-    .dashboard-container {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 16px;
-    }
-    
-    .dashboard-card {
-        min-height: 160px;
-    }
+.page {
+    padding: 20px;
+    color: white;
+}
+
+
+/* map */
+#map.page {
+    padding: 0 !important;
+}
+
+#map {
+    margin: 0 !important;
+}
+
+#map-container, #map-image {
+    margin: 0 !important;
+    padding: 0 !important;
 }

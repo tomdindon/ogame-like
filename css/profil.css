@@ -1,139 +1,156 @@
-/* ============================================
-   PROFIL.CSS
-   ============================================ */
+/* ============================
+   CONTENEUR PRINCIPAL
+============================ */
 
-#page-profil {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+.profil-container {
+    width: 100%;
+    padding: 40px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Affichage des rangs */
+/* Empêche dashboard.css de forcer les images à width:100% */
+.profil-container img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 240px;
+}
+
+/* Empêche .page { padding:20px } de casser la mise en page */
+#profil.page {
+    padding: 0 !important;
+}
+
+/* ============================
+   AFFICHAGE DU RANG
+============================ */
+
 .rank-display {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.rank-side,
-.rank-current {
-    padding: 1rem 2rem;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1.2rem;
-    text-align: center;
+    gap: 20px;
+    margin: 30px auto;
+    width: 90%;
+    max-width: 1200px;
 }
 
 .rank-side {
-    background: rgba(255, 255, 255, 0.05);
-    opacity: 0.5;
+    font-size: 1.2em;
+    color: #ffffff;
+    opacity: 0.7;
+    flex: 1;
+}
+
+#rank-prev { text-align: right; }
+#rank-next { text-align: left; }
+
+/* Correction : forcer la couleur du texte du rang */
+.rank-current,
+.rank-side,
+#rank-prev,
+#rank-next {
+    color: #ffffff !important;
 }
 
 .rank-current {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
-    transform: scale(1.1);
+    font-size: 2.4em;
+    font-weight: 900;
+    padding: 12px 25px;
+    border-radius: 10px;
+    min-width: 250px;
+    background: rgba(255, 140, 0, 0.25);
+    border: 2px solid rgba(255, 140, 0, 0.6);
+    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Panneau principal */
+/* ============================
+   PANNEAU PRINCIPAL
+============================ */
+
 .rank-panel {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 90%;
+    margin: 20px auto;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    padding: 2rem;
+    backdrop-filter: blur(6px);
 }
 
+/* Icône du rang */
 #rank-icon {
     display: block;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 2rem auto;
-    border-radius: 50%;
-    border: 3px solid #667eea;
-    object-fit: cover;
+    margin: 0 auto 20px auto;
+    width: 240px;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(251, 252, 252, 0.7));
 }
 
-/* Grille d'informations */
+/* ============================
+   GRILLE D'INFOS
+============================ */
+
 .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    gap: 35px;
 }
 
 .col {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-}
-
-.section-title {
-    font-size: 1.3rem;
-    color: #667eea;
-    margin: 1.5rem 0 0.75rem 0;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+    gap: 12px;
 }
 
 .info-line {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    font-size: 0.95rem;
+    color: #d0d4d8;
+    font-size: 1.1em;
 }
 
-.info-line.total-line {
-    font-weight: 700;
-    font-size: 1.05rem;
-    color: #764ba2;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 1rem;
-    margin-top: 0.5rem;
+.section-title {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 1.3em;
+    color: #7fffd4;
+    text-shadow: 0 0 6px rgba(127, 255, 212, 0.4);
 }
+
+/* ============================
+   BARRES DE PROGRESSION
+============================ */
 
 .progress-bar {
     width: 100%;
-    height: 10px;
+    height: 12px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 6px;
     overflow: hidden;
-    margin: 0.25rem 0 0.75rem 0;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    border-radius: 10px;
-    transition: width 0.5s ease;
+    width: 0%;
+    background: linear-gradient(90deg, #7fffd4, #00bcd4);
+    transition: width 0.4s ease;
 }
 
 .troop-fill {
-    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    background: linear-gradient(90deg, #4aff9c, #00d47a);
 }
 
 .building-fill {
-    background: linear-gradient(90deg, #e74c3c, #c0392b);
+    background: linear-gradient(90deg, #ffd86b, #ffb84a);
 }
 
-@media (max-width: 968px) {
-    .info-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
-    .rank-display {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .rank-current {
-        transform: scale(1);
-    }
-
-    #rank-icon {
-        width: 120px;
-        height: 120px;
-    }
+.total-line span:last-child {
+    font-weight: bold;
+    color: #ffffff;
 }

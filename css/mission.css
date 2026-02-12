@@ -1,0 +1,142 @@
+/* ============================
+   PAGE MISSIONS — LAYOUT 2 COLONNES
+============================ */
+
+#missions {
+    overflow: hidden;
+    height: calc(100vh - 80px); /* sous le HUD */
+}
+
+#missionsWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* colonnes identiques */
+    gap: 40px;
+    padding: 30px;
+    height: 100%;
+}
+
+/* ============================
+   COLONNE GAUCHE — LISTE DES MISSIONS
+============================ */
+
+#missionsLeft {
+    overflow-y: auto;
+    padding-right: 10px;
+    height: 100%;
+}
+
+#missionsLeft h2 {
+    margin-bottom: 15px;
+}
+
+#missionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Carte mission */
+.building {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    transition: 0.25s;
+}
+
+.building:hover {
+    transform: translateY(-4px);
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.building p strong {
+    color: #7fffd4;
+    font-size: 1.2em;
+}
+
+/* Bouton lancer mission */
+.building button {
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #7fffd4;
+    background: rgba(0, 0, 0, 0.55);
+    color: #7fffd4;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.building button:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.75);
+    box-shadow: 0 0 10px rgba(127, 255, 212, 0.4);
+}
+
+.building button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ============================
+   COLONNE DROITE — JOURNAL
+============================ */
+
+#missionsRight {
+    overflow-y: auto;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+}
+
+#missionsRight h2 {
+    margin-bottom: 10px;
+    color: #ffd86b;
+}
+
+#missionStatus {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #ffd86b;
+}
+
+#missionLog {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    min-height: 60px;
+    line-height: 1.4em;
+}
+
+/* ============================
+   BARRE DE PROGRESSION
+============================ */
+
+.missionActiveBlock {
+    margin-bottom: 20px;
+}
+
+.progressBar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 6px 0 10px 0;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #00eaff, #7fffd4);
+    transition: width 0.3s linear;
+}
+
+.rewardPreview {
+    font-size: 0.9em;
+    color: #ffd86b;
+}

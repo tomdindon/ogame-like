@@ -1,0 +1,236 @@
+// =======================================
+// Liste des ressources affichées
+// =======================================
+
+const resourceList = [
+    { id: "scrap",     name: "Ferraille",        emoji: "🔩", rarity: "common" },
+    { id: "energy",    name: "Énergie",          emoji: "⚡", rarity: "common" },
+    { id: "nano",      name: "Nanocomposants",   emoji: "🧬", rarity: "common" },
+    { id: "data",      name: "Données anciennes",emoji: "📡", rarity: "common" },
+
+    { id: "tools",     name: "Outils",           emoji: "🛠️", rarity: "rare" },
+    { id: "drones",    name: "Drones",           emoji: "🤖", rarity: "rare" },
+    { id: "parts",     name: "Pièces",           emoji: "🧩", rarity: "rare" },
+    { id: "intel",     name: "Intelligence",     emoji: "🧠", rarity: "rare" }
+];
+
+// =======================================
+// Dépenser une ressource
+// =======================================
+
+function spendResource(id, amount) {
+    let save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
+
+    const current = save[id] ?? 0;
+
+    // Pas assez de ressources
+    if (current < amount) {
+        return false;
+    }
+
+    // Déduire
+    save[id] = current - amount;
+
+    // Sauvegarder
+    localStorage.setItem("cosmicSave", JSON.stringify(save));
+
+    // Mettre à jour l'affichage
+    updateHUD?.();
+    updateRessourcesPage?.();
+
+    return true;
+}
+
+// =======================================
+// Sauvegarde complète du jeu
+// =======================================
+
+function saveGame() {
+    let save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
+
+    // Sauvegarder les unités
+    save.units = GameData.units;
+
+    // Sauvegarder les ressources (elles sont déjà modifiées par spendResource)
+    // donc on ne touche pas save.scrap, save.energy, etc.
+
+    localStorage.setItem("cosmicSave", JSON.stringify(save));
+}
+
+
+// =======================================
+// Génération de la page Ressources
+// =======================================
+
+function initRessources() {
+
+    const container = document.getElementById("inventory-grid");
+    container.innerHTML = ""; // reset
+
+    const save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
+
+    resourceList.forEach(res => {
+
+        const value = save[res.id] ?? 0;
+
+        const item = document.createElement("div");
+        item.classList.add("inventory-item");
+
+        item.innerHTML = `
+            <span class="emoji">${res.emoji}</span>
+            <div class="item-name">${res.name}</div>
+            <div class="item-value">${value}</div>
+        `;
+
+        container.appendChild(item);
+    });
+
+    initTrade();
+}
+
+
+
+// =======================================
+// Remplir les menus déroulants
+// =======================================
+
+function populateTradeMenus() {
+    const sellSelect = document.getElementById("sell-select");
+    const buySelect = document.getElementById("buy-select");
+
+    sellSelect.innerHTML = '<option value="">Choisir...</option>';
+    buySelect.innerHTML = '<option value="">Choisir...</option>';
+
+    resourceList.forEach(res => {
+        const opt1 = document.createElement("option");
+        opt1.value = res.id;
+        opt1.textContent = res.name;
+        sellSelect.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = res.id;
+        opt2.textContent = res.name;
+        buySelect.appendChild(opt2);
+    });
+}
+
+
+
+// =======================================
+// Icônes du trade
+// =======================================
+
+function updateTradeIcons() {
+    const sellId = document.getElementById("sell-select").value;
+    const buyId = document.getElementById("buy-select").value;
+
+    const sellIcon = document.getElementById("sell-icon");
+    const buyIcon = document.getElementById("buy-icon");
+
+    const sellRes = resourceList.find(r => r.id === sellId);
+    const buyRes = resourceList.find(r => r.id === buyId);
+
+    sellIcon.textContent = sellRes ? sellRes.emoji : "❔";
+    buyIcon.textContent = buyRes ? buyRes.emoji : "❔";
+}
+
+
+
+// =======================================
+// Calcul du trade
+// =======================================
+
+function calculateTrade() {
+    const sellId = document.getElementById("sell-select").value;
+    const buyId = document.getElementById("buy-select").value;
+    const amount = parseInt(document.getElementById("sell-amount").value) || 0;
+
+    const sellRes = resourceList.find(r => r.id === sellId);
+    const buyRes = resourceList.find(r => r.id === buyId);
+
+    if (!sellRes || !buyRes || amount <= 0) {
+        document.getElementById("buy-result").textContent = "0";
+        return;
+    }
+
+    let rate = 1;
+
+    if (sellRes.rarity === "common" && buyRes.rarity === "rare") rate = 0.01;
+    if (sellRes.rarity === "rare" && buyRes.rarity === "common") rate = 50;
+
+    const result = amount * rate;
+    document.getElementById("buy-result").textContent = result.toFixed(2);
+}
+
+
+
+// =======================================
+// Fonction ÉCHANGER
+// =======================================
+
+function doTrade() {
+    let save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
+
+    const sellId = document.getElementById("sell-select").value;
+    const buyId = document.getElementById("buy-select").value;
+    const amount = parseInt(document.getElementById("sell-amount").value) || 0;
+
+    if (!sellId || !buyId || amount <= 0) return;
+
+    if ((save[sellId] ?? 0) < amount) {
+        alert("Pas assez de ressources !");
+        return;
+    }
+
+    const sellRes = resourceList.find(r => r.id === sellId);
+    const buyRes = resourceList.find(r => r.id === buyId);
+
+    let rate = 1;
+    if (sellRes.rarity === "common" && buyRes.rarity === "rare") rate = 0.01;
+    if (sellRes.rarity === "rare" && buyRes.rarity === "common") rate = 50;
+
+    const result = amount * rate;
+
+    save[sellId] -= amount;
+    save[buyId] = (save[buyId] ?? 0) + result;
+
+    localStorage.setItem("cosmicSave", JSON.stringify(save));
+
+    updateHUD();
+    updateRessourcesPage();
+}
+
+
+
+// =======================================
+// Événements du trade
+// =======================================
+
+function setupTradeEvents() {
+    document.getElementById("sell-select").addEventListener("change", () => {
+        updateTradeIcons();
+        calculateTrade();
+    });
+
+    document.getElementById("buy-select").addEventListener("change", () => {
+        updateTradeIcons();
+        calculateTrade();
+    });
+
+    document.getElementById("sell-amount").addEventListener("input", calculateTrade);
+
+    // 🔥 Le bon ID du bouton !
+    document.getElementById("trade-button").addEventListener("click", doTrade);
+}
+
+
+
+// =======================================
+// Initialisation du trade
+// =======================================
+
+function initTrade() {
+    populateTradeMenus();
+    setupTradeEvents();
+    updateTradeIcons();
+}
