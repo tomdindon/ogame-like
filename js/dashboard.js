@@ -18,7 +18,11 @@ document.addEventListener("click", () => {
 const buttons = document.querySelectorAll(".hud-btn");
 const pages = document.querySelectorAll(".page");
 
+<<<<<<< HEAD
+async function navigate(pageId) {
+=======
 function navigate(pageId) {
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
     // Masquer toutes les pages
     pages.forEach(p => p.style.display = "none");
@@ -46,15 +50,27 @@ function navigate(pageId) {
         initBatiments();
     }
 
+<<<<<<< HEAD
+    if (pageId === "ressources" && typeof initRessources === "function") {
+        initRessources();
+=======
     // 🔥 Correction essentielle : mise à jour de la page Ressources
     if (pageId === "ressources") {
         initRessources();
     
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
     }
 
     if (pageId === "unites" && typeof initUnites === "function") {
         initUnites();
     }
+<<<<<<< HEAD
+
+    if (pageId === "players" && typeof loadPlayersList === "function") {
+        loadPlayersList();
+    }
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 }
 
 // =======================================
@@ -68,10 +84,47 @@ buttons.forEach(btn => {
 });
 
 // =======================================
+<<<<<<< HEAD
+// INITIALISATION SUPABASE AU CHARGEMENT
+// =======================================
+
+async function initDashboard() {
+
+    // 1. Vérifier si un utilisateur est connecté
+    const { data: auth } = await supabase.auth.getUser();
+
+    if (!auth.user) {
+        console.warn("Aucun utilisateur connecté.");
+        return;
+    }
+
+    // 2. Initialiser le joueur si nécessaire (création des tables)
+    if (typeof initPlayerIfNeeded === "function") {
+        await initPlayerIfNeeded();
+    }
+
+    // 3. Appliquer la production automatique
+    if (typeof applyProduction === "function") {
+        await applyProduction();
+    }
+
+    // 4. Charger la page par défaut
+    navigate("default");
+
+    console.log("Dashboard initialisé avec Supabase.");
+}
+
+// =======================================
+// LANCEMENT DU DASHBOARD
+// =======================================
+
+initDashboard();
+=======
 // PAGE PAR DÉFAUT AU CHARGEMENT
 // =======================================
 
 navigate("default");
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
 // =======================================
 // HUD : MENU DÉROULANT DES RESSOURCES
@@ -95,3 +148,8 @@ if (resMain && resDropdown) {
         }
     });
 }
+<<<<<<< HEAD
+
+window.dashboardReady = true;
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3

@@ -3,6 +3,22 @@
 // =======================================
 
 const resourceList = [
+<<<<<<< HEAD
+    // COMMUNES
+    { id: "scrap",  name: "Ferraille",          emoji: "🔩", rarity: "common", rareEquivalent: "reinforcedSteel" },
+    { id: "energy", name: "Énergie instable",   emoji: "⚡", rarity: "common", rareEquivalent: "cyberModule" },
+    { id: "nano",   name: "Nanocomposants",     emoji: "🧬", rarity: "common", rareEquivalent: "syntheticNanites" },
+    { id: "data",   name: "Données anciennes",  emoji: "📡", rarity: "common", rareEquivalent: "aiFragment" },
+
+    // RARES (uniquement via trade)
+    { id: "reinforcedSteel", name: "Acier renforcé",        emoji: "🛠️", rarity: "rare", commonSource: "scrap" },
+    { id: "cyberModule",     name: "Module cybernétique",   emoji: "🧩", rarity: "rare", commonSource: "energy" },
+    { id: "syntheticNanites",name: "Nanites synthétiques",  emoji: "🤖", rarity: "rare", commonSource: "nano" },
+    { id: "aiFragment",      name: "Fragment d’IA",         emoji: "🧠", rarity: "rare", commonSource: "data" }
+];
+
+
+=======
     { id: "scrap",     name: "Ferraille",        emoji: "🔩", rarity: "common" },
     { id: "energy",    name: "Énergie",          emoji: "⚡", rarity: "common" },
     { id: "nano",      name: "Nanocomposants",   emoji: "🧬", rarity: "common" },
@@ -14,6 +30,7 @@ const resourceList = [
     { id: "intel",     name: "Intelligence",     emoji: "🧠", rarity: "rare" }
 ];
 
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 // =======================================
 // Dépenser une ressource
 // =======================================

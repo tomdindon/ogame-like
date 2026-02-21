@@ -3,6 +3,10 @@
 // ===============================
 
 function initProfil() {
+<<<<<<< HEAD
+    updatePlayerName();
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
     updateRankDisplay();
     updateBuildingBars();
     updateBuildingsTotal();
@@ -90,6 +94,18 @@ function updateRankProgress(rankIndex, xp) {
 }
 
 // ===============================
+<<<<<<< HEAD
+// NOM DU JOUEUR
+// ===============================
+
+function updatePlayerName() {
+    const name = GameData.playerName || "Inconnu";
+    document.getElementById("player-name").textContent = name;
+}
+
+// ===============================
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 // UNITÉS
 // ===============================
 

@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>Accueil du Jeu</title>
 
+<<<<<<< HEAD
+    <!-- Police Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Ton CSS -->
+    <link rel="stylesheet" href="css/index.css">
+
+    <style>
+        /* Empêche tout scroll */
+        html, body {
+            overflow: hidden;
+            height: 100%;
+        }
+    </style>
+=======
     <link rel="stylesheet" href="css/global-scale.css">
 
     <!-- Police Orbitron -->
@@ -14,6 +29,7 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/index.css">
 
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 </head>
 <body>
 
@@ -25,7 +41,26 @@
         </div>
 
         <div class="button-zone">
+<<<<<<< HEAD
+
+            <!-- 🔹 LOGIN BOX -->
+            <div id="login-box">
+
+                <input type="text" id="username" placeholder="Nom du joueur">
+                <input type="password" id="password" placeholder="Mot de passe">
+
+                <button id="login-btn">Connexion</button>
+
+                <div class="new-player-zone">
+                    <button id="register-btn">Nouveau joueur</button>
+                </div>
+
+            </div>
+            <!-- 🔹 FIN LOGIN BOX -->
+
+=======
             <button id="start-btn">Démarrer</button>
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
         </div>
 
     </div>
@@ -33,6 +68,8 @@
     <!-- Étoiles scintillantes -->
     <div class="shooting-stars"></div>
 
+<<<<<<< HEAD
+=======
     <!-- Script bouton -->
     <script>
         const startBtn = document.getElementById("start-btn");
@@ -49,6 +86,7 @@
         });
     </script>
 
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
     <!-- Script étoiles -->
     <script>
         const starContainer = document.querySelector(".shooting-stars");
@@ -74,8 +112,26 @@
             }
         }
 
+<<<<<<< HEAD
+        window.addEventListener("load", () => {
+            createStaticStars(150);
+        });
+    </script>
+
+    <!-- Librairie Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Client Supabase (UNE SEULE FOIS) -->
+<script src="./js/supabaseclient_v2.js"></script>
+
+<!-- Auth uniquement -->
+<script src="./js/auth.js"></script>
+
+
+=======
         createStaticStars(150);
     </script>
 
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 </body>
 </html>

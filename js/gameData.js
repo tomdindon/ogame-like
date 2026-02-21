@@ -5,7 +5,11 @@
 const GameData = {
 
     // XP du joueur (modifie cette valeur pour tester les rangs)
+<<<<<<< HEAD
+    xp: 42000,
+=======
     xp: 14000,
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
     // Temps de jeu
     playtime: {
@@ -94,6 +98,7 @@ function getUnitCapacity() {
     }
 
     return base + bonus;
+<<<<<<< HEAD
 }
 
 // Mise à jour du HUD global (pour plus tard)
@@ -101,3 +106,41 @@ function updateGlobalUnitHUD() {
     // Tu pourras afficher le total dans le HUD ici
     // Pour l’instant, on laisse vide pour éviter les erreurs
 }
+
+/* ============================================================
+   LOGIQUE DE PROGRESSION DES BÂTIMENTS
+   ============================================================ */
+
+// =======================================
+// Interpolation générique
+// =======================================
+function interpolate(level1, level10, level) {
+    return level1 + (level10 - level1) * ((level - 1) / 9);
+}
+
+// =======================================
+// Production d’un bâtiment selon son niveau
+// =======================================
+function getBuildingProduction(building, level) {
+    if (!building.production) return 0;
+    return interpolate(building.production.level1, building.production.level10, level);
+}
+
+// =======================================
+// Coût d’amélioration d’un bâtiment
+// =======================================
+function getBuildingUpgradeCost(building, targetLevel) {
+    if (!building.costPerLevel) return 0;
+    return building.costPerLevel[targetLevel] || 0;
+}
+
+
+=======
+}
+
+// Mise à jour du HUD global (pour plus tard)
+function updateGlobalUnitHUD() {
+    // Tu pourras afficher le total dans le HUD ici
+    // Pour l’instant, on laisse vide pour éviter les erreurs
+}
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3

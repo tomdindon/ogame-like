@@ -112,3 +112,65 @@
         twinkle 3s infinite ease-in-out,
         drift calc(40s * var(--parallax)) linear infinite;
 }
+
+#login-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    width: 260px;
+}
+
+#login-box input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.45);
+    color: white;
+    backdrop-filter: blur(6px);
+}
+
+#login-box input::placeholder {
+    color: #ccc;
+}
+
+#login-btn, #register-btn {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.45);
+    color: white;
+    backdrop-filter: blur(6px);
+    transition: 0.3s;
+}
+
+#login-btn:hover, #register-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.new-player-zone {
+    display: flex;
+    justify-content: center;
+}
+
+/* ============================
+   ANIMATIONS DES ÉTOILES
+============================ */
+
+/* Scintillement */
+@keyframes twinkle {
+    0% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.4); }
+    100% { opacity: 0.2; transform: scale(1); }
+}
+
+/* Déplacement lent (parallax) */
+@keyframes drift {
+    0% {
+        transform: translateY(0px) translateX(0px);
+    }
+    100% {
+        transform: translateY(200px) translateX(100px);
+    }
+}

@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="css/profil.css">
     <link rel="stylesheet" href="css/batiments.css">
     <link rel="stylesheet" href="css/ressources.css">
+<<<<<<< HEAD
+    <link rel="stylesheet" href="css/players.css">
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
     <link rel="stylesheet" href="css/units.css">
     <link rel="stylesheet" href="css/map.css">
     <link rel="stylesheet" href="css/mission.css">
@@ -44,6 +48,10 @@
             <div class="hud-btn" data-page="map">🗺️</div>
             <div class="hud-btn" data-page="labo" title="Labo">🔬</div>
             <div class="hud-btn" data-page="ressources" title="Ressources">📦</div>
+<<<<<<< HEAD
+            <div class="hud-btn" data-page="players" title="Joueurs">👥</div>
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
         </div>
 
         <!-- Droite : Ressources -->
@@ -57,6 +65,22 @@
     </div>
 
     <!-- Menu déroulant -->
+<<<<<<< HEAD
+   <div id="res-dropdown">
+    <!-- COMMUNES -->
+    <div class="res-item"><span class="res-icon">🔩</span><span id="hud-scrap" class="res-value">0</span></div>
+    <div class="res-item"><span class="res-icon">⚡</span><span id="hud-energy" class="res-value">0</span></div>
+    <div class="res-item"><span class="res-icon">🧬</span><span id="hud-nano" class="res-value">0</span></div>
+    <div class="res-item"><span class="res-icon">📡</span><span id="hud-data" class="res-value">0</span></div>
+
+    <!-- RARES -->
+    <div class="res-item"><span class="res-icon">🛠️</span><span id="hud-reinforcedSteel" class="res-value">0</span></div>
+    <div class="res-item"><span class="res-icon">🧩</span><span id="hud-cyberModule" class="res-value">0</span></div>
+    <div class="res-item"><span class="res-icon">🤖</span><span id="hud-syntheticNanites" class="res-value">0</span></div>
+    <div class="res-item"><span class="res-icon">🧠</span><span id="hud-aiFragment" class="res-value">0</span></div>
+</div>
+
+=======
     <div id="res-dropdown">
         <div class="res-item"><span class="res-icon">⚡</span><span id="hud-energy" class="res-value">0</span></div>
         <div class="res-item"><span class="res-icon">🧬</span><span id="hud-nano" class="res-value">0</span></div>
@@ -66,6 +90,7 @@
         <div class="res-item"><span class="res-icon">🧩</span><span id="hud-parts" class="res-value">0</span></div>
         <div class="res-item"><span class="res-icon">🧠</span><span id="hud-intel" class="res-value">0</span></div>
     </div>
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
 </div>
 
@@ -96,7 +121,11 @@
 
 
 
+<<<<<<< HEAD
+    <section id="profil" class="page profil-container" style="display:none;">
+=======
         <section id="profil" class="page profil-container" style="display:none;">
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
     <!-- Ligne des rangs -->
     <div class="rank-display">
@@ -111,12 +140,48 @@
         <!-- Icône du rang -->
         <img id="rank-icon" src="assets/ranks/non_classe.png" alt="Rang">
 
+<<<<<<< HEAD
+        <!-- ⭐ NOUVELLE GRILLE 2×2 POUR LES INFOS DU JOUEUR -->
+        <div class="player-info-grid">
+
+            <div class="info-line">
+                <span>Nom du joueur :</span>
+                <span id="player-name">Inconnu</span>
+            </div>
+
+            <div class="info-line">
+                <span>Temps de jeu :</span>
+                <span id="playtime">0h 00m</span>
+            </div>
+
+            <div class="info-line">
+                <span>Points d'expérience :</span>
+                <span id="xp-points">0 XP</span>
+            </div>
+
+            <div class="info-line">
+                <span>Progression du rang :</span>
+                <span id="rank-progress-text">0%</span>
+            </div>
+
+        </div>
+
+        <!-- Barre de progression du rang -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="rank-progress"></div>
+        </div>
+
+        <!-- Grille d'informations (Troupes + Bâtiments) -->
+=======
         <!-- Grille d'informations -->
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
         <div class="info-grid">
 
             <!-- Colonne 1 -->
             <div class="col">
 
+<<<<<<< HEAD
+=======
                 <div class="info-line">
                     <span>Temps de jeu :</span>
                     <span id="playtime">0h 00m</span>
@@ -136,6 +201,7 @@
                     <div class="progress-fill" id="rank-progress"></div>
                 </div>
 
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
                 <div class="section-title">Troupes</div>
 
                 <div class="info-line">
@@ -258,6 +324,10 @@
 </section>
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
         <section id="missions" class="page" style="display:none;">
 
     <div id="missionsWrapper">
@@ -415,6 +485,23 @@
 
 </section>
 
+<<<<<<< HEAD
+<section id="players" class="page" style="display:none;">
+
+    <div class="players-container">
+
+        <h2 class="players-title">Liste des joueurs</h2>
+
+        <div id="players-list" class="players-list">
+            <!-- Les joueurs seront injectés ici via JS -->
+        </div>
+
+    </div>
+
+</section>
+
+=======
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
 
         <section id="default" class="page">
@@ -425,6 +512,39 @@
 
     </main>
 
+<<<<<<< HEAD
+    <!-- ===================================== -->
+    <!--  SCRIPTS SUPABASE (ordre obligatoire) -->
+    <!-- ===================================== -->
+
+    <!-- Supabase library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Client Supabase -->
+<script src="js/supabaseclient_v2.js"></script>
+
+<!-- Managers -->
+<script src="js/playerManager.js"></script>
+<script src="js/shipManager.js"></script>
+<script src="js/gameState.js"></script>
+
+<!-- Gameplay -->
+<script src="js/buildings.js"></script>
+<script src="js/batiments.js"></script>
+<script src="js/units.js"></script>
+<script src="js/production.js"></script>
+<script src="js/ressources.js"></script>
+<script src="js/labo.js"></script>
+
+<!-- UI -->
+<script src="js/dashboard.js"></script>
+<script src="js/map.js"></script>
+<script src="js/mission.js"></script>
+<script src="js/profil.js"></script>
+
+
+
+=======
     <script src="js/GameData.js"></script>
     <script src="js/buildings.js"></script>
     <script src="js/production.js"></script>
@@ -437,6 +557,7 @@
     <script src="js/labo.js"></script>
     <script src="js/dashboard.js"></script>
     
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
 </body>
 </html>

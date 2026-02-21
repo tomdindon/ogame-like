@@ -7,6 +7,78 @@ const technologies = [
         id: "tech1",
         nom: "Analyse de matériaux",
         desc: "Débloque de nouvelles recettes dans le laboratoire.",
+<<<<<<< HEAD
+        maxLevel: 7,
+        baseCost: 120,
+        baseTime: 30,
+        effect: "unlock_recipe"
+    },
+    {
+        id: "tech2",
+        nom: "Blindage avancé",
+        desc: "Renforce la résistance des unités terrestres.",
+        maxLevel: 10,
+        baseCost: 200,
+        baseTime: 60,
+        effect: "unit_defense"
+    },
+    {
+        id: "tech3",
+        nom: "Amélioration énergétique",
+        desc: "Augmente l'efficacité des générateurs.",
+        maxLevel: 10,
+        baseCost: 150,
+        baseTime: 45,
+        effect: "energy_efficiency"
+    },
+    {
+        id: "tech4",
+        nom: "Optimisation industrielle",
+        desc: "Réduit le coût des améliorations de bâtiments.",
+        maxLevel: 10,
+        baseCost: 300,
+        baseTime: 90,
+        effect: "building_discount"
+    },
+    {
+        id: "tech5",
+        nom: "Puissance d'attaque",
+        desc: "Augmente la puissance d'attaque de toutes les unités.",
+        maxLevel: 10,
+        baseCost: 180,
+        baseTime: 50,
+        effect: "unit_attack"
+    },
+
+    // ⭐ NOUVELLES TECHNOLOGIES ⭐
+
+    {
+        id: "tech6",
+        nom: "Infrastructure spatiale",
+        desc: "Débloque les hangars orbitaux.",
+        maxLevel: 1,
+        baseCost: 500,
+        baseTime: 120,
+        effect: "unlock_hangars"
+    },
+    {
+        id: "tech7",
+        nom: "Armes expérimentales",
+        desc: "Débloque les unités d'attaque avancées.",
+        maxLevel: 5,
+        baseCost: 250,
+        baseTime: 75,
+        effect: "unlock_attack_units"
+    },
+    {
+        id: "tech8",
+        nom: "Systèmes défensifs",
+        desc: "Débloque les unités de défense renforcées.",
+        maxLevel: 4,
+        baseCost: 220,
+        baseTime: 70,
+        effect: "unlock_defense_units"
+=======
         maxLevel: 5,
         baseCost: 120,
         baseTime: 30,
@@ -47,9 +119,15 @@ const technologies = [
         baseCost: 180,
         baseTime: 50,
         effect: "unit_attack"
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
     }
 ];
 
+// ============================
+// SÉLECTEURS
+// ============================
+
+<<<<<<< HEAD
 // ============================
 // SÉLECTEURS
 // ============================
@@ -61,6 +139,15 @@ const infoBox = document.getElementById("infoBox");
 // CHARGER / SAUVER NIVEAUX
 // ============================
 
+=======
+const techGrid = document.getElementById("techGrid");
+const infoBox = document.getElementById("infoBox");
+
+// ============================
+// CHARGER / SAUVER NIVEAUX
+// ============================
+
+>>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 function loadTechLevels() {
     const save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
     if (!save.techLevels) save.techLevels = {};
