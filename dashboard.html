@@ -145,7 +145,7 @@
 </section>
 
 
-        <section id="profil" class="page profil-container" style="display:none;">
+<section id="profil" class="page profil-container" style="display:none;">
 
     <!-- Ligne des rangs -->
     <div class="rank-display">
@@ -159,6 +159,16 @@
 
         <!-- Icône du rang -->
         <img id="rank-icon" src="assets/ranks/non_classe.png" alt="Rang">
+
+        <!-- Progression du rang (au-dessus des colonnes) -->
+        <div class="info-line">
+            <span>Progression du rang :</span>
+            <span id="rank-progress-text">0%</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="rank-progress"></div>
+        </div>
 
         <!-- Grille d'informations -->
         <div class="info-grid">
@@ -174,15 +184,6 @@
                 <div class="info-line">
                     <span>Points d'expérience :</span>
                     <span id="xp-points">0 XP</span>
-                </div>
-
-                <div class="info-line">
-                    <span>Progression du rang :</span>
-                    <span id="rank-progress-text">0%</span>
-                </div>
-
-                <div class="progress-bar">
-                    <div class="progress-fill" id="rank-progress"></div>
                 </div>
 
                 <div class="section-title">Troupes</div>
@@ -228,11 +229,51 @@
                 </div>
 
                 <div class="info-line">
-                    <span>Hangar</span>
-                    <span id="hangar-level">0 / 10</span>
+                    <span>Étoile noire</span>
+                    <span id="blackstar-level">0 / 10</span>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill troop-fill" id="hangar-fill"></div>
+                    <div class="progress-fill troop-fill" id="blackstar-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Roquette</span>
+                    <span id="rocket-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="rocket-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Canon à impulsion</span>
+                    <span id="pulse-cannon-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="pulse-cannon-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Canon plasma</span>
+                    <span id="plasma-cannon-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="plasma-cannon-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Batterie anti-aérienne</span>
+                    <span id="aa-battery-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="aa-battery-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Intercepteur</span>
+                    <span id="interceptor-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="interceptor-fill"></div>
                 </div>
 
                 <div class="info-line total-line">
@@ -247,6 +288,16 @@
 
             <!-- Colonne 2 -->
             <div class="col">
+
+                <div class="info-line">
+                    <span>Victoires :</span>
+                    <span id="wins">0</span>
+                </div>
+
+                <div class="info-line">
+                    <span>Défaites :</span>
+                    <span id="losses">0</span>
+                </div>
 
                 <div class="section-title">Bâtiments</div>
 
@@ -290,6 +341,22 @@
                     <div class="progress-fill building-fill" id="bat5-fill"></div>
                 </div>
 
+                <div class="info-line">
+                    <span id="bat6-name"></span>
+                    <span id="bat6-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat6-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span id="bat7-name"></span>
+                    <span id="bat7-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat7-fill"></div>
+                </div>
+
                 <div class="info-line total-line">
                     <span>Total bâtiments</span>
                     <span id="buildings-total-text">0%</span>
@@ -305,7 +372,6 @@
     </div>
 
 </section>
-
 
         <section id="missions" class="page" style="display:none;">
 
