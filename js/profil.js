@@ -1,4 +1,16 @@
 // ===============================
+// INITIALISATION DU PROFIL
+// ===============================
+
+function initProfil() {
+    updateRankDisplay();
+    updateBuildingBars();
+    updateBuildingsTotal();
+    updateBuildingNames();
+    updateProfileUnits();
+}
+
+// ===============================
 // CONFIGURATION DES RANGS
 // ===============================
 
@@ -30,7 +42,7 @@ const rankIcons = [
 ];
 
 // ===============================
-// DÉTERMINER LE RANG À PARTIR DE L'XP
+// DÉTERMINER LE RANG
 // ===============================
 
 function getRankFromXP(xpValue) {
@@ -42,42 +54,23 @@ function getRankFromXP(xpValue) {
 }
 
 // ===============================
-// AFFICHAGE DU RANG (PIXEL PERFECT)
+// AFFICHAGE DU RANG
 // ===============================
 
 function updateRankDisplay() {
     const xp = GameData.xp || 0;
     const rankIndex = getRankFromXP(xp);
 
-    const prev = document.getElementById("rank-prev");
-    const current = document.getElementById("rank-current");
-    const next = document.getElementById("rank-next");
+    document.getElementById("rank-current").textContent = rankNames[rankIndex];
+    document.getElementById("rank-prev").textContent =
+        rankIndex > 0 ? "Rang précédent : " + rankNames[rankIndex - 1] : "Aucun rang précédent";
+    document.getElementById("rank-next").textContent =
+        rankIndex < rankNames.length - 1 ? "Rang suivant : " + rankNames[rankIndex + 1] : "Rang maximum atteint";
 
-    // Rang actuel
-    current.textContent = rankNames[rankIndex];
+    document.getElementById("rank-icon").src = "assets/ranks/" + rankIcons[rankIndex];
 
-    // Rang précédent
-    if (rankIndex > 0) {
-        prev.textContent = "Rang précédent : " + rankNames[rankIndex - 1];
-    } else {
-        prev.textContent = "Aucun rang précédent";
-    }
-
-    // Rang suivant
-    if (rankIndex < rankNames.length - 1) {
-        next.textContent = "Rang suivant : " + rankNames[rankIndex + 1];
-    } else {
-        next.textContent = "Rang maximum atteint";
-    }
-
-    // Mise à jour de l'icône
-    const icon = document.getElementById("rank-icon");
-    icon.src = "assets/ranks/" + rankIcons[rankIndex];
-
-    // Mise à jour de la progression
     updateRankProgress(rankIndex, xp);
 }
-
 
 // ===============================
 // PROGRESSION DU RANG
@@ -88,7 +81,6 @@ function updateRankProgress(rankIndex, xp) {
     const maxXP = rankThresholds[rankIndex + 1] ?? minXP;
 
     let percent = 100;
-
     if (maxXP > minXP) {
         percent = Math.floor(((xp - minXP) / (maxXP - minXP)) * 100);
     }
@@ -98,81 +90,44 @@ function updateRankProgress(rankIndex, xp) {
 }
 
 // ===============================
-// MISE À JOUR DES UNITÉS (TOUTES LES UNITÉS DU JEU)
+// UNITÉS
 // ===============================
 
 function updateProfileUnits() {
-
     const U = GameData.units;
 
-    // --- DRONE ---
-    const droneLevel = U.drone_recuperateur?.level ?? 1;
-    document.getElementById("drone-level").textContent = `${droneLevel} / 10`;
-    document.getElementById("drone-fill").style.width = `${(droneLevel / 10) * 100}%`;
-
-    // --- FRÉGATE ---
-    const frigateLevel = U.fregate?.level ?? 1;
-    document.getElementById("frigate-level").textContent = `${frigateLevel} / 10`;
-    document.getElementById("frigate-fill").style.width = `${(frigateLevel / 10) * 100}%`;
-
-    // --- SENTINELLE ---
-    const sentinelLevel = U.sentinelle?.level ?? 1;
-    document.getElementById("sentinel-level").textContent = `${sentinelLevel} / 10`;
-    document.getElementById("sentinel-fill").style.width = `${(sentinelLevel / 10) * 100}%`;
-
-    // --- CARGO ---
-    const cargoLevel = U.cargo?.level ?? 1;
-    document.getElementById("cargo-level").textContent = `${cargoLevel} / 10`;
-    document.getElementById("cargo-fill").style.width = `${(cargoLevel / 10) * 100}%`;
-
-    // --- CHASSEUR ---
-    const chasseurLevel = U.chasseur?.level ?? 1;
-    document.getElementById("chasseur-level").textContent = `${chasseurLevel} / 10`;
-    document.getElementById("chasseur-fill").style.width = `${(chasseurLevel / 10) * 100}%`;
-
-    // --- HANGAR ---
-    const hangarLevel = U.hangar?.level ?? 1;
-    document.getElementById("hangar-level").textContent = `${hangarLevel} / 10`;
-    document.getElementById("hangar-fill").style.width = `${(hangarLevel / 10) * 100}%`;
-
-    // ===============================
-    // TOTAL DES TROUPES = PROGRESSION GLOBALE DES NIVEAUX
-    // ===============================
-
-    const levels = [
-        droneLevel,
-        frigateLevel,
-        sentinelLevel,
-        cargoLevel,
-        chasseurLevel,
-        hangarLevel
+    const units = [
+        { id: "drone_recuperateur", text: "drone-level", bar: "drone-fill" },
+        { id: "fregate", text: "frigate-level", bar: "frigate-fill" },
+        { id: "sentinelle", text: "sentinel-level", bar: "sentinel-fill" },
+        { id: "cargo", text: "cargo-level", bar: "cargo-fill" },
+        { id: "chasseur", text: "chasseur-level", bar: "chasseur-fill" },
+        { id: "etoile_noire", text: "blackstar-level", bar: "blackstar-fill" },
+        { id: "roquette", text: "rocket-level", bar: "rocket-fill" },
+        { id: "canon_impulsion", text: "pulse-cannon-level", bar: "pulse-cannon-fill" },
+        { id: "canon_plasma", text: "plasma-cannon-level", bar: "plasma-cannon-fill" },
+        { id: "batterie_aa", text: "aa-battery-level", bar: "aa-battery-fill" },
+        { id: "intercepteur", text: "interceptor-level", bar: "interceptor-fill" }
     ];
 
-    const sumLevels = levels.reduce((s, v) => s + v, 0);
-    const maxTotal = levels.length * 10; // 6 unités * 10 niveaux
+    let total = 0;
 
-    const percent = Math.floor((sumLevels / maxTotal) * 100);
+    units.forEach(u => {
+        const level = U[u.id]?.level ?? 1;
+        total += level;
 
-    document.getElementById("troops-total-text").textContent = `${percent}%`;
-    document.getElementById("troops-total-fill").style.width = `${percent}%`;
+        document.getElementById(u.text).textContent = `${level} / 10`;
+        document.getElementById(u.bar).style.width = `${(level / 10) * 100}%`;
+    });
+
+    const percent = Math.floor((total / (units.length * 10)) * 100);
+    document.getElementById("troops-total-text").textContent = percent + "%";
+    document.getElementById("troops-total-fill").style.width = percent + "%";
 }
 
-
-
 // ===============================
-// CHARGEMENT
+// BÂTIMENTS
 // ===============================
-
-window.addEventListener("load", () => {
-    updateRankDisplay();
-    updateBuildingBars();
-    updateBuildingsTotal();
-    updateBuildingNames();
-    updateProfileUnits(); // 🔥 AJOUT ICI
-});
-
-
-
 
 function updateBuildingBars() {
     const buildingList = [
@@ -180,44 +135,37 @@ function updateBuildingBars() {
         { id: "reacteur_instable", text: "bat2-level", bar: "bat2-fill" },
         { id: "extracteur_nanocomposants", text: "bat3-level", bar: "bat3-fill" },
         { id: "archives_fracturees", text: "bat4-level", bar: "bat4-fill" },
-        { id: "atelier_reparation", text: "bat5-level", bar: "bat5-fill" }
+        { id: "atelier_reparation", text: "bat5-level", bar: "bat5-fill" },
+        { id: "hangar_attaque", text: "bat6-level", bar: "bat6-fill" },
+        { id: "hangar_defense", text: "bat7-level", bar: "bat7-fill" }
     ];
 
     buildingList.forEach(b => {
         const level = GameData.buildings[b.id].level;
-        const max = 10;
+        const percent = (level / 10) * 100;
 
-        // Mise à jour du texte
-        document.getElementById(b.text).textContent = level + " / " + max;
-
-        // Mise à jour de la barre
-        const percent = (level / max) * 100;
+        document.getElementById(b.text).textContent = `${level} / 10`;
         document.getElementById(b.bar).style.width = percent + "%";
     });
 }
 
 function updateBuildingsTotal() {
-    const buildingIds = [
+    const ids = [
         "extracteur_ferraille",
         "reacteur_instable",
         "extracteur_nanocomposants",
         "archives_fracturees",
-        "atelier_reparation"
+        "atelier_reparation",
+        "hangar_attaque",
+        "hangar_defense"
     ];
 
-    let totalLevel = 0;
-    const maxTotal = buildingIds.length * 10; // 5 bâtiments * 10 niveaux
+    let total = 0;
+    ids.forEach(id => total += GameData.buildings[id].level);
 
-    buildingIds.forEach(id => {
-        totalLevel += GameData.buildings[id].level;
-    });
+    const percent = Math.floor((total / (ids.length * 10)) * 100);
 
-    const percent = Math.floor((totalLevel / maxTotal) * 100);
-
-    // Mise à jour du texte
     document.getElementById("buildings-total-text").textContent = percent + "%";
-
-    // Mise à jour de la barre
     document.getElementById("buildings-total-fill").style.width = percent + "%";
 }
 
@@ -227,14 +175,15 @@ function updateBuildingNames() {
         { id: "reacteur_instable", nameId: "bat2-name" },
         { id: "extracteur_nanocomposants", nameId: "bat3-name" },
         { id: "archives_fracturees", nameId: "bat4-name" },
-        { id: "atelier_reparation", nameId: "bat5-name" }
+        { id: "atelier_reparation", nameId: "bat5-name" },
+        { id: "hangar_attaque", nameId: "bat6-name" },
+        { id: "hangar_defense", nameId: "bat7-name" }
     ];
 
-    buildingList.forEach((b, index) => {
-        const buildingData = buildings.find(x => x.id === b.id);
-        if (buildingData) {
-            document.getElementById(b.nameId).textContent = buildingData.name;
+    buildingList.forEach(b => {
+        const data = buildings.find(x => x.id === b.id);
+        if (data) {
+            document.getElementById(b.nameId).textContent = data.name;
         }
     });
 }
-

@@ -1,98 +1,133 @@
-// ===============================
+// =======================================
 // IMAGE PAR NIVEAU
-// ===============================
+// =======================================
 
 function getBuildingImage(buildingId, level) {
     const b = buildings.find(x => x.id === buildingId);
-    
-    // Sécurité : si pas d'image définie, on met une image par défaut ou vide
+
     if (!b || !b.imageBase) {
-        return "assets/buildings/default.png"; // Image de secours
+        return "assets/buildings/default.png";
     }
 
-    // Version simple : Une seule image pour tous les niveaux (plus facile au début)
-    // return `${b.imageBase}.png`; 
-    
-    // Version avancée (la tienne) : Une image par niveau (ex: mine_lvl1.png)
+    // Version avancée : image par niveau
     return `${b.imageBase}_lvl${level}.png`;
 }
 
 
-// ===============================
-// REMPLISSAGE DES SLOTS
-// ===============================
+// =======================================
+// TEXTE DE PRODUCTION (gère les bâtiments avec courbe spécifique)
+// =======================================
 
-const slots = document.querySelectorAll(".slot");
+function getBuildingProductionText(building, level) {
+    if (!building.production) return "Pas de production";
 
-slots.forEach((slot, index) => {
-    const b = buildings[index];
-
-    if (!b) {
-        slot.classList.add("empty");
-        slot.textContent = "Emplacement vide";
-        return;
+    // Extracteur de ferraille : utilise la table horaire dédiée (scrapProduction)
+    // définie dans le fichier de production (production.js)
+    if (building.id === "extracteur_ferraille") {
+        const hourlyRate = scrapProduction[level - 1] || 0;
+        return `Production : ${hourlyRate}/h`;
     }
 
-    // On récupère le niveau depuis GameData
-    const level = GameData.buildings[b.id]?.level || 1;
+    // Autres bâtiments : formule générique inchangée
+    return `Production : ${building.production.base * level}/s`;
+}
 
-    slot.innerHTML = `
-        <div class="building-card">
-           <img 
-    src="${getBuildingImage(b.id, level)}" 
-    class="building-image" 
-    alt="${b.name}" 
-    onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=Image+Manquante';"
->
-            <div class="building-name">${b.name}</div>
-            <div class="building-description">${b.description}</div>
-            <div class="building-level">Niveau : <span class="lvl-val">${level}</span> / ${b.maxLevel}</div>
-            
-            <div class="building-bonus">
-                 ${b.production ? `Production : ${b.production.base * level}/s` : "Pas de production"}
-            </div>
 
-            <div class="building-cost">Coût : ${b.cost.scrap} ferraille, ${b.cost.energy} énergie</div>
-            <div class="building-time">Temps : 1s</div> <button class="building-button">Améliorer</button>
-        </div>
-    `;
+// =======================================
+// INITIALISATION DE LA PAGE BÂTIMENTS
+// =======================================
 
-    const button = slot.querySelector(".building-button");
+function initBatiments() {
 
-    // Désactiver le bouton si déjà au niveau max
-    if (level >= b.maxLevel) {
-        button.disabled = true;
-        button.textContent = "Niveau max";
-    }
+    const slots = document.querySelectorAll("#building-slots .slot");
 
-    button.addEventListener("click", () => {
-        // Vérifier le niveau max
-        if (GameData.buildings[b.id].level >= b.maxLevel) return;
+    slots.forEach((slot, index) => {
+        const b = buildings[index];
 
-        // On utilise la fonction globale spendResource (définie dans gameData.js)
-        if (spendResource("scrap", b.cost.scrap) && spendResource("energy", b.cost.energy)) {
-
-            GameData.buildings[b.id].level++;
-            saveGame(); // Fonction globale de gameData.js
-
-            const newLevel = GameData.buildings[b.id].level;
-
-            // Mise à jour visuelle locale
-            slot.querySelector(".lvl-val").textContent = newLevel;
-            slot.querySelector(".building-image").src = getBuildingImage(b.id, newLevel);
-            
-            // Mise à jour de la production affichée si nécessaire
-            if(b.production) {
-                slot.querySelector(".building-bonus").textContent = `Production : ${b.production.base * newLevel}/s`;
-            }
-
-            // Gestion niveau max
-            if (newLevel >= b.maxLevel) {
-                button.disabled = true;
-                button.textContent = "Niveau max";
-            }
-        } else {
-            alert("Pas assez de ressources !");
+        // Si pas de bâtiment pour ce slot → slot vide
+        if (!b) {
+            slot.classList.add("empty");
+            slot.textContent = "Emplacement vide";
+            return;
         }
+
+        // Niveau actuel depuis GameData
+        const level = GameData.buildings[b.id]?.level || 1;
+
+        // Génération de la carte bâtiment
+        slot.innerHTML = `
+            <div class="building-card">
+                <img 
+                    src="${getBuildingImage(b.id, level)}" 
+                    class="building-image" 
+                    alt="${b.name}"
+                    onerror="this.onerror=null; this.src='https://placehold.co/200x200?text=Image+Manquante';"
+                >
+
+                <div class="building-name">${b.name}</div>
+                <div class="building-description">${b.description}</div>
+
+                <div class="building-level">
+                    Niveau : <span class="lvl-val">${level}</span> / ${b.maxLevel}
+                </div>
+
+                <div class="building-bonus">
+                    ${getBuildingProductionText(b, level)}
+                </div>
+
+                <div class="building-cost">
+                    Coût : ${b.cost.scrap} ferraille, ${b.cost.energy} énergie
+                </div>
+
+                <div class="building-time">Temps : 1s</div>
+
+                <button class="building-button">Améliorer</button>
+            </div>
+        `;
+
+        const button = slot.querySelector(".building-button");
+
+        // Désactiver si niveau max
+        if (level >= b.maxLevel) {
+            button.disabled = true;
+            button.textContent = "Niveau max";
+        }
+
+        // ===============================
+        // BOUTON AMÉLIORER
+        // ===============================
+
+        button.addEventListener("click", () => {
+
+            const currentLevel = GameData.buildings[b.id].level;
+
+            if (currentLevel >= b.maxLevel) return;
+
+            // Vérifier les ressources
+            if (spendResource("scrap", b.cost.scrap) && spendResource("energy", b.cost.energy)) {
+
+                // Amélioration
+                GameData.buildings[b.id].level++;
+                saveGame();
+
+                const newLevel = GameData.buildings[b.id].level;
+
+                // Mise à jour visuelle
+                slot.querySelector(".lvl-val").textContent = newLevel;
+                slot.querySelector(".building-image").src = getBuildingImage(b.id, newLevel);
+
+                slot.querySelector(".building-bonus").textContent =
+                    getBuildingProductionText(b, newLevel);
+
+                // Niveau max atteint
+                if (newLevel >= b.maxLevel) {
+                    button.disabled = true;
+                    button.textContent = "Niveau max";
+                }
+
+            } else {
+                alert("Pas assez de ressources !");
+            }
+        });
     });
-});
+}

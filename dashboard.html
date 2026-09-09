@@ -4,55 +4,545 @@
     <meta charset="UTF-8">
     <title>Tableau de bord – Cosmic Empires</title>
 
-    <link rel="stylesheet" href="css/global-scale.css">
+    <!-- Police Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Feuilles de style globales -->
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
-
-    <!-- Style spécifique à cette page -->
+    <link rel="stylesheet" href="css/acceuil.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/profil.css">
+    <link rel="stylesheet" href="css/batiments.css">
+    <link rel="stylesheet" href="css/ressources.css">
+    <link rel="stylesheet" href="css/units.css">
+    <link rel="stylesheet" href="css/playerslist.css">
+    <link rel="stylesheet" href="css/mission.css">
+    <link rel="stylesheet" href="css/labo.css">
 </head>
 
 <body class="dashboard-bg">
 
-<header>
-    <h1>Tableau de bord - Cosmic Empires</h1>
-</header>
-
-<main class="dashboard-container">
-
-    <div class="dashboard-card" onclick="location.href='batiments.html'">
-      <h2>Bâtiments</h2>
-      <p>Gérer les extracteurs, réacteurs, archives, ateliers…</p>
+    <!-- Étoiles animées (AU-DESSUS du cockpit) -->
+    <div id="starfield">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
     </div>
 
-    <div class="dashboard-card" onclick="location.href='unites.html'">
-      <h2>Unités</h2>
-      <p>Gérer les drones, frégates, sentinelles…</p>
+    <!-- Musique du jeu -->
+    <audio id="gameMusic" src="assets/audio/theme.mp3" loop autoplay></audio>
+
+    <!-- HUD futuriste -->
+    <nav id="hud">
+
+        <!-- Gauche : Titre -->
+        <div id="hud-left">
+            <span id="game-title">Cosmic Empires</span>
+        </div>
+
+        <!-- Centre : Navigation -->
+        <div id="hud-center">
+            <div class="hud-btn" data-page="acceuil" title="Tableau de bord">🛰️</div>
+            <div class="hud-btn" data-page="batiments" title="Bâtiments">🏢</div>
+            <div class="hud-btn" data-page="unites" title="Unités">🚀</div>
+            <div class="hud-btn" data-page="profil" title="Profil">👤</div>
+            <div class="hud-btn" data-page="missions" title="Missions">⚔️</div>
+            <div class="hud-btn" data-page="labo" title="Labo">🔬</div>
+            <div class="hud-btn" data-page="ressources" title="Ressources">📦</div>
+            <div class="hud-btn" data-page="players" title="Joueurs">👥</div>
+        </div>
+
+        <!-- Droite : Ressources -->
+<div id="hud-right">
+
+    <!-- Ressource principale : ferraille -->
+    <div id="res-main" class="res-item">
+        <span class="res-icon">🔩</span>
+        <span id="hud-scrap" class="res-value">0</span>
+        <span id="res-toggle">▼</span>
     </div>
 
-    <div class="dashboard-card" onclick="location.href='missions.html'">
-        <h2>Missions</h2>
-        <p>Objectifs, expéditions, récompenses.</p>
+    <!-- Menu déroulant -->
+    <div id="res-dropdown">
+        <div class="res-item"><span class="res-icon">⚡</span><span id="hud-energy" class="res-value">0</span></div>
+        <div class="res-item"><span class="res-icon">🧬</span><span id="hud-nano" class="res-value">0</span></div>
+        <div class="res-item"><span class="res-icon">📡</span><span id="hud-data" class="res-value">0</span></div>
+        <div class="res-item"><span class="res-icon">🛠️</span><span id="hud-tools" class="res-value">0</span></div>
+        <div class="res-item"><span class="res-icon">🤖</span><span id="hud-drones" class="res-value">0</span></div>
+        <div class="res-item"><span class="res-icon">🧩</span><span id="hud-parts" class="res-value">0</span></div>
+        <div class="res-item"><span class="res-icon">🧠</span><span id="hud-intel" class="res-value">0</span></div>
     </div>
 
-    <div class="dashboard-card" onclick="location.href='inventaire.html'">
-        <h2>Inventaire</h2>
-        <p>Ressources, modules, améliorations.</p>
+</div>
+
+    </nav>
+
+    <main id="content">
+
+     <section id="acceuil" class="page">
+
+    <div class="acc-grid">
+
+        <!-- Bloc Attaque / Défense -->
+        <div class="acc-card acc-card-military">
+            <h3>Puissance militaire</h3>
+
+            <div class="acceuil-video-container">
+                <video class="acceuil-video" autoplay loop muted playsinline>
+                    <source src="assets/video/acceuil.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="acc-badges">
+                <span class="badge badge-atk">ATK : <span id="acc-attack-total">0</span></span>
+                <span class="badge badge-def">DEF : <span id="acc-defense-total">0</span></span>
+            </div>
+        </div>
+
+        <!-- Bloc Production -->
+        <div class="acc-card">
+            <h3>Production ressources</h3>
+            <p>Ferraille : <span id="acc-prod-scrap">0</span>/h</p>
+            <p>Énergie instable : <span id="acc-prod-energy">0</span>/h</p>
+            <p>Nanocomposants : <span id="acc-prod-nano">0</span>/h</p>
+            <p>Données anciennes : <span id="acc-prod-data">0</span>/h</p>
+        </div>
+
+        <!-- Bloc Missions -->
+        <div class="acc-card">
+            <h3>Missions en cours</h3>
+            <ul id="acc-missions-list"></ul>
+        </div>
+
+        <!-- Bloc Améliorations -->
+        <div class="acc-card">
+            <h3>Améliorations en cours</h3>
+            <ul id="acc-upgrades-list"></ul>
+        </div>
+
     </div>
 
-    <div class="dashboard-card" onclick="location.href='profil.html'">
-        <h2>Profil</h2>
-        <p>Niveau, progression, statistiques.</p>
+</section>
+
+
+    <section id="batiments" class="page" style="display:none;">
+
+    <div class="building-slots" id="building-slots">
+        <div class="slot" data-slot="1"></div>
+        <div class="slot" data-slot="2"></div>
+        <div class="slot" data-slot="3"></div>
+        <div class="slot" data-slot="4"></div>
+        <div class="slot" data-slot="5"></div>
+        <div class="slot" data-slot="6"></div>
+        <div class="slot" data-slot="7"></div>
     </div>
 
-</main>
+</section>
 
-<!-- Script éventuel -->
-<script src="js/gameData.js"></script>
-<script src="js/layout.js"></script>   
+
+
+        <section id="unites" class="page" style="display:none;">
+    <div id="units-capacity"></div>
+    <div id="units-container"></div>
+</section>
+
+
+<section id="profil" class="page profil-container" style="display:none;">
+
+    <!-- Ligne des rangs -->
+    <div class="rank-display">
+        <div id="rank-prev" class="rank-side"></div>
+        <div id="rank-current" class="rank-current"></div>
+        <div id="rank-next" class="rank-side"></div>
+    </div>
+
+    <!-- Panneau principal -->
+    <div class="rank-panel">
+
+        <!-- Icône du rang -->
+        <img id="rank-icon" src="assets/ranks/non_classe.png" alt="Rang">
+
+        <!-- Progression du rang (au-dessus des colonnes) -->
+        <div class="info-line">
+            <span>Progression du rang :</span>
+            <span id="rank-progress-text">0%</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="rank-progress"></div>
+        </div>
+
+        <!-- Grille d'informations -->
+        <div class="info-grid">
+
+            <!-- Colonne 1 -->
+            <div class="col">
+
+                <div class="info-line">
+                    <span>Temps de jeu :</span>
+                    <span id="playtime">0h 00m</span>
+                </div>
+
+                <div class="info-line">
+                    <span>Points d'expérience :</span>
+                    <span id="xp-points">0 XP</span>
+                </div>
+
+                <div class="section-title">Troupes</div>
+
+                <div class="info-line">
+                    <span>Drone</span>
+                    <span id="drone-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="drone-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Frégate</span>
+                    <span id="frigate-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="frigate-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Sentinelle</span>
+                    <span id="sentinel-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="sentinel-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Cargo</span>
+                    <span id="cargo-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="cargo-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Chasseur</span>
+                    <span id="chasseur-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="chasseur-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Étoile noire</span>
+                    <span id="blackstar-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="blackstar-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Roquette</span>
+                    <span id="rocket-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="rocket-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Canon à impulsion</span>
+                    <span id="pulse-cannon-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="pulse-cannon-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Canon plasma</span>
+                    <span id="plasma-cannon-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="plasma-cannon-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Batterie anti-aérienne</span>
+                    <span id="aa-battery-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="aa-battery-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span>Intercepteur</span>
+                    <span id="interceptor-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill troop-fill" id="interceptor-fill"></div>
+                </div>
+
+                <div class="info-line total-line">
+                    <span>Total troupes</span>
+                    <span id="troops-total-text">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="troops-total-fill"></div>
+                </div>
+
+            </div>
+
+            <!-- Colonne 2 -->
+            <div class="col">
+
+                <div class="info-line">
+                    <span>Victoires :</span>
+                    <span id="wins">0</span>
+                </div>
+
+                <div class="info-line">
+                    <span>Défaites :</span>
+                    <span id="losses">0</span>
+                </div>
+
+                <div class="section-title">Bâtiments</div>
+
+                <div class="info-line">
+                    <span id="bat1-name"></span>
+                    <span id="bat1-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat1-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span id="bat2-name"></span>
+                    <span id="bat2-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat2-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span id="bat3-name"></span>
+                    <span id="bat3-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat3-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span id="bat4-name"></span>
+                    <span id="bat4-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat4-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span id="bat5-name"></span>
+                    <span id="bat5-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat5-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span id="bat6-name"></span>
+                    <span id="bat6-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat6-fill"></div>
+                </div>
+
+                <div class="info-line">
+                    <span id="bat7-name"></span>
+                    <span id="bat7-level">0 / 10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill building-fill" id="bat7-fill"></div>
+                </div>
+
+                <div class="info-line total-line">
+                    <span>Total bâtiments</span>
+                    <span id="buildings-total-text">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="buildings-total-fill"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+        <section id="missions" class="page" style="display:none;">
+
+    <div id="missionsWrapper">
+
+    <!-- Colonne gauche -->
+    <div id="missionsLeft">
+        <div id="missionsList"></div>
+    </div>
+
+    <!-- Colonne droite -->
+    <div id="missionsRight">
+        <div class="mission-radar-inline">
+            <video class="mission-radar-video" autoplay loop muted playsinline>
+                <source src="assets/video/radar.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <h2>Missions en cours</h2>
+        <div id="missionStatus"></div>
+        <div id="missionLog"></div>
+    </div>
+
+</div>
+
+</section>
+
+        <section id="labo" class="page" style="display:none;">
+
+    <div id="techGrid" class="tech-grid"></div>
+
+    <div id="infoBox" class="info-box">
+        Sélectionnez une technologie pour afficher ses détails.
+    </div>
+
+</section>
+
+
+        <section id="ressources" class="page" style="display:none;">
+
+    <div class="inventory-grid" id="inventory-grid">
+
+    <!-- Ferraille -->
+    <div class="inventory-item">
+        <span class="item-name">Ferraille</span>
+        <span class="emoji">🔩</span>
+        <span id="res-scrap" class="item-value">0</span>
+    </div>
+
+    <!-- Énergie -->
+    <div class="inventory-item">
+        <span class="item-name">Énergie</span>
+        <span class="emoji">⚡</span>
+        <span id="res-energy" class="item-value">0</span>
+    </div>
+
+    <!-- Nanocomposants -->
+    <div class="inventory-item">
+        <span class="item-name">Nanocomposants</span>
+        <span class="emoji">🧬</span>
+        <span id="res-nano" class="item-value">0</span>
+    </div>
+
+    <!-- Données anciennes -->
+    <div class="inventory-item">
+        <span class="item-name">Données anciennes</span>
+        <span class="emoji">📡</span>
+        <span id="res-data" class="item-value">0</span>
+    </div>
+
+    <!-- Outils -->
+    <div class="inventory-item">
+        <span class="item-name">Outils</span>
+        <span class="emoji">🛠️</span>
+        <span id="res-tools" class="item-value">0</span>
+    </div>
+
+    <!-- Drones -->
+    <div class="inventory-item">
+        <span class="item-name">Drones</span>
+        <span class="emoji">🤖</span>
+        <span id="res-drones" class="item-value">0</span>
+    </div>
+
+    <!-- Pièces -->
+    <div class="inventory-item">
+        <span class="item-name">Pièces</span>
+        <span class="emoji">🧩</span>
+        <span id="res-parts" class="item-value">0</span>
+    </div>
+
+    <!-- Intelligence -->
+    <div class="inventory-item">
+        <span class="item-name">Intelligence</span>
+        <span class="emoji">🧠</span>
+        <span id="res-intel" class="item-value">0</span>
+    </div>
+
+</div>
+
+    <!-- Zone pour le futur système de trade -->
+    <div id="trade-zone">
+
+    <div class="trade-container">
+
+        <!-- Ressource à vendre -->
+        <div class="trade-block">
+            <div class="trade-title">Vendre</div>
+
+            <div class="trade-icon" id="sell-icon">❔</div>
+
+            <select id="sell-select">
+                <option value="">Choisir...</option>
+            </select>
+
+            <input type="number" id="sell-amount" placeholder="Quantité" min="1">
+        </div>
+
+        <!-- Bouton échange -->
+        <div class="trade-center">
+            <button id="trade-button">Échanger</button>
+        </div>
+
+        <!-- Ressource obtenue -->
+        <div class="trade-block">
+            <div class="trade-title">Obtenir</div>
+
+            <div class="trade-icon" id="buy-icon">❔</div>
+
+            <select id="buy-select">
+                <option value="">Choisir...</option>
+            </select>
+
+            <div id="buy-result">0</div>
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<section id="players" class="page" style="display:none;">
+    
+    <div id="playersList"></div>
+</section>
+
+
+
+
+        <section id="default" class="page">
+            <p style="text-align:center; opacity:0.7;">
+                Sélectionnez une section via le HUD.
+            </p>
+        </section>
+
+    </main>
+
+    <script src="js/GameData.js"></script>
+    <script src="js/buildings.js"></script>
+    <script src="js/production.js"></script>
+    <script src="js/batiments.js"></script>
+    <script src="js/units.js"></script>
+    <script src="js/profil.js"></script>
+    <script src="js/ressources.js"></script>
+    <script src="js/playerslist.js"></script>
+    <script src="js/mission.js"></script>
+    <script src="js/labo.js"></script>
+    <script src="js/dashboard.js"></script>
+    
 
 </body>
 </html>

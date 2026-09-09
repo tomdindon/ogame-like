@@ -1,0 +1,410 @@
+/* ============================================
+   UNITS.CSS - VERSION FINALE
+   ============================================ */
+
+/* Grille des unités */
+#units-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    padding: 20px;
+}
+
+/* Carte d'unité */
+.unit-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+}
+
+.unit-card:hover {
+    border-color: rgba(0, 217, 255, 0.4);
+    transform: translateY(-4px);
+    box-shadow:
+        0 20px 40px rgba(0, 217, 255, 0.2),
+        0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+/* Image */
+.unit-image-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(168, 85, 247, 0.1));
+}
+
+.unit-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform var(--transition-base);
+}
+
+.unit-card:hover .unit-image {
+    transform: scale(1.05);
+}
+
+/* Emoji overlay */
+.unit-image-overlay {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+}
+
+.unit-emoji-large {
+    font-size: 1.8rem;
+}
+
+/* Contenu */
+.unit-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.unit-header h3 {
+    font-size: 1.3rem;
+    margin: 0;
+    color: white;
+}
+
+/* Niveau */
+.unit-level span {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+}
+
+.level-progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(15, 15, 30, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.level-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-purple));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 8px var(--color-accent-cyan);
+}
+
+/* Description */
+.unit-description {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Stats */
+.unit-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(15, 15, 30, 0.4);
+    border-radius: 8px;
+}
+
+.stat-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.stat-label {
+    color: var(--color-text-secondary);
+}
+
+.stat-value {
+    color: var(--color-accent-cyan);
+    font-weight: 700;
+    font-family: 'Orbitron', monospace;
+}
+
+/* Coûts */
+.unit-cost {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.cost-item {
+    padding: 8px 16px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Compteur */
+.unit-count {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    padding: 8px;
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: 8px;
+}
+
+.unit-count strong {
+    color: var(--color-accent-purple);
+    font-family: 'Orbitron', monospace;
+}
+
+/* Actions */
+.unit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.btn-build,
+.btn-upgrade {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-purple));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+}
+
+.btn-build:hover,
+.btn-upgrade:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 217, 255, 0.5);
+}
+
+.btn-build:disabled,
+.btn-upgrade:disabled {
+    background: var(--color-bg-tertiary);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Info bâtiment */
+.unit-info-building {
+    text-align: center;
+    padding: 12px;
+    background: rgba(0, 217, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+.unit-info-building strong {
+    color: var(--color-accent-cyan);
+    font-family: 'Orbitron', monospace;
+}
+
+/* ===============================
+   CAPACITÉS — VERSION FINALE
+   =============================== */
+
+#units-capacity {
+    width: 100%;
+    padding: 20px 40px;
+    margin-bottom: 20px;
+}
+
+.capacity-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.capacity-slot {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 80px; /* marge interne pour éviter que la barre touche les bords */
+}
+
+
+/* BARRE AVEC CONTOUR BLANC */
+.capacity-bar {
+    width: 100%;
+    height: 14px;
+    background: rgba(15, 30, 21, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #ffffff;
+    position: relative; /* ← OBLIGATOIRE */
+}
+
+.capacity-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0; /* ← valeur initiale */
+    background: linear-gradient(90deg, #00eaff, #a855f7);
+    box-shadow: 0 0 10px var(--color-accent-cyan);
+    transition: width 0.4s ease;
+}
+
+.btn-sell {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-cyan));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+.btn-sell:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    flex: 1;
+}
+
+.qty-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.qty-input {
+    width: 80px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-weight: 600;
+    margin-right: 12px;
+}
+
+.unit-actions-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ===============================
+   STATS — BADGES HORIZONTAUX
+   =============================== */
+
+.unit-stats-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(15, 15, 30, 0.4);
+    border-radius: 10px;
+}
+
+.stat-badge {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-badge span {
+    display: block;
+    margin-top: 4px;
+    font-size: 1rem;
+    font-family: 'Orbitron', monospace;
+    color: var(--color-accent-cyan);
+    font-weight: 700;
+}
+
+/* ===============================
+   COSTS — BADGES HORIZONTAUX
+   =============================== */
+
+.unit-cost-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(15, 15, 30, 0.4);
+    border-radius: 10px;
+}
+
+.cost-badge {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cost-badge span {
+    display: block;
+    margin-top: 4px;
+    font-size: 1rem;
+    font-family: 'Orbitron', monospace;
+    color: var(--color-accent-purple);
+    font-weight: 700;
+}
+
+.btn-sell {
+    position: relative;
+    overflow: visible; /* IMPORTANT : permet à la bulle de dépasser */
+}
+
+.btn-sell:hover::after {
+    content: "Récupère 50% du coût de construction";
+    position: absolute;
+    top: -45px; /* BULLE AU-DESSUS */
+    left: 10%;
+    transform: translateX(-50%);
+    background: rgba(15, 15, 30, 0.95);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--color-accent-cyan);
+    white-space: nowrap;
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+    z-index: 9999; /* BULLE AU-DESSUS DE TOUT */
+    pointer-events: none; /* évite les glitchs */
+}

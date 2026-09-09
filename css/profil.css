@@ -1,76 +1,72 @@
 /* ============================
-   PAGE PROFIL
+   CONTENEUR PRINCIPAL
 ============================ */
 
-* {
-    box-sizing: border-box; /* Crucial pour que les bordures ne mangent pas la largeur */
-}
-
-
-
-/* Fond spécifique */
-body.bg-profil {
-    background-image: url("../assets/Logo/profil.png");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-     margin: 0;
-    padding: 0;
+.profil-container {
+    width: 100%;
+    padding: 40px 0;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centre tout verticalement dans le viewport */
+    align-items: center;
 }
 
-/* Titre */
-header h1 {
-    text-align: center;
-    color: #7fffd4;
-    margin: 20px 0; /* On s'assure qu'il n'y a pas de marges latérales parasites */
-    width: 100%;    /* Force l'occupation de toute la largeur */
-    text-shadow: 0 0 10px rgba(127, 255, 212, 0.4);
+/* Empêche dashboard.css de forcer les images à width:100% */
+.profil-container img {
+    width: auto !important;
+    height: auto !important;
+    max-width: 240px;
+}
+
+/* Empêche .page { padding:20px } de casser la mise en page */
+#profil.page {
+    padding: 0 !important;
 }
 
 /* ============================
-   AFFICHAGE DU RANG (NOUVEAU)
+   AFFICHAGE DU RANG
 ============================ */
-
 
 .rank-display {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px; /* Réduit un peu le gap pour plus de flexibilité */
+    gap: 20px;
     margin: 30px auto;
-    width: 90%; /* Aligné sur la largeur du panel */
+    width: 90%;
     max-width: 1200px;
 }
 
 .rank-side {
     font-size: 1.2em;
     color: #ffffff;
-    opacity: 0.7; /* Légère transparence pour le style */
-    flex: 1;      /* FORCE les deux côtés à faire la même taille */
+    opacity: 0.7;
+    flex: 1;
 }
 
-#rank-prev { text-align: right; } /* Pousse le texte vers le centre */
-#rank-next { text-align: left; }  /* Pousse le texte vers le centre */
+#rank-prev { text-align: right; }
+#rank-next { text-align: left; }
 
-/* Rang actif centré */
+/* Correction : forcer la couleur du texte du rang */
+.rank-current,
+.rank-side,
+#rank-prev,
+#rank-next {
+    color: #ffffff !important;
+}
+
 .rank-current {
     font-size: 2.4em;
     font-weight: 900;
-    color: #ffffff;
     padding: 12px 25px;
     border-radius: 10px;
-flex: 0 0 auto; /* Le centre ne s'étire pas, il garde sa taille */
     min-width: 250px;
     background: rgba(255, 140, 0, 0.25);
     border: 2px solid rgba(255, 140, 0, 0.6);
-
     text-shadow: 0 0 10px rgba(255,255,255,0.8);
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
-
-    min-width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* ============================
@@ -82,7 +78,6 @@ flex: 0 0 auto; /* Le centre ne s'étire pas, il garde sa taille */
     max-width: 1000px; /* Optionnel : évite que ce soit trop large sur grand écran */
     margin: 20px auto;
     padding: 25px;
-
     background: rgba(0, 0, 0, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
@@ -111,15 +106,15 @@ flex: 0 0 auto; /* Le centre ne s'étire pas, il garde sa taille */
 .col {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
-/* Ligne d'information */
 .info-line {
     display: flex;
     justify-content: space-between;
     color: #d0d4d8;
     font-size: 1.1em;
+    line-height: 1.5;
 }
 
 .section-title {
@@ -149,17 +144,14 @@ flex: 0 0 auto; /* Le centre ne s'étire pas, il garde sa taille */
     transition: width 0.4s ease;
 }
 
-/* Couleur troupes */
 .troop-fill {
     background: linear-gradient(90deg, #4aff9c, #00d47a);
 }
 
-/* Couleur bâtiments */
 .building-fill {
     background: linear-gradient(90deg, #ffd86b, #ffb84a);
 }
 
-/* Totaux */
 .total-line span:last-child {
     font-weight: bold;
     color: #ffffff;

@@ -1,0 +1,140 @@
+/* ============================
+   PAGE ACCUEIL
+============================ */
+
+#acceuil {
+    width: 90%;
+    margin: 30px auto;
+    color: #fff;
+}
+
+/* ============================
+   GRILLE DES CARTES
+============================ */
+
+.acc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* ============================
+   CARTE (STYLE BÂTIMENT)
+============================ */
+
+.acc-card {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(6px);
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ============================
+   TITRE DE CARTE
+============================ */
+
+.acc-card h3 {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #ffd86b;
+    text-shadow: 0 0 6px rgba(255, 216, 107, 0.3);
+    margin-bottom: 10px;
+}
+
+/* ============================
+   TEXTE / LIGNES
+============================ */
+
+.acc-card p {
+    font-size: 1.05em;
+    color: #d0d4d8;
+}
+
+.acc-card span {
+    font-weight: 700;
+    color: #7fffd4;
+}
+
+/* ============================
+   LISTES (missions / upgrades)
+============================ */
+
+.acc-card ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.acc-card li {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 0.95em;
+    color: #e0e0e0;
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+
+@media (max-width: 600px) {
+    .acc-title {
+        font-size: 1.8em;
+    }
+}
+
+.acceuil-video-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.acceuil-video {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+
+    border-radius: 10px;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    box-shadow: 0 0 12px rgba(0, 217, 255, 0.25);
+}
+
+/* ============================
+   BADGES ATK / DEF
+============================ */
+
+.acc-badges {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95em;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.badge-atk {
+    background: rgba(255, 80, 80, 0.15);
+    color: #ff6b6b;
+    text-shadow: 0 0 6px rgba(255, 107, 107, 0.4);
+}
+
+.badge-def {
+    background: rgba(90, 180, 255, 0.15);
+    color: #5ab4ff;
+    text-shadow: 0 0 6px rgba(90, 180, 255, 0.4);
+}

@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <title>Accueil du Jeu</title>
 
-    <link rel="stylesheet" href="css/global-scale.css">
-
     <!-- Police Orbitron -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index.css">
 
 </head>
 <body>
@@ -20,16 +15,15 @@
     <!-- Écran d'accueil -->
     <div id="home-screen">
 
-    <div class="title-zone">
-        <h1>Cosmic Empires</h1>
+        <div class="title-zone">
+            <h1>Cosmic Empires</h1>
+        </div>
+
+        <div class="button-zone">
+            <button id="start-btn">Démarrer</button>
+        </div>
+
     </div>
-
-    <div class="button-zone">
-        <button id="start-btn">Démarrer</button>
-    </div>
-
-</div>
-
 
     <!-- Étoiles scintillantes -->
     <div class="shooting-stars"></div>
@@ -39,8 +33,11 @@
         const startBtn = document.getElementById("start-btn");
 
         startBtn.addEventListener("click", () => {
+
+            // Animation fade-out
             document.body.classList.add("fade-out");
 
+            // Redirection
             setTimeout(() => {
                 window.location.href = "dashboard.html";
             }, 500);
@@ -51,7 +48,7 @@
     <script>
         const starContainer = document.querySelector(".shooting-stars");
 
-        function createStaticStars(count = 120) {
+        function createStaticStars(count = 150) {
             for (let i = 0; i < count; i++) {
                 const star = document.createElement("span");
                 star.classList.add("star-static");

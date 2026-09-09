@@ -1,0 +1,73 @@
+/* === PAGE MAP === */
+#map {
+    position: fixed;
+    top: 70px; /* sous le HUD */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 70px);
+    margin: 0;
+    padding: 0;
+    overflow: scroll; /* autorise scroll horizontal + vertical */
+    background: black;
+    z-index: 5;
+}
+
+/* Conteneur interne (taille réelle) */
+#map-container { position: relative; 
+    width: fit-content; 
+    height: fit-content; 
+}
+
+/* Image taille réelle */
+#map-image { 
+    display: block; 
+}
+
+#map-zoom-controls {
+    position: fixed;
+    top: 90px; /* juste sous le HUD */
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 20;
+}
+
+#map-zoom-controls button {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #8beaff;
+    background: rgba(5, 10, 25, 0.7);
+    border: 1px solid rgba(0, 200, 255, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: 0.2s;
+}
+
+#map-zoom-controls button:hover {
+    background: rgba(0, 150, 255, 0.25);
+    box-shadow: 0 0 10px #00eaff;
+}
+#fogLayer { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; /* couvre toute la largeur de l'image */ 
+    height: 100%; /* couvre toute la hauteur de l'image */ 
+    display: grid; 
+    grid-template-columns: repeat(48, 1fr); 
+    grid-template-rows: repeat(32, 1fr); 
+    pointer-events: none; 
+}
+
+.fogCell {
+    background: rgba(0, 0, 0, 0.85);
+    transition: opacity 0.6s ease;
+}
+
+.fogCell.revealed {
+    opacity: 0;
+}
