@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <title>Tableau de bord – Cosmic Empires</title>
 
+    <!-- Police Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="css/acceuil.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/profil.css">
     <link rel="stylesheet" href="css/batiments.css">
     <link rel="stylesheet" href="css/ressources.css">
-<<<<<<< HEAD
-    <link rel="stylesheet" href="css/players.css">
-=======
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
     <link rel="stylesheet" href="css/units.css">
-    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/playerslist.css">
     <link rel="stylesheet" href="css/mission.css">
     <link rel="stylesheet" href="css/labo.css">
 </head>
@@ -41,17 +40,14 @@
 
         <!-- Centre : Navigation -->
         <div id="hud-center">
+            <div class="hud-btn" data-page="acceuil" title="Tableau de bord">🛰️</div>
             <div class="hud-btn" data-page="batiments" title="Bâtiments">🏢</div>
             <div class="hud-btn" data-page="unites" title="Unités">🚀</div>
             <div class="hud-btn" data-page="profil" title="Profil">👤</div>
             <div class="hud-btn" data-page="missions" title="Missions">⚔️</div>
-            <div class="hud-btn" data-page="map">🗺️</div>
             <div class="hud-btn" data-page="labo" title="Labo">🔬</div>
             <div class="hud-btn" data-page="ressources" title="Ressources">📦</div>
-<<<<<<< HEAD
             <div class="hud-btn" data-page="players" title="Joueurs">👥</div>
-=======
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
         </div>
 
         <!-- Droite : Ressources -->
@@ -65,22 +61,6 @@
     </div>
 
     <!-- Menu déroulant -->
-<<<<<<< HEAD
-   <div id="res-dropdown">
-    <!-- COMMUNES -->
-    <div class="res-item"><span class="res-icon">🔩</span><span id="hud-scrap" class="res-value">0</span></div>
-    <div class="res-item"><span class="res-icon">⚡</span><span id="hud-energy" class="res-value">0</span></div>
-    <div class="res-item"><span class="res-icon">🧬</span><span id="hud-nano" class="res-value">0</span></div>
-    <div class="res-item"><span class="res-icon">📡</span><span id="hud-data" class="res-value">0</span></div>
-
-    <!-- RARES -->
-    <div class="res-item"><span class="res-icon">🛠️</span><span id="hud-reinforcedSteel" class="res-value">0</span></div>
-    <div class="res-item"><span class="res-icon">🧩</span><span id="hud-cyberModule" class="res-value">0</span></div>
-    <div class="res-item"><span class="res-icon">🤖</span><span id="hud-syntheticNanites" class="res-value">0</span></div>
-    <div class="res-item"><span class="res-icon">🧠</span><span id="hud-aiFragment" class="res-value">0</span></div>
-</div>
-
-=======
     <div id="res-dropdown">
         <div class="res-item"><span class="res-icon">⚡</span><span id="hud-energy" class="res-value">0</span></div>
         <div class="res-item"><span class="res-icon">🧬</span><span id="hud-nano" class="res-value">0</span></div>
@@ -90,13 +70,58 @@
         <div class="res-item"><span class="res-icon">🧩</span><span id="hud-parts" class="res-value">0</span></div>
         <div class="res-item"><span class="res-icon">🧠</span><span id="hud-intel" class="res-value">0</span></div>
     </div>
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
 </div>
 
     </nav>
 
     <main id="content">
+
+     <section id="acceuil" class="page">
+
+    <div class="acc-grid">
+
+        <!-- Bloc Attaque / Défense -->
+        <div class="acc-card acc-card-military">
+            <h3>Puissance militaire</h3>
+
+            <div class="acceuil-video-container">
+                <video class="acceuil-video" autoplay loop muted playsinline>
+                    <source src="assets/video/acceuil.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="acc-badges">
+                <span class="badge badge-atk">ATK : <span id="acc-attack-total">0</span></span>
+                <span class="badge badge-def">DEF : <span id="acc-defense-total">0</span></span>
+            </div>
+        </div>
+
+        <!-- Bloc Production -->
+        <div class="acc-card">
+            <h3>Production ressources</h3>
+            <p>Ferraille : <span id="acc-prod-scrap">0</span>/h</p>
+            <p>Énergie instable : <span id="acc-prod-energy">0</span>/h</p>
+            <p>Nanocomposants : <span id="acc-prod-nano">0</span>/h</p>
+            <p>Données anciennes : <span id="acc-prod-data">0</span>/h</p>
+        </div>
+
+        <!-- Bloc Missions -->
+        <div class="acc-card">
+            <h3>Missions en cours</h3>
+            <ul id="acc-missions-list"></ul>
+        </div>
+
+        <!-- Bloc Améliorations -->
+        <div class="acc-card">
+            <h3>Améliorations en cours</h3>
+            <ul id="acc-upgrades-list"></ul>
+        </div>
+
+    </div>
+
+</section>
+
 
     <section id="batiments" class="page" style="display:none;">
 
@@ -106,6 +131,8 @@
         <div class="slot" data-slot="3"></div>
         <div class="slot" data-slot="4"></div>
         <div class="slot" data-slot="5"></div>
+        <div class="slot" data-slot="6"></div>
+        <div class="slot" data-slot="7"></div>
     </div>
 
 </section>
@@ -113,19 +140,12 @@
 
 
         <section id="unites" class="page" style="display:none;">
-
-        <!-- Conteneur principal des unités -->
-        <div id="units-container"></div>
-
-       </section>
+    <div id="units-capacity"></div>
+    <div id="units-container"></div>
+</section>
 
 
-
-<<<<<<< HEAD
-    <section id="profil" class="page profil-container" style="display:none;">
-=======
         <section id="profil" class="page profil-container" style="display:none;">
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
     <!-- Ligne des rangs -->
     <div class="rank-display">
@@ -140,48 +160,12 @@
         <!-- Icône du rang -->
         <img id="rank-icon" src="assets/ranks/non_classe.png" alt="Rang">
 
-<<<<<<< HEAD
-        <!-- ⭐ NOUVELLE GRILLE 2×2 POUR LES INFOS DU JOUEUR -->
-        <div class="player-info-grid">
-
-            <div class="info-line">
-                <span>Nom du joueur :</span>
-                <span id="player-name">Inconnu</span>
-            </div>
-
-            <div class="info-line">
-                <span>Temps de jeu :</span>
-                <span id="playtime">0h 00m</span>
-            </div>
-
-            <div class="info-line">
-                <span>Points d'expérience :</span>
-                <span id="xp-points">0 XP</span>
-            </div>
-
-            <div class="info-line">
-                <span>Progression du rang :</span>
-                <span id="rank-progress-text">0%</span>
-            </div>
-
-        </div>
-
-        <!-- Barre de progression du rang -->
-        <div class="progress-bar">
-            <div class="progress-fill" id="rank-progress"></div>
-        </div>
-
-        <!-- Grille d'informations (Troupes + Bâtiments) -->
-=======
         <!-- Grille d'informations -->
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
         <div class="info-grid">
 
             <!-- Colonne 1 -->
             <div class="col">
 
-<<<<<<< HEAD
-=======
                 <div class="info-line">
                     <span>Temps de jeu :</span>
                     <span id="playtime">0h 00m</span>
@@ -201,7 +185,6 @@
                     <div class="progress-fill" id="rank-progress"></div>
                 </div>
 
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
                 <div class="section-title">Troupes</div>
 
                 <div class="info-line">
@@ -324,50 +307,31 @@
 </section>
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
         <section id="missions" class="page" style="display:none;">
 
     <div id="missionsWrapper">
 
-        <!-- Colonne gauche -->
-        <div id="missionsLeft">
-        
-            <div id="missionsList"></div>
-        </div>
-
-        <!-- Colonne droite -->
-        <div id="missionsRight">
-            <h2>Missions en cours</h2>
-            <div id="missionStatus"></div>
-            <div id="missionLog"></div>
-        </div>
-
+    <!-- Colonne gauche -->
+    <div id="missionsLeft">
+        <div id="missionsList"></div>
     </div>
 
+    <!-- Colonne droite -->
+    <div id="missionsRight">
+        <div class="mission-radar-inline">
+            <video class="mission-radar-video" autoplay loop muted playsinline>
+                <source src="assets/video/radar.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <h2>Missions en cours</h2>
+        <div id="missionStatus"></div>
+        <div id="missionLog"></div>
+    </div>
+
+</div>
+
 </section>
-
-
-
-
-       <section id="map" class="page" style="display:none;">
-
-           <div id="map-wrapper">
-           
-           <div id="map-container">
-               <img src="assets/map/map.png" id="map-image" alt="Carte d'exploration">
-               <div id="fogLayer"></div>
-           </div>
-
-           <div id="map-zoom-controls">
-               <button id="zoom-in">+</button>
-               <button id="zoom-out">−</button>
-           </div>
-
-       </section>
-
 
         <section id="labo" class="page" style="display:none;">
 
@@ -386,57 +350,57 @@
 
     <!-- Ferraille -->
     <div class="inventory-item">
-        <span class="emoji">🔩</span>
         <span class="item-name">Ferraille</span>
+        <span class="emoji">🔩</span>
         <span id="res-scrap" class="item-value">0</span>
     </div>
 
     <!-- Énergie -->
     <div class="inventory-item">
-        <span class="emoji">⚡</span>
         <span class="item-name">Énergie</span>
+        <span class="emoji">⚡</span>
         <span id="res-energy" class="item-value">0</span>
     </div>
 
     <!-- Nanocomposants -->
     <div class="inventory-item">
-        <span class="emoji">🧬</span>
         <span class="item-name">Nanocomposants</span>
+        <span class="emoji">🧬</span>
         <span id="res-nano" class="item-value">0</span>
     </div>
 
     <!-- Données anciennes -->
     <div class="inventory-item">
-        <span class="emoji">📡</span>
         <span class="item-name">Données anciennes</span>
+        <span class="emoji">📡</span>
         <span id="res-data" class="item-value">0</span>
     </div>
 
     <!-- Outils -->
     <div class="inventory-item">
-        <span class="emoji">🛠️</span>
         <span class="item-name">Outils</span>
+        <span class="emoji">🛠️</span>
         <span id="res-tools" class="item-value">0</span>
     </div>
 
     <!-- Drones -->
     <div class="inventory-item">
-        <span class="emoji">🤖</span>
         <span class="item-name">Drones</span>
+        <span class="emoji">🤖</span>
         <span id="res-drones" class="item-value">0</span>
     </div>
 
     <!-- Pièces -->
     <div class="inventory-item">
-        <span class="emoji">🧩</span>
         <span class="item-name">Pièces</span>
+        <span class="emoji">🧩</span>
         <span id="res-parts" class="item-value">0</span>
     </div>
 
     <!-- Intelligence -->
     <div class="inventory-item">
-        <span class="emoji">🧠</span>
         <span class="item-name">Intelligence</span>
+        <span class="emoji">🧠</span>
         <span id="res-intel" class="item-value">0</span>
     </div>
 
@@ -485,23 +449,12 @@
 
 </section>
 
-<<<<<<< HEAD
 <section id="players" class="page" style="display:none;">
-
-    <div class="players-container">
-
-        <h2 class="players-title">Liste des joueurs</h2>
-
-        <div id="players-list" class="players-list">
-            <!-- Les joueurs seront injectés ici via JS -->
-        </div>
-
-    </div>
-
+    
+    <div id="playersList"></div>
 </section>
 
-=======
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
+
 
 
         <section id="default" class="page">
@@ -512,39 +465,6 @@
 
     </main>
 
-<<<<<<< HEAD
-    <!-- ===================================== -->
-    <!--  SCRIPTS SUPABASE (ordre obligatoire) -->
-    <!-- ===================================== -->
-
-    <!-- Supabase library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Client Supabase -->
-<script src="js/supabaseclient_v2.js"></script>
-
-<!-- Managers -->
-<script src="js/playerManager.js"></script>
-<script src="js/shipManager.js"></script>
-<script src="js/gameState.js"></script>
-
-<!-- Gameplay -->
-<script src="js/buildings.js"></script>
-<script src="js/batiments.js"></script>
-<script src="js/units.js"></script>
-<script src="js/production.js"></script>
-<script src="js/ressources.js"></script>
-<script src="js/labo.js"></script>
-
-<!-- UI -->
-<script src="js/dashboard.js"></script>
-<script src="js/map.js"></script>
-<script src="js/mission.js"></script>
-<script src="js/profil.js"></script>
-
-
-
-=======
     <script src="js/GameData.js"></script>
     <script src="js/buildings.js"></script>
     <script src="js/production.js"></script>
@@ -552,12 +472,11 @@
     <script src="js/units.js"></script>
     <script src="js/profil.js"></script>
     <script src="js/ressources.js"></script>
-    <script src="js/map.js"></script>
+    <script src="js/playerslist.js"></script>
     <script src="js/mission.js"></script>
     <script src="js/labo.js"></script>
     <script src="js/dashboard.js"></script>
     
->>>>>>> 99f3915a40eed9b8359562dce8dfaca8557bc5c3
 
 </body>
 </html>

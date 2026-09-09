@@ -221,80 +221,190 @@
     font-family: 'Orbitron', monospace;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    #units-container {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 15px;
-    }
+/* ===============================
+   CAPACITÉS — VERSION FINALE
+   =============================== */
 
-    .unit-image-container {
-        height: 180px;
-    }
+#units-capacity {
+    width: 100%;
+    padding: 20px 40px;
+    margin-bottom: 20px;
+}
+
+.capacity-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .capacity-slot {
-    background: rgba(0, 0, 0, 0.55); /* plus sombre */
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 22px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 80px; /* marge interne pour éviter que la barre touche les bords */
+}
 
+
+/* BARRE AVEC CONTOUR BLANC */
+.capacity-bar {
+    width: 100%;
+    height: 14px;
+    background: rgba(15, 30, 21, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #ffffff;
+    position: relative; /* ← OBLIGATOIRE */
+}
+
+.capacity-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0; /* ← valeur initiale */
+    background: linear-gradient(90deg, #00eaff, #a855f7);
+    box-shadow: 0 0 10px var(--color-accent-cyan);
+    transition: width 0.4s ease;
+}
+
+.btn-sell {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-cyan));
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+.btn-sell:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+}
+
+.action-buttons {
     display: flex;
-    flex-direction: column;
-    align-items: center; /* centrage */
-    gap: 6px;
-
-    box-shadow: 0 0 14px rgba(0, 0, 0, 0.55);
+    gap: 12px;
+    flex: 1;
 }
 
-/* Ligne 1 : Capacité */
-.capacity-line1 {
-    font-size: 1.2em;
-    font-weight: 700;
-    opacity: 0.95;
-    text-align: center;
+.qty-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
 }
 
-/* Ligne 2 : Hangar attaque / défense */
-.capacity-line2 {
-    font-size: 1.05em;
-    opacity: 0.85;
-    text-align: center;
-}
-
-/* Ligne 3 : vide (espacement) */
-.capacity-line3 {
-    height: 10px;
-}
-
-/* Ligne 4 : valeur */
-.capacity-line4 {
-    font-size: 1.3em;
-    font-weight: 700;
-    text-align: center;
-    color: #ffffff;
+.qty-input {
+    width: 80px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-weight: 600;
+    margin-right: 12px;
 }
 
 .unit-actions-horizontal {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-top: 10px;
-}
-
-.cost-column {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.cost-item {
-    font-size: 0.9em;
+/* ===============================
+   STATS — BADGES HORIZONTAUX
+   =============================== */
+
+.unit-stats-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(15, 15, 30, 0.4);
+    border-radius: 10px;
 }
 
+.stat-badge {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
+.stat-badge span {
+    display: block;
+    margin-top: 4px;
+    font-size: 1rem;
+    font-family: 'Orbitron', monospace;
+    color: var(--color-accent-cyan);
+    font-weight: 700;
+}
 
+/* ===============================
+   COSTS — BADGES HORIZONTAUX
+   =============================== */
 
+.unit-cost-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(15, 15, 30, 0.4);
+    border-radius: 10px;
+}
+
+.cost-badge {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cost-badge span {
+    display: block;
+    margin-top: 4px;
+    font-size: 1rem;
+    font-family: 'Orbitron', monospace;
+    color: var(--color-accent-purple);
+    font-weight: 700;
+}
+
+.btn-sell {
+    position: relative;
+    overflow: visible; /* IMPORTANT : permet à la bulle de dépasser */
+}
+
+.btn-sell:hover::after {
+    content: "Récupère 50% du coût de construction";
+    position: absolute;
+    top: -45px; /* BULLE AU-DESSUS */
+    left: 10%;
+    transform: translateX(-50%);
+    background: rgba(15, 15, 30, 0.95);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--color-accent-cyan);
+    white-space: nowrap;
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+    z-index: 9999; /* BULLE AU-DESSUS DE TOUT */
+    pointer-events: none; /* évite les glitchs */
+}

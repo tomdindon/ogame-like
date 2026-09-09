@@ -140,3 +140,29 @@
     font-size: 0.9em;
     color: #ffd86b;
 }
+
+.mission-radar-overlay {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    pointer-events: none;
+}
+
+.mission-radar-video {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(0, 217, 255, 0.4);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+    opacity: 0.9;
+}
+
+.mission-radar-inline {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* centre horizontalement */
+    margin-bottom: 20px;
+}

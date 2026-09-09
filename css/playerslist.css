@@ -1,0 +1,121 @@
+/* ============================
+   PAGE JOUEURS
+============================ */
+
+#players {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#players h2 {
+    margin-bottom: 25px;
+    color: #7fffd4;
+    font-size: 2.2em;
+    text-align: center;
+}
+
+/* ============================
+   CONTAINER CENTRAL
+============================ */
+
+#playersList {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ============================
+   CARTE JOUEUR
+============================ */
+
+.player-card {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 10px;
+    padding: 14px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    transition: 0.25s;
+}
+
+.player-card:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+/* ============================
+   PSEUDO + RANG
+============================ */
+
+.player-main {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.player-name {
+    color: #7fffd4;
+    font-weight: 700;
+    font-size: 1.4em; /* plus grand */
+}
+
+.player-rank {
+    color: #ffd86b;
+    font-size: 1.2em; /* plus grand */
+    width: 150px; /* alignement parfait */
+    text-align: left;
+}
+
+/* ============================
+   BOUTONS (style unités)
+============================ */
+
+.player-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-player {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* Attaquer = rouge comme unités */
+.btn-player.attack {
+    background: rgba(255, 60, 60, 0.25);
+    border: 1px solid rgba(255, 60, 60, 0.5);
+    color: #ff6b6b;
+}
+
+.btn-player.attack:hover {
+    background: rgba(255, 60, 60, 0.45);
+    box-shadow: 0 0 10px rgba(255, 60, 60, 0.5);
+}
+
+/* Espionner = bleu comme actions secondaires */
+.btn-player.spy {
+    background: rgba(0, 217, 255, 0.25);
+    border: 1px solid rgba(0, 217, 255, 0.5);
+    color: #7fffd4;
+}
+
+.btn-player.spy:hover {
+    background: rgba(0, 217, 255, 0.45);
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
