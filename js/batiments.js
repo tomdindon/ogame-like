@@ -15,6 +15,25 @@ function getBuildingImage(buildingId, level) {
 
 
 // =======================================
+// TEXTE DE PRODUCTION (gère les bâtiments avec courbe spécifique)
+// =======================================
+
+function getBuildingProductionText(building, level) {
+    if (!building.production) return "Pas de production";
+
+    // Extracteur de ferraille : utilise la table horaire dédiée (scrapProduction)
+    // définie dans le fichier de production (production.js)
+    if (building.id === "extracteur_ferraille") {
+        const hourlyRate = scrapProduction[level - 1] || 0;
+        return `Production : ${hourlyRate}/h`;
+    }
+
+    // Autres bâtiments : formule générique inchangée
+    return `Production : ${building.production.base * level}/s`;
+}
+
+
+// =======================================
 // INITIALISATION DE LA PAGE BÂTIMENTS
 // =======================================
 
@@ -53,7 +72,7 @@ function initBatiments() {
                 </div>
 
                 <div class="building-bonus">
-                    ${b.production ? `Production : ${b.production.base * level}/s` : "Pas de production"}
+                    ${getBuildingProductionText(b, level)}
                 </div>
 
                 <div class="building-cost">
@@ -97,10 +116,8 @@ function initBatiments() {
                 slot.querySelector(".lvl-val").textContent = newLevel;
                 slot.querySelector(".building-image").src = getBuildingImage(b.id, newLevel);
 
-                if (b.production) {
-                    slot.querySelector(".building-bonus").textContent =
-                        `Production : ${b.production.base * newLevel}/s`;
-                }
+                slot.querySelector(".building-bonus").textContent =
+                    getBuildingProductionText(b, newLevel);
 
                 // Niveau max atteint
                 if (newLevel >= b.maxLevel) {

@@ -2,6 +2,9 @@
    PRODUCTION DES RESSOURCES PAR LES BÂTIMENTS
 ===================================================== */
 
+// Table de production horaire de l'extracteur de ferraille (niveau 1 à 10)
+const scrapProduction = [200, 293, 430, 631, 927, 1360, 1996, 2929, 4297, 6304];
+
 // Tick toutes les secondes
 setInterval(productionTick, 1000);
 
@@ -22,11 +25,8 @@ function productionTick() {
     save.nano = save.nano || 0;
     save.data = save.data || 0;
 
-    // Ressources rares
-    save.tools = save.tools || 0;
-    save.drones = save.drones || 0;
-    save.parts = save.parts || 0;
-    save.intel = save.intel || 0;
+    // Buffer pour accumuler les décimales de production sans les perdre
+    save.scrapBuffer = save.scrapBuffer || 0;
 
     /* =====================================================
        Parcours de tous les bâtiments définis dans buildings.js
@@ -37,6 +37,20 @@ function productionTick() {
 
         if (!building.production || level <= 0) return;
 
+        // Extracteur de ferraille : courbe exponentielle dédiée
+        if (building.id === "extracteur_ferraille") {
+            const hourlyRate = scrapProduction[level - 1] || 0;
+            save.scrapBuffer += hourlyRate / 3600;
+
+            const gained = Math.floor(save.scrapBuffer);
+            if (gained > 0) {
+                save.scrap += gained;
+                save.scrapBuffer -= gained;
+            }
+            return;
+        }
+
+        // Autres bâtiments : logique existante inchangée
         const base = building.production.base;
         const scaling = Math.pow(1.12, level - 1);
         let amount = Math.floor(base * scaling);
@@ -45,7 +59,6 @@ function productionTick() {
             amount = Math.floor(amount * (1 + energyBonus));
         }
 
-        if (building.id === "extracteur_ferraille") save.scrap += amount;
         if (building.id === "reacteur_instable") save.energy += amount;
         if (building.id === "extracteur_nanocomposants") save.nano += amount;
         if (building.id === "archives_fracturees") save.data += amount;
@@ -69,10 +82,10 @@ function updateHUD() {
         "hud-energy": "energy",
         "hud-nano": "nano",
         "hud-data": "data",
-        "hud-tools": "tools",
-        "hud-drones": "drones",
-        "hud-parts": "parts",
-        "hud-intel": "intel"
+        "hud-tools": "reinforcedSteel",
+        "hud-drones": "cyberModule",
+        "hud-parts": "syntheticNanites",
+        "hud-intel": "aiFragment"
     };
 
     for (const id in map) {

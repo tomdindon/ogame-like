@@ -23,16 +23,14 @@ const GameData = {
         cargo: { level: 1, count: 0 },
         chasseur: { level: 1, count: 0 },
         intercepteur: { level: 1, count: 0 },
+        etoile_noire: { level: 1 },
 
         // Défense
         roquette: { level: 1, count: 0 },
         canon_impulsion: { level: 1, count: 0 },
         canon_plasma: { level: 1, count: 0 },
-        batterie_aa: { level: 1, count: 0 },
-
-        // Bâtiments unités
+        batterie_aa: { level: 1, count: 0 }        
         
-        etoile_noire: { level: 1 }
     },
 
     // ============================

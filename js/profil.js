@@ -102,7 +102,12 @@ function updateProfileUnits() {
         { id: "sentinelle", text: "sentinel-level", bar: "sentinel-fill" },
         { id: "cargo", text: "cargo-level", bar: "cargo-fill" },
         { id: "chasseur", text: "chasseur-level", bar: "chasseur-fill" },
-        { id: "hangar", text: "hangar-level", bar: "hangar-fill" }
+        { id: "etoile_noire", text: "blackstar-level", bar: "blackstar-fill" },
+        { id: "roquette", text: "rocket-level", bar: "rocket-fill" },
+        { id: "canon_impulsion", text: "pulse-cannon-level", bar: "pulse-cannon-fill" },
+        { id: "canon_plasma", text: "plasma-cannon-level", bar: "plasma-cannon-fill" },
+        { id: "batterie_aa", text: "aa-battery-level", bar: "aa-battery-fill" },
+        { id: "intercepteur", text: "interceptor-level", bar: "interceptor-fill" }
     ];
 
     let total = 0;
@@ -130,7 +135,9 @@ function updateBuildingBars() {
         { id: "reacteur_instable", text: "bat2-level", bar: "bat2-fill" },
         { id: "extracteur_nanocomposants", text: "bat3-level", bar: "bat3-fill" },
         { id: "archives_fracturees", text: "bat4-level", bar: "bat4-fill" },
-        { id: "atelier_reparation", text: "bat5-level", bar: "bat5-fill" }
+        { id: "atelier_reparation", text: "bat5-level", bar: "bat5-fill" },
+        { id: "hangar_attaque", text: "bat6-level", bar: "bat6-fill" },
+        { id: "hangar_defense", text: "bat7-level", bar: "bat7-fill" }
     ];
 
     buildingList.forEach(b => {
@@ -148,7 +155,9 @@ function updateBuildingsTotal() {
         "reacteur_instable",
         "extracteur_nanocomposants",
         "archives_fracturees",
-        "atelier_reparation"
+        "atelier_reparation",
+        "hangar_attaque",
+        "hangar_defense"
     ];
 
     let total = 0;
@@ -166,7 +175,9 @@ function updateBuildingNames() {
         { id: "reacteur_instable", nameId: "bat2-name" },
         { id: "extracteur_nanocomposants", nameId: "bat3-name" },
         { id: "archives_fracturees", nameId: "bat4-name" },
-        { id: "atelier_reparation", nameId: "bat5-name" }
+        { id: "atelier_reparation", nameId: "bat5-name" },
+        { id: "hangar_attaque", nameId: "bat6-name" },
+        { id: "hangar_defense", nameId: "bat7-name" }
     ];
 
     buildingList.forEach(b => {
