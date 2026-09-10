@@ -107,3 +107,18 @@
     background: linear-gradient(90deg, #00eaff, #7fffd4);
     transition: width 0.3s linear;
 }
+
+/* Style pour les technologies verrouillées */
+.tech-card.locked {
+    opacity: 0.4; /* Assombrit la carte */
+    filter: grayscale(100%); /* Enlève les couleurs */
+    border-color: #555; /* Bordure plus terne */
+    cursor: pointer; /* On garde le pointeur car on veut qu'ils cliquent pour voir ce qu'il manque */
+}
+
+/* Léger effet au survol pour indiquer que c'est toujours cliquable */
+.tech-card.locked:hover {
+    opacity: 0.6;
+    border-color: #f44336; /* Bordure rouge pour indiquer le blocage */
+    box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
+}

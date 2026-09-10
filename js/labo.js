@@ -2,174 +2,200 @@
 // TECHNOLOGIES MULTI‑NIVEAUX
 // ============================
 
+// PREREQ = prérequis sous forme d'objet { techId: niveauRequis, ... } 
+
+
 const technologies = [
+    // --- PALIER 1 : Fondations (Aucun prérequis) ---
     {
         id: "tech1",
         nom: "Analyse de matériaux",
         desc: "Débloque de nouvelles recettes dans le laboratoire.",
         maxLevel: 17,
-        baseCost: 120,
+        baseCost: { scrap: 100, energy: 20 },
         baseTime: 30,
-        effect: "unlock_recipe"
-    },
-    {
-        id: "tech2",
-        nom: "Blindage avancé",
-        desc: "Renforce la résistance des unités terrestres.",
-        maxLevel: 10,
-        baseCost: 200,
-        baseTime: 60,
-        effect: "unit_defense"
+        effect: "unlock_recipe",
+        prereq: {} 
     },
     {
         id: "tech3",
         nom: "Amélioration énergétique",
         desc: "Augmente l'efficacité des générateurs.",
         maxLevel: 10,
-        baseCost: 150,
+        baseCost: { scrap: 150, energy: 50 },
         baseTime: 45,
-        effect: "energy_efficiency"
+        effect: "energy_efficiency",
+        prereq: {}
+    },
+
+    // --- PALIER 2 : Logistique et bases militaires ---
+    {
+        id: "tech9",
+        nom: "Drone récupérateur",
+        desc: "Augmente la puissance d'attaque de l'unité.",
+        maxLevel: 10,
+        baseCost: { scrap: 200, tools: 20 },
+        baseTime: 70,
+        effect: "unlock_next_level",
+        prereq: { tech1: 1 }
     },
     {
-        id: "tech4",
-        nom: "Optimisation industrielle",
-        desc: "Réduit le coût des améliorations de bâtiments.",
+        id: "tech2",
+        nom: "Blindage avancé",
+        desc: "Renforce la résistance des unités terrestres.",
         maxLevel: 10,
-        baseCost: 300,
-        baseTime: 90,
-        effect: "building_discount"
+        baseCost: { scrap: 300, nano: 50 },
+        baseTime: 60,
+        effect: "unit_defense",
+        prereq: { tech1: 3 }
     },
     {
         id: "tech5",
         nom: "Puissance d'attaque",
         desc: "Augmente la puissance d'attaque de toutes les unités.",
         maxLevel: 10,
-        baseCost: 180,
+        baseCost: { energy: 200, nano: 100 },
         baseTime: 50,
-        effect: "unit_attack"
+        effect: "unit_attack",
+        prereq: { tech1: 2, tech3: 2 }
+    },
+    {
+        id: "tech4",
+        nom: "Optimisation industrielle",
+        desc: "Réduit le coût des améliorations de bâtiments.",
+        maxLevel: 10,
+        baseCost: { scrap: 400, data: 50 },
+        baseTime: 90,
+        effect: "building_discount",
+        prereq: { tech1: 5, tech3: 4 }
     },
 
-    // ⭐ NOUVELLES TECHNOLOGIES ⭐
-
+    // --- PALIER 3 : Conquête spatiale ---
     {
         id: "tech6",
         nom: "Infrastructure spatiale",
         desc: "Débloque les hangars orbitaux.",
         maxLevel: 1,
-        baseCost: 500,
+        baseCost: { scrap: 800, energy: 400, nano: 200 },
         baseTime: 120,
-        effect: "unlock_hangars"
-    },
-    {
-        id: "tech7",
-        nom: "Armes expérimentales",
-        desc: "Débloque les unités d'attaque avancées.",
-        maxLevel: 5,
-        baseCost: 250,
-        baseTime: 75,
-        effect: "unlock_attack_units"
-    },
-    {
-        id: "tech8",
-        nom: "Systèmes défensifs",
-        desc: "Débloque les unités de défense renforcées.",
-        maxLevel: 4,
-        baseCost: 220,
-        baseTime: 70,
-        effect: "unlock_defense_units"
-    },
-    {
-        id: "tech9",
-        nom: "Drone récupérateur",
-        desc: "Augmente la puissance d'attaque de l'unité.",
-        maxLevel: 10,
-        baseCost: 220,
-        baseTime: 70,
-        effect: "unlock_next_level"
-    },
-    {
-        id: "tech10",
-        nom: "Frégate",
-        desc: "Augmente la puissance d'attaque de l'unité.",
-        maxLevel: 10,
-        baseCost: 220,
-        baseTime: 70,
-        effect: "unlock_next_level"
+        effect: "unlock_hangars",
+        prereq: { tech4: 3, tech3: 5 }
     },
     {
         id: "tech11",
         nom: "Cargo",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: 220,
+        baseCost: { scrap: 300, parts: 50 },
         baseTime: 70,
-        effect: "unlock_next_level"
+        effect: "unlock_next_level",
+        prereq: { tech9: 3, tech6: 1 }
     },
     {
-        id: "tech12",
-        nom: "Sentinelle",
+        id: "tech10",
+        nom: "Frégate",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: 220,
+        baseCost: { scrap: 400, energy: 100, parts: 100 },
         baseTime: 70,
-        effect: "unlock_next_level"
-    },
-    {
-        id: "tech13",
-        nom: "Chasseur",
-        desc: "Augmente la puissance d'attaque de l'unité.",
-        maxLevel: 10,
-        baseCost: 220,
-        baseTime: 70,
-        effect: "unlock_next_level"
+        effect: "unlock_next_level",
+        prereq: { tech5: 3, tech6: 1 }
     },
     {
         id: "tech14",
         nom: "Roquette",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: 220,
+        baseCost: { scrap: 250, nano: 80 },
         baseTime: 70,
-        effect: "unlock_next_level"
+        effect: "unlock_next_level",
+        prereq: { tech5: 3, tech2: 2 }
+    },
+
+    // --- PALIER 4 : Spécialisation et Défense Lourde ---
+    {
+        id: "tech8",
+        nom: "Systèmes défensifs",
+        desc: "Débloque les unités de défense renforcées.",
+        maxLevel: 4,
+        baseCost: { scrap: 500, nano: 200, data: 100 },
+        baseTime: 70,
+        effect: "unlock_defense_units",
+        prereq: { tech2: 5, tech6: 1 }
     },
     {
-        id: "tech15",
-        nom: "Canon à impulsion",
-        desc: "Augmente la puissance d'attaque de l'unité.",
-        maxLevel: 10,
-        baseCost: 220,
-        baseTime: 70,
-        effect: "unlock_next_level"
+        id: "tech7",
+        nom: "Armes expérimentales",
+        desc: "Débloque les unités d'attaque avancées.",
+        maxLevel: 5,
+        baseCost: { energy: 600, nano: 300, data: 150 },
+        baseTime: 75,
+        effect: "unlock_attack_units",
+        prereq: { tech5: 6, tech1: 8 }
     },
     {
-        id: "tech16",
-        nom: "Canon plasma",
+        id: "tech12",
+        nom: "Sentinelle",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: 220,
+        baseCost: { scrap: 400, parts: 150, drones: 50 },
         baseTime: 70,
-        effect: "unlock_next_level"
+        effect: "unlock_next_level",
+        prereq: { tech8: 1, tech2: 6 }
     },
     {
         id: "tech17",
         nom: "Batterie Anti-aérienne",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: 220,
+        baseCost: { scrap: 500, parts: 200, nano: 150 },
         baseTime: 70,
-        effect: "unlock_next_level"
+        effect: "unlock_next_level",
+        prereq: { tech8: 2, tech14: 5 }
+    },
+    {
+        id: "tech13",
+        nom: "Chasseur",
+        desc: "Augmente la puissance d'attaque de l'unité.",
+        maxLevel: 10,
+        baseCost: { scrap: 600, energy: 300, parts: 250 },
+        baseTime: 70,
+        effect: "unlock_next_level",
+        prereq: { tech10: 5, tech7: 1 }
+    },
+    {
+        id: "tech15",
+        nom: "Canon à impulsion",
+        desc: "Augmente la puissance d'attaque de l'unité.",
+        maxLevel: 10,
+        baseCost: { energy: 800, nano: 400, parts: 200 },
+        baseTime: 70,
+        effect: "unlock_next_level",
+        prereq: { tech7: 2, tech3: 7 }
+    },
+
+    // --- PALIER 5 : Élite ---
+    {
+        id: "tech16",
+        nom: "Canon plasma",
+        desc: "Augmente la puissance d'attaque de l'unité.",
+        maxLevel: 10,
+        baseCost: { energy: 1200, nano: 600, data: 300, intel: 50 },
+        baseTime: 70,
+        effect: "unlock_next_level",
+        prereq: { tech15: 5, tech7: 4 }
     },
     {
         id: "tech18",
         nom: "Intercepteur",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: 220,
+        baseCost: { scrap: 1000, parts: 500, data: 400, intel: 100 },
         baseTime: 70,
-        effect: "unlock_next_level"
+        effect: "unlock_next_level",
+        prereq: { tech13: 5, tech16: 2 }
     }
 ];
-
 
 // ============================
 // SÉLECTEURS
@@ -202,8 +228,18 @@ function saveTechLevels(levels) {
 // CALCUL COÛT / TEMPS NIVEAU
 // ============================
 
+
+// Ajout du calcul pour chaque ressource individuellement
+
 function getCost(tech, level) {
-    return Math.floor(tech.baseCost * Math.pow(1.15, level - 1));
+    const factor = Math.pow(1.15, level - 1);
+    let scaledCost = {};
+    
+    for (const [res, amount] of Object.entries(tech.baseCost)) {
+        scaledCost[res] = Math.floor(amount * factor);
+    }
+    
+    return scaledCost;
 }
 
 function getTime(tech, level) {
@@ -214,25 +250,44 @@ function getTime(tech, level) {
 // GÉNÉRATION DES CARTES
 // ============================
 
+// ============================
+// GÉNÉRATION DES CARTES
+// ============================
+
 function genererTechnologies() {
     const levels = loadTechLevels();
+    const techGrid = document.getElementById("techGrid");
     techGrid.innerHTML = "";
 
     technologies.forEach(tech => {
         const level = levels[tech.id];
+        
+        // 1. Vérification des prérequis pour cette carte
+        const checkReq = verifierPrerequis(tech, levels);
+        
         const card = document.createElement("div");
-        card.className = "tech-card";
+        
+        // 2. Ajout conditionnel de la classe "locked"
+        card.className = checkReq.valid ? "tech-card" : "tech-card locked";
+
+        // 3. Ajout d'un indicateur visuel (cadenas) si bloqué
+        const lockIcon = checkReq.valid ? "" : "🔒 ";
 
         card.innerHTML = `
-            <h3>${tech.nom}</h3>
+            <h3>${lockIcon}${tech.nom}</h3>
             <p>${tech.desc}</p>
             <p>Niveau : ${level} / ${tech.maxLevel}</p>
         `;
 
+        // Le joueur peut toujours cliquer pour voir les prérequis manquants
         card.addEventListener("click", () => afficherInfo(tech));
         techGrid.appendChild(card);
     });
 }
+
+// ============================
+// AFFICHAGE DES DÉTAILS
+// ============================
 
 // ============================
 // AFFICHAGE DES DÉTAILS
@@ -252,24 +307,112 @@ function afficherInfo(tech) {
     }
 
     const nextLevel = level + 1;
-    const cost = getCost(tech, nextLevel);
+    
+    // 1. CORRECTION : Il faut calculer 'cost' avant de s'en servir !
+    const cost = getCost(tech, nextLevel); 
     const time = getTime(tech, nextLevel);
 
+    // 2. CORRECTION : Ajouter TOUTES les ressources possibles dans la map
+    const resMap = {
+        scrap: { nom: "Ferraille", icon: "🔩" },
+        energy: { nom: "Énergie", icon: "⚡" },
+        nano: { nom: "Nanocomposants", icon: "🧬" },
+        data: { nom: "Données", icon: "📡" },
+        tools: { nom: "Outils", icon: "🛠️" },
+        parts: { nom: "Pièces", icon: "🧩" },
+        drones: { nom: "Drones", icon: "🤖" },
+        intel: { nom: "Intelligence", icon: "🧠" }
+    };
+
+    let costHTML = "";
+    for (const [res, amount] of Object.entries(cost)) {
+        // Sécurité supplémentaire au cas où une ressource inconnue se glisse
+        const icon = resMap[res] ? resMap[res].icon : "❓";
+        costHTML += `<span style="margin-right: 10px;">${icon} ${amount}</span>`;
+    }
+
+    // Vérification des prérequis avec notre nouvelle fonction
+    const checkReq = verifierPrerequis(tech, levels);
     const rechercheActive = JSON.parse(localStorage.getItem("rechercheActive"));
 
-    const bouton = rechercheActive
-        ? `<button class="btn-recherche" disabled>Recherche en cours…</button>`
-        : `<button class="btn-recherche" onclick="lancerRecherche('${tech.id}')">Améliorer</button>`;
+    // Construction du bloc HTML pour les prérequis
+    let prereqHTML = "";
+    if (checkReq.list.length > 0) {
+        prereqHTML = `<div class="prereq-box" style="margin: 15px 0; padding: 10px; background: rgba(0, 0, 0, 0.4); border-left: 3px solid #00f3ff; border-radius: 4px;">
+            <strong style="color: #00f3ff; font-size: 0.9em; text-transform: uppercase;">Prérequis :</strong><br>`;
+        
+        checkReq.list.forEach(req => {
+            const icon = req.valide ? "✅" : "❌";
+            const color = req.valide ? "#4caf50" : "#f44336";
+            prereqHTML += `<span style="color: ${color}; font-size: 0.9em; display: block; margin-top: 5px;">
+                ${icon} ${req.nom} (Niv. ${req.actuel} / ${req.requis})
+            </span>`;
+        });
+        prereqHTML += `</div>`;
+    } else {
+        prereqHTML = `<div style="margin: 15px 0; color: #4caf50; font-size: 0.9em;">✅ Aucun prérequis</div>`;
+    }
 
+    // Gestion de l'état du bouton
+    let bouton = "";
+    if (!checkReq.valid) {
+        bouton = `<button class="btn-recherche" disabled style="opacity: 0.5; cursor: not-allowed; border-color: #f44336; color: #f44336;">Prérequis manquants</button>`;
+    } else if (rechercheActive) {
+        bouton = `<button class="btn-recherche" disabled>Recherche en cours…</button>`;
+    } else {
+        bouton = `<button class="btn-recherche" onclick="lancerRecherche('${tech.id}')">Améliorer</button>`;
+    }
+
+    // Injection dans le DOM
     infoBox.innerHTML = `
-        <strong>${tech.nom}</strong><br>
-        ${tech.desc}<br><br>
+        <strong style="font-size: 1.2em; color: #fff;">${tech.nom}</strong><br>
+        <span style="font-size: 0.9em; color: #aaa;">${tech.desc}</span><br><br>
+        
         <strong>Niveau actuel :</strong> ${level}<br>
         <strong>Niveau suivant :</strong> ${nextLevel}<br><br>
-        <strong>Coût :</strong> ${cost} Cristal<br>
-        <strong>Temps :</strong> ${time}s<br><br>
+        
+        <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+            <span><strong>Coût :</strong> ${costHTML}<br></span>
+            <span><strong>Temps :</strong> ${time}s</span>
+        </div>
+        
+        ${prereqHTML}
         ${bouton}
     `;
+}
+
+function verifierPrerequis(tech, currentLevels) {
+    // S'il n'y a pas de prérequis
+    if (!tech.prereq || Object.keys(tech.prereq).length === 0) {
+        return { valid: true, list: [] };
+    }
+
+    let list = [];
+    let allValid = true;
+
+    for (const [reqId, reqLevel] of Object.entries(tech.prereq)) {
+        const playerLevel = currentLevels[reqId] || 0;
+        const isValid = playerLevel >= reqLevel;
+        
+        if (!isValid) {
+            allValid = false;
+        }
+
+        // On récupère le nom de la technologie requise
+        const reqTech = technologies.find(t => t.id === reqId);
+        
+        list.push({
+            nom: reqTech.nom,
+            requis: reqLevel,
+            actuel: playerLevel,
+            valide: isValid
+        });
+    }
+
+    return {
+        valid: allValid,
+        list: list
+    };
 }
 
 // ============================
@@ -285,6 +428,35 @@ function lancerRecherche(idTech) {
 
     if (nextLevel > tech.maxLevel) return;
 
+    // 1. Charger la sauvegarde pour vérifier les ressources
+    let save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
+    const cost = getCost(tech, nextLevel);
+
+    // 2. Vérification de la disponibilité
+    for (const [res, amount] of Object.entries(cost)) {
+        if ((save[res] || 0) < amount) {
+            alert(`Fonds insuffisants ! Il vous manque du ${res}.`);
+            return; // Annule le lancement de la recherche
+        }
+    }
+
+    // 3. Déduction des ressources
+    for (const [res, amount] of Object.entries(cost)) {
+        save[res] -= amount;
+    }
+    
+    // 4. Sauvegarde de la transaction
+    localStorage.setItem("cosmicSave", JSON.stringify(save));
+
+    // Si la page Ressources est ouverte, on la met à jour
+    if (typeof updateRessourcesPage === "function") {
+        updateRessourcesPage();
+    }
+    if (typeof updateHUD === "function") {
+        updateHUD();
+    }
+
+    // 5. Lancement du timer (code existant)
     const time = getTime(tech, nextLevel);
     const endTime = Date.now() + time * 1000;
 

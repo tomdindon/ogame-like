@@ -75,6 +75,7 @@
 
 .rank-panel {
     width: 90%;
+    max-width: 1000px; /* Optionnel : évite que ce soit trop large sur grand écran */
     margin: 20px auto;
     padding: 25px;
     background: rgba(0, 0, 0, 0.45);

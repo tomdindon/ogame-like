@@ -5,6 +5,9 @@
 // Table de production horaire de l'extracteur de ferraille (niveau 1 à 10)
 const scrapProduction = [200, 293, 430, 631, 927, 1360, 1996, 2929, 4297, 6304];
 
+let lastSyncTime = Date.now();
+const SYNC_INTERVAL = 60000; // Synchronisation toutes les 60 secondes (60000 ms)
+
 // Tick toutes les secondes
 setInterval(productionTick, 1000);
 
