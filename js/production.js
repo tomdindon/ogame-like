@@ -2,11 +2,61 @@
    PRODUCTION DES RESSOURCES PAR LES BÂTIMENTS
 ===================================================== */
 
-// Table de production horaire de l'extracteur de ferraille (niveau 1 à 10)
-const scrapProduction = [200, 293, 430, 631, 927, 1360, 1996, 2929, 4297, 6304];
+// Production PAR SECONDE de l'extracteur de ferraille (niv 1 → 10)
+const scrapProduction = [
+    2,    // niv 1
+    4,    // niv 2
+    7,    // niv 3
+    13,   // niv 4
+    23,   // niv 5
+    42,   // niv 6
+    75,   // niv 7
+    135,  // niv 8
+    259,  // niv 9
+    500   // niv 10
+];
 
-let lastSyncTime = Date.now();
-const SYNC_INTERVAL = 60000; // Synchronisation toutes les 60 secondes (60000 ms)
+// Production PAR SECONDE du réacteur instable (niv 1 → 10)
+const energyProduction = [
+    2,    // niv 1
+    4,    // niv 2
+    7,    // niv 3
+    13,   // niv 4
+    23,   // niv 5
+    42,   // niv 6
+    75,   // niv 7
+    135,  // niv 8
+    259,  // niv 9
+    500   // niv 10
+];
+
+// Production PAR SECONDE des nanocomposants (niv 1 → 10)
+const nanoProduction = [
+    2,    // niv 1
+    4,    // niv 2
+    7,    // niv 3
+    13,   // niv 4
+    23,   // niv 5
+    42,   // niv 6
+    75,   // niv 7
+    135,  // niv 8
+    259,  // niv 9
+    500   // niv 10
+];
+
+// Production PAR SECONDE des données anciennes (niv 1 → 10)
+const dataProduction = [
+    2,    // niv 1
+    4,    // niv 2
+    7,    // niv 3
+    13,   // niv 4
+    23,   // niv 5
+    42,   // niv 6
+    75,   // niv 7
+    135,  // niv 8
+    259,  // niv 9
+    500   // niv 10
+];
 
 // Tick toutes les secondes
 setInterval(productionTick, 1000);
@@ -36,41 +86,44 @@ function productionTick() {
     ====================================================== */
 
     buildings.forEach(building => {
-        const level = save.buildings[building.id] || 0;
+    const level = save.buildings[building.id] || 0;
 
-        if (!building.production || level <= 0) return;
+    if (!building.production || level <= 0) return;
 
-        // Extracteur de ferraille : courbe exponentielle dédiée
-        if (building.id === "extracteur_ferraille") {
-            const hourlyRate = scrapProduction[level - 1] || 0;
-            save.scrapBuffer += hourlyRate / 3600;
+    // Extracteur de ferraille
+    if (building.id === "extracteur_ferraille") {
+        const perSecondRate = scrapProduction[level - 1] || 0;
+        save.scrap += perSecondRate;
+        return;
+    }
 
-            const gained = Math.floor(save.scrapBuffer);
-            if (gained > 0) {
-                save.scrap += gained;
-                save.scrapBuffer -= gained;
-            }
-            return;
-        }
+    // Réacteur instable
+    if (building.id === "reacteur_instable") {
+        let amount = energyProduction[level - 1] || 0;
+        amount = Math.floor(amount * (1 + energyBonus));
+        save.energy += amount;
+        return;
+    }
 
-        // Autres bâtiments : logique existante inchangée
-        const base = building.production.base;
-        const scaling = Math.pow(1.12, level - 1);
-        let amount = Math.floor(base * scaling);
+    // Extracteur de nanocomposants
+    if (building.id === "extracteur_nanocomposants") {
+        const perSecondRate = nanoProduction[level - 1] || 0;
+        save.nano += perSecondRate;
+        return;
+    }
 
-        if (building.id === "reacteur_instable") {
-            amount = Math.floor(amount * (1 + energyBonus));
-        }
-
-        if (building.id === "reacteur_instable") save.energy += amount;
-        if (building.id === "extracteur_nanocomposants") save.nano += amount;
-        if (building.id === "archives_fracturees") save.data += amount;
-    });
+    // Archives fracturées
+    if (building.id === "archives_fracturees") {
+        const perSecondRate = dataProduction[level - 1] || 0;
+        save.data += perSecondRate;
+        return;
+    }
+});
 
     localStorage.setItem("cosmicSave", JSON.stringify(save));
 
     updateHUD();
-    updateRessourcesPage();  // 🔥 Mise à jour en temps réel
+    updateRessourcesPage();
 }
 
 /* =====================================================

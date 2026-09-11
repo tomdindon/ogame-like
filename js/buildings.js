@@ -21,7 +21,7 @@ const buildings = [
         imageBase: "assets/buildings/reacteur_instable",
         maxLevel: 10,
         cost: { scrap: 80, energy: 0 },
-        production: { base: 3 }
+        production: { base: 2 }
     },
 
     {
@@ -31,7 +31,7 @@ const buildings = [
         imageBase: "assets/buildings/extracteur_nanocomposants",
         maxLevel: 10,
         cost: { scrap: 120, energy: 40 },
-        production: { base: 1 }
+        production: { base: 2 }
     },
 
     {
@@ -41,7 +41,7 @@ const buildings = [
         imageBase: "assets/buildings/archives_fracturees",
         maxLevel: 10,
         cost: { scrap: 60, energy: 30 },
-        production: { base: 1 }
+        production: { base: 2 }
     },
 
     {

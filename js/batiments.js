@@ -21,14 +21,23 @@ function getBuildingImage(buildingId, level) {
 function getBuildingProductionText(building, level) {
     if (!building.production) return "Pas de production";
 
-    // Extracteur de ferraille : utilise la table horaire dédiée (scrapProduction)
-    // définie dans le fichier de production (production.js)
     if (building.id === "extracteur_ferraille") {
-        const hourlyRate = scrapProduction[level - 1] || 0;
-        return `Production : ${hourlyRate}/h`;
+        return `Production : ${scrapProduction[level - 1] || 0}/s`;
     }
 
-    // Autres bâtiments : formule générique inchangée
+    if (building.id === "reacteur_instable") {
+        return `Production : ${energyProduction[level - 1] || 0}/s`;
+    }
+
+    if (building.id === "extracteur_nanocomposants") {
+        return `Production : ${nanoProduction[level - 1] || 0}/s`;
+    }
+
+    if (building.id === "archives_fracturees") {
+        return `Production : ${dataProduction[level - 1] || 0}/s`;
+    }
+
+    // Autres bâtiments (sans table dédiée) : formule générique inchangée
     return `Production : ${building.production.base * level}/s`;
 }
 

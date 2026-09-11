@@ -34,7 +34,7 @@ const technologies = [
         nom: "Drone récupérateur",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { scrap: 200, tools: 20 },
+        baseCost: { scrap: 200, reinforcedSteel: 20 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech1: 1 }
@@ -86,7 +86,7 @@ const technologies = [
         nom: "Cargo",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { scrap: 300, parts: 50 },
+        baseCost: { scrap: 300, syntheticNanites: 50 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech9: 3, tech6: 1 }
@@ -96,7 +96,7 @@ const technologies = [
         nom: "Frégate",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { scrap: 400, energy: 100, parts: 100 },
+        baseCost: { scrap: 400, energy: 100, cyberModule: 100 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech5: 3, tech6: 1 }
@@ -138,7 +138,7 @@ const technologies = [
         nom: "Sentinelle",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { scrap: 400, parts: 150, drones: 50 },
+        baseCost: { scrap: 400, syntheticNanites: 150, cyberModule: 50 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech8: 1, tech2: 6 }
@@ -148,7 +148,7 @@ const technologies = [
         nom: "Batterie Anti-aérienne",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { scrap: 500, parts: 200, nano: 150 },
+        baseCost: { scrap: 500, syntheticNanites: 200, nano: 150 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech8: 2, tech14: 5 }
@@ -158,7 +158,7 @@ const technologies = [
         nom: "Chasseur",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { scrap: 600, energy: 300, parts: 250 },
+        baseCost: { scrap: 600, energy: 300, syntheticNanites: 250 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech10: 5, tech7: 1 }
@@ -168,7 +168,7 @@ const technologies = [
         nom: "Canon à impulsion",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { energy: 800, nano: 400, parts: 200 },
+        baseCost: { energy: 800, nano: 400, syntheticNanites: 200 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech7: 2, tech3: 7 }
@@ -180,7 +180,7 @@ const technologies = [
         nom: "Canon plasma",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { energy: 1200, nano: 600, data: 300, intel: 50 },
+        baseCost: { energy: 1200, nano: 600, data: 300, aiFragment: 50 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech15: 5, tech7: 4 }
@@ -190,7 +190,7 @@ const technologies = [
         nom: "Intercepteur",
         desc: "Augmente la puissance d'attaque de l'unité.",
         maxLevel: 10,
-        baseCost: { scrap: 1000, parts: 500, data: 400, intel: 100 },
+        baseCost: { scrap: 1000, syntheticNanites: 500, data: 400, aiFragment: 100 },
         baseTime: 70,
         effect: "unlock_next_level",
         prereq: { tech13: 5, tech16: 2 }
@@ -250,10 +250,6 @@ function getTime(tech, level) {
 // GÉNÉRATION DES CARTES
 // ============================
 
-// ============================
-// GÉNÉRATION DES CARTES
-// ============================
-
 function genererTechnologies() {
     const levels = loadTechLevels();
     const techGrid = document.getElementById("techGrid");
@@ -289,10 +285,6 @@ function genererTechnologies() {
 // AFFICHAGE DES DÉTAILS
 // ============================
 
-// ============================
-// AFFICHAGE DES DÉTAILS
-// ============================
-
 function afficherInfo(tech) {
     const levels = loadTechLevels();
     const level = levels[tech.id];
@@ -318,10 +310,10 @@ function afficherInfo(tech) {
         energy: { nom: "Énergie", icon: "⚡" },
         nano: { nom: "Nanocomposants", icon: "🧬" },
         data: { nom: "Données", icon: "📡" },
-        tools: { nom: "Outils", icon: "🛠️" },
-        parts: { nom: "Pièces", icon: "🧩" },
-        drones: { nom: "Drones", icon: "🤖" },
-        intel: { nom: "Intelligence", icon: "🧠" }
+        reinforcedSteel: { nom: "Acier renforcé", icon: "🛠️" },
+        syntheticNanites: { nom: "Nanites synthétiques", icon: "🤖" },
+        cyberModule: { nom: "Module cybernétique", icon: "🧩" },
+        aiFragment: { nom: "Fragment d'IA", icon: "🧠" }
     };
 
     let costHTML = "";

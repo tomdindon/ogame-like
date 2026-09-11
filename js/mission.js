@@ -2,41 +2,98 @@
    Définition des missions disponibles
 ===================================================== */
 const MISSIONS = {
-    exploration_galactique: {
-        key: "exploration_galactique",
-        name: "Exploration Galactique",
-        duration: 10,
-        reward: { exploration: true },
-        prereq: { drones: 5 }
+
+    // ============================
+    // RESSOURCES COMMUNES
+    // ============================
+
+    patrouille_courte: {
+        key: "patrouille_courte",
+        name: "Patrouille courte",
+        duration: 60,
+        reward: { scrap: 150 },
+        prereq: { drones: 2 }
     },
-    exploration: {
-        key: "exploration",
-        name: "Exploration",
-        duration: 300,
-        reward: { scrap: 1000 },
-        prereq: { drones: 5 }
+    forage_profond: {
+        key: "forage_profond",
+        name: "Forage profond",
+        duration: 1800,
+        reward: { scrap: 3500 },
+        prereq: { drones: 12, cargo: 3 }
     },
-    reconnaissance: {
-        key: "reconnaissance",
-        name: "Reconnaissance",
-        duration: 120,
-        reward: { data: 50 },
-        prereq: { drones: 3 }
+    collecte_energie: {
+        key: "collecte_energie",
+        name: "Collecte d'énergie",
+        duration: 900,
+        reward: { energy: 400 },
+        prereq: { chasseur: 6, fregate: 2 }
     },
-    sauvetage: {
-        key: "sauvetage",
-        name: "Sauvetage",
-        duration: 600,
-        reward: { nano: 20 },
-        prereq: { drones: 8 }
+    analyse_signal: {
+        key: "analyse_signal",
+        name: "Analyse de signal",
+        duration: 900,
+        reward: { data: 250 },
+        prereq: { drones: 6, sentinelle: 2 }
     },
-    sauvetage_OCC: {
-        key: "sauvetage_OCC",
-        name: "Sauvetage OCC",
-        duration: 120,
-        reward: { energy: 20 },
-        prereq: { chasseur: 5 }
+    synthese_nano: {
+        key: "synthese_nano",
+        name: "Synthèse de nanocomposants",
+        duration: 1800,
+        reward: { nano: 60 },
+        prereq: { drones: 10, sentinelle: 4 }
     },
+    expedition_longue: {
+        key: "expedition_longue",
+        name: "Expédition longue durée",
+        duration: 3600,
+        reward: { scrap: 6000, energy: 1200 },
+        prereq: { fregate: 5, cargo: 4, chasseur: 6 }
+    },
+
+    // ============================
+    // RESSOURCES RARES
+    // ============================
+
+    recuperation_acier: {
+        key: "recuperation_acier",
+        name: "Récupération d'acier renforcé",
+        duration: 1200,
+        reward: { reinforcedSteel: 3 },
+        prereq: { drones: 8, chasseur: 4 }
+    },
+    extraction_module: {
+        key: "extraction_module",
+        name: "Extraction de module cybernétique",
+        duration: 1800,
+        reward: { cyberModule: 4 },
+        prereq: { sentinelle: 5, fregate: 3 }
+    },
+    recolte_nanites: {
+        key: "recolte_nanites",
+        name: "Récolte de nanites synthétiques",
+        duration: 2400,
+        reward: { syntheticNanites: 5 },
+        prereq: { drones: 15, sentinelle: 6 }
+    },
+    fouille_archives_IA: {
+        key: "fouille_archives_IA",
+        name: "Fouille d'archives d'IA",
+        duration: 3600,
+        reward: { aiFragment: 6 },
+        prereq: { fregate: 6, sentinelle: 8 }
+    },
+    mission_elite: {
+        key: "mission_elite",
+        name: "Mission d'élite",
+        duration: 7200,
+        reward: {
+            reinforcedSteel: 8,
+            cyberModule: 6,
+            syntheticNanites: 5,
+            aiFragment: 4
+        },
+        prereq: { fregate: 10, sentinelle: 10, chasseur: 10, cargo: 5 }
+    }
 };
 
 const ACTIVE_MISSIONS_KEY = "activeMissions";
@@ -94,6 +151,53 @@ function isMissionActive(missionKey, activeList) {
 }
 
 /* =====================================================
+   Utilitaire : construit le texte des récompenses
+   (commun à renderMissionsList et updateMissionLogDisplay)
+===================================================== */
+function getRewardText(reward) {
+    let rewardText = [];
+
+    if (!reward) return ["Aucune récompense directe"];
+
+    // Ressources communes
+    if (reward.scrap) rewardText.push(`${reward.scrap} Ferraille`);
+    if (reward.energy) rewardText.push(`${reward.energy} Énergie`);
+    if (reward.nano) rewardText.push(`${reward.nano} Nano‑composants`);
+    if (reward.data) rewardText.push(`${reward.data} Données anciennes`);
+
+    // Ressources rares
+    if (reward.reinforcedSteel) rewardText.push(`${reward.reinforcedSteel} Acier renforcé`);
+    if (reward.cyberModule) rewardText.push(`${reward.cyberModule} Module cybernétique`);
+    if (reward.syntheticNanites) rewardText.push(`${reward.syntheticNanites} Nanites synthétiques`);
+    if (reward.aiFragment) rewardText.push(`${reward.aiFragment} Fragment d'IA`);
+
+    if (reward.exploration) rewardText.push(`Révélation d'un secteur galactique`);
+
+    if (rewardText.length === 0) rewardText.push("Aucune récompense directe");
+
+    return rewardText;
+}
+
+/* =====================================================
+   Utilitaire : construit le texte des prérequis
+===================================================== */
+function getPrereqText(prereq) {
+    let prereqText = [];
+
+    if (!prereq) return ["Aucun"];
+
+    if (prereq.drones) prereqText.push(`${prereq.drones} Drones récupérateurs`);
+    if (prereq.chasseur) prereqText.push(`${prereq.chasseur} Chasseurs`);
+    if (prereq.fregate) prereqText.push(`${prereq.fregate} Frégates`);
+    if (prereq.sentinelle) prereqText.push(`${prereq.sentinelle} Sentinelles`);
+    if (prereq.cargo) prereqText.push(`${prereq.cargo} Cargos`);
+
+    if (prereqText.length === 0) prereqText.push("Aucun");
+
+    return prereqText;
+}
+
+/* =====================================================
    Affichage de la liste des missions
 ===================================================== */
 function renderMissionsList() {
@@ -110,22 +214,8 @@ function renderMissionsList() {
         const hasReq = hasPrerequisites(mission.key);
         const active = isMissionActive(mission.key, activeMissions);
 
-        let rewardText = [];
-
-        if (mission.reward) {
-            if (mission.reward.scrap) rewardText.push(`${mission.reward.scrap} Ferraille`);
-            if (mission.reward.energy) rewardText.push(`${mission.reward.energy} Énergie`);
-            if (mission.reward.nano) rewardText.push(`${mission.reward.nano} Nano‑composants`);
-            if (mission.reward.data) rewardText.push(`${mission.reward.data} Données anciennes`);
-            if (mission.reward.exploration) rewardText.push(`Révélation d’un secteur galactique`);
-        }
-
-        if (rewardText.length === 0) rewardText.push("Aucune récompense directe");
-
-        let prereqText = [];
-        if (mission.prereq.drones) prereqText.push(`${mission.prereq.drones} Drones récupérateurs`);
-        if (mission.prereq.chasseur) prereqText.push(`${mission.prereq.chasseur} Chasseurs`);
-        if (prereqText.length === 0) prereqText.push("Aucun");
+        const rewardText = getRewardText(mission.reward);
+        const prereqText = getPrereqText(mission.prereq);
 
         div.innerHTML = `
             <p><strong>${mission.name}</strong></p>
@@ -176,12 +266,7 @@ function updateMissionLogDisplay() {
         const progress = 1 - (remaining / mission.duration);
         const percent = Math.floor(progress * 100);
 
-        let rewardText = [];
-        if (mission.reward.scrap) rewardText.push(`${mission.reward.scrap} Ferraille`);
-        if (mission.reward.energy) rewardText.push(`${mission.reward.energy} Énergie`);
-        if (mission.reward.nano) rewardText.push(`${mission.reward.nano} Nano‑composants`);
-        if (mission.reward.data) rewardText.push(`${mission.reward.data} Données anciennes`);
-        if (mission.reward.exploration) rewardText.push(`Révélation d’un secteur galactique`);
+        const rewardText = getRewardText(mission.reward);
 
         return `
             <div class="missionActiveBlock">
@@ -282,10 +367,17 @@ function finishMission(missionKey) {
     const save = JSON.parse(localStorage.getItem("cosmicSave")) || {};
 
     if (mission && mission.reward) {
+        // Ressources communes
         if (mission.reward.scrap) save.scrap = (save.scrap || 0) + mission.reward.scrap;
         if (mission.reward.energy) save.energy = (save.energy || 0) + mission.reward.energy;
         if (mission.reward.nano) save.nano = (save.nano || 0) + mission.reward.nano;
         if (mission.reward.data) save.data = (save.data || 0) + mission.reward.data;
+
+        // Ressources rares
+        if (mission.reward.reinforcedSteel) save.reinforcedSteel = (save.reinforcedSteel || 0) + mission.reward.reinforcedSteel;
+        if (mission.reward.cyberModule) save.cyberModule = (save.cyberModule || 0) + mission.reward.cyberModule;
+        if (mission.reward.syntheticNanites) save.syntheticNanites = (save.syntheticNanites || 0) + mission.reward.syntheticNanites;
+        if (mission.reward.aiFragment) save.aiFragment = (save.aiFragment || 0) + mission.reward.aiFragment;
 
         if (mission.reward.exploration) {
             // 🔥 Nouvelle intégration fog
@@ -296,6 +388,10 @@ function finishMission(missionKey) {
     }
 
     localStorage.setItem("cosmicSave", JSON.stringify(save));
+
+    // Mise à jour immédiate de l'affichage (HUD + page ressources)
+    updateHUD?.();
+    updateRessourcesPage?.();
 
     const logText = mission
         ? `Mission "${mission.name}" terminée : récompense obtenue`

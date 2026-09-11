@@ -93,11 +93,18 @@ function calcTotalDefense(save) {
 
 // Production horaire (bâtiments + bonus labo)
 function calcProduction(save) {
+    const scrapLevel = save.buildings.extracteur_ferraille || 0;
+    const energyLevel = save.buildings.reacteur_instable || 0;
+    const nanoLevel = save.buildings.extracteur_nanocomposants || 0;
+    const dataLevel = save.buildings.archives_fracturees || 0;
+
+    const energyBonus = save.energyEfficiency || 0;
+
     return {
-        scrap: save.buildings.extracteur_ferraille * 10,
-        energy: save.buildings.reacteur_instable * 5,
-        nano: save.buildings.extracteur_nanocomposants * 2,
-        data: save.buildings.archives_fracturees * 1
+        scrap: scrapProduction[scrapLevel - 1] || 0,
+        energy: Math.floor((energyProduction[energyLevel - 1] || 0) * (1 + energyBonus)),
+        nano: nanoProduction[nanoLevel - 1] || 0,
+        data: dataProduction[dataLevel - 1] || 0
     };
 }
 
