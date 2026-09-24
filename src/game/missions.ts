@@ -7,21 +7,21 @@ export interface MissionDef {
 }
 
 export const MISSIONS: Record<string, MissionDef> = {
-  patrouille_courte: { key: "patrouille_courte", name: "Patrouille courte", duration: 60, reward: { scrap: 150, xp: 10 }, prereq: { drone_recuperateur: 2 } },
-  forage_profond: { key: "forage_profond", name: "Forage profond", duration: 1800, reward: { scrap: 3500, xp: 150 }, prereq: { drone_recuperateur: 12, cargo: 3 } },
-  collecte_energie: { key: "collecte_energie", name: "Collecte d'énergie", duration: 900, reward: { energy: 400, xp: 80 }, prereq: { chasseur: 6, fregate: 2 } },
-  analyse_signal: { key: "analyse_signal", name: "Analyse de signal", duration: 900, reward: { data: 250, xp: 80 }, prereq: { drone_recuperateur: 6, sentinelle: 2 } },
-  synthese_nano: { key: "synthese_nano", name: "Synthèse de nanocomposants", duration: 1800, reward: { nano: 60, xp: 150 }, prereq: { drone_recuperateur: 10, sentinelle: 4 } },
-  expedition_longue: { key: "expedition_longue", name: "Expédition longue durée", duration: 3600, reward: { scrap: 6000, energy: 1200, xp: 300 }, prereq: { fregate: 5, cargo: 4, chasseur: 6 } },
-  recuperation_acier: { key: "recuperation_acier", name: "Récupération d'acier renforcé", duration: 1200, reward: { reinforcedSteel: 3, xp: 100 }, prereq: { drone_recuperateur: 8, chasseur: 4 } },
-  extraction_module: { key: "extraction_module", name: "Extraction de module cybernétique", duration: 1800, reward: { cyberModule: 4, xp: 150 }, prereq: { sentinelle: 5, fregate: 3 } },
-  recolte_nanites: { key: "recolte_nanites", name: "Récolte de nanites synthétiques", duration: 2400, reward: { syntheticNanites: 5, xp: 200 }, prereq: { drone_recuperateur: 15, sentinelle: 6 } },
-  fouille_archives_IA: { key: "fouille_archives_IA", name: "Fouille d'archives d'IA", duration: 3600, reward: { aiFragment: 6, xp: 300 }, prereq: { fregate: 6, sentinelle: 8 } },
+  patrouille_courte: { key: "patrouille_courte", name: "Patrouille courte", duration: 60, reward: { scrap: 1500, xp: 10 }, prereq: { drone_recuperateur: 2 } },
+  forage_profond: { key: "forage_profond", name: "Forage profond", duration: 1800, reward: { scrap: 35000, xp: 150 }, prereq: { drone_recuperateur: 12, cargo: 3 } },
+  collecte_energie: { key: "collecte_energie", name: "Collecte d'énergie", duration: 900, reward: { energy: 4000, xp: 80 }, prereq: { chasseur: 6, fregate: 2 } },
+  analyse_signal: { key: "analyse_signal", name: "Analyse de signal", duration: 900, reward: { data: 2500, xp: 80 }, prereq: { drone_recuperateur: 6, sentinelle: 2 } },
+  synthese_nano: { key: "synthese_nano", name: "Synthèse de nanocomposants", duration: 1800, reward: { nano: 600, xp: 150 }, prereq: { drone_recuperateur: 10, sentinelle: 4 } },
+  expedition_longue: { key: "expedition_longue", name: "Expédition longue durée", duration: 3600, reward: { scrap: 60000, energy: 1200, xp: 300 }, prereq: { fregate: 5, cargo: 4, chasseur: 6 } },
+  recuperation_acier: { key: "recuperation_acier", name: "Récupération d'acier renforcé", duration: 1200, reward: { reinforcedSteel: 30, xp: 100 }, prereq: { drone_recuperateur: 8, chasseur: 4 } },
+  extraction_module: { key: "extraction_module", name: "Extraction de module cybernétique", duration: 1800, reward: { cyberModule: 40, xp: 150 }, prereq: { sentinelle: 5, fregate: 3 } },
+  recolte_nanites: { key: "recolte_nanites", name: "Récolte de nanites synthétiques", duration: 2400, reward: { syntheticNanites: 50, xp: 200 }, prereq: { drone_recuperateur: 15, sentinelle: 6 } },
+  fouille_archives_IA: { key: "fouille_archives_IA", name: "Fouille d'archives d'IA", duration: 3600, reward: { aiFragment: 60, xp: 300 }, prereq: { fregate: 6, sentinelle: 8 } },
   mission_elite: {
     key: "mission_elite",
     name: "Mission d'élite",
     duration: 7200,
-    reward: { reinforcedSteel: 8, cyberModule: 6, syntheticNanites: 5, aiFragment: 4, xp: 600 },
+    reward: { reinforcedSteel: 80, cyberModule: 60, syntheticNanites: 50, aiFragment: 40, xp: 600 },
     prereq: { fregate: 10, sentinelle: 10, chasseur: 10, cargo: 5 },
   },
 };
