@@ -27,7 +27,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Petit drone autonome conçu pour récupérer des ressources dispersées.",
     cost: { scrap: 500, energy: 200 },
-    stats: { attaque: 0, defense: 5, vitesse: 5, cargo: 10 },
+    stats: { attaque: 15, defense: 5, vitesse: 5, cargo: 10 },
     category: "attack",
   },
   {
@@ -37,7 +37,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Vaisseau polyvalent, équilibré entre attaque et défense.",
     cost: { scrap: 1000, energy: 500 },
-    stats: { attaque: 15, defense: 20, vitesse: 3, cargo: 5 },
+    stats: { attaque: 100, defense: 20, vitesse: 3, cargo: 5 },
     category: "attack",
   },
   {
@@ -47,7 +47,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Transporteur massif conçu pour déplacer de grandes quantités de ressources.",
     cost: { scrap: 1200, energy: 300 },
-    stats: { attaque: 0, defense: 10, vitesse: 3, cargo: 50 },
+    stats: { attaque: 50, defense: 10, vitesse: 3, cargo: 50 },
     category: "attack",
   },
   {
@@ -57,7 +57,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Unité défensive spécialisée dans la détection et la protection.",
     cost: { scrap: 800, energy: 400 },
-    stats: { attaque: 5, defense: 30, vitesse: 1, detection: 10, cargo: 0 },
+    stats: { attaque: 120, defense: 30, vitesse: 1, detection: 10, cargo: 0 },
     category: "attack",
   },
   {
@@ -67,7 +67,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Vaisseau rapide conçu pour les attaques éclairs.",
     cost: { scrap: 1500, energy: 800 },
-    stats: { attaque: 105, defense: 10, vitesse: 8, cargo: 5 },
+    stats: { attaque: 245, defense: 10, vitesse: 8, cargo: 5 },
     category: "attack",
   },
   {
@@ -87,7 +87,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Arme simple mais efficace pour saturer une zone.",
     cost: { scrap: 200, energy: 100 },
-    stats: { attaque: 70, defense: 0, vitesse: 0, cargo: 0 },
+    stats: { attaque: 60, defense: 0, vitesse: 0, cargo: 0 },
     category: "defense",
   },
   {
@@ -97,7 +97,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Canon énergétique puissant, idéal contre les cibles blindées.",
     cost: { scrap: 2000, energy: 1200 },
-    stats: { attaque: 90, defense: 10, vitesse: 0, cargo: 0 },
+    stats: { attaque: 80, defense: 10, vitesse: 0, cargo: 0 },
     category: "defense",
   },
   {
@@ -107,7 +107,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Arme lourde tirant des projectiles de plasma surchauffé.",
     cost: { scrap: 2500, energy: 1500 },
-    stats: { attaque: 125, defense: 20, vitesse: 0, cargo: 0 },
+    stats: { attaque: 105, defense: 20, vitesse: 0, cargo: 0 },
     category: "defense",
   },
   {
@@ -117,7 +117,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Défense spécialisée contre les unités rapides et aériennes.",
     cost: { scrap: 1800, energy: 900 },
-    stats: { attaque: 155, defense: 60, vitesse: 0, cargo: 0 },
+    stats: { attaque: 135, defense: 60, vitesse: 0, cargo: 0 },
     category: "defense",
   },
   {
