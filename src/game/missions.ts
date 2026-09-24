@@ -12,7 +12,7 @@ export const MISSIONS: Record<string, MissionDef> = {
   collecte_energie: { key: "collecte_energie", name: "Collecte d'énergie", duration: 900, reward: { energy: 4000, xp: 80 }, prereq: { chasseur: 6, fregate: 2 } },
   analyse_signal: { key: "analyse_signal", name: "Analyse de signal", duration: 900, reward: { data: 2500, xp: 80 }, prereq: { drone_recuperateur: 6, sentinelle: 2 } },
   synthese_nano: { key: "synthese_nano", name: "Synthèse de nanocomposants", duration: 1800, reward: { nano: 600, xp: 150 }, prereq: { drone_recuperateur: 10, sentinelle: 4 } },
-  expedition_longue: { key: "expedition_longue", name: "Expédition longue durée", duration: 3600, reward: { scrap: 60000, energy: 1200, xp: 300 }, prereq: { fregate: 5, cargo: 4, chasseur: 6 } },
+  expedition_longue: { key: "expedition_longue", name: "Expédition longue durée", duration: 3600, reward: { scrap: 60000, energy: 12000, xp: 300 }, prereq: { fregate: 5, cargo: 4, chasseur: 6 } },
   recuperation_acier: { key: "recuperation_acier", name: "Récupération d'acier renforcé", duration: 1200, reward: { reinforcedSteel: 30, xp: 100 }, prereq: { drone_recuperateur: 8, chasseur: 4 } },
   extraction_module: { key: "extraction_module", name: "Extraction de module cybernétique", duration: 1800, reward: { cyberModule: 40, xp: 150 }, prereq: { sentinelle: 5, fregate: 3 } },
   recolte_nanites: { key: "recolte_nanites", name: "Récolte de nanites synthétiques", duration: 2400, reward: { syntheticNanites: 50, xp: 200 }, prereq: { drone_recuperateur: 15, sentinelle: 6 } },
@@ -21,8 +21,8 @@ export const MISSIONS: Record<string, MissionDef> = {
     key: "mission_elite",
     name: "Mission d'élite",
     duration: 7200,
-    reward: { reinforcedSteel: 80, cyberModule: 60, syntheticNanites: 50, aiFragment: 40, xp: 600 },
-    prereq: { fregate: 10, sentinelle: 10, chasseur: 10, cargo: 5 },
+    reward: { reinforcedSteel: 800, cyberModule: 600, syntheticNanites: 500, aiFragment: 400, xp: 600 },
+    prereq: { fregate: 10, sentinelle: 10, chasseur: 10, cargo: 15 },
   },
 };
 
