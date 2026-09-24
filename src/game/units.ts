@@ -133,16 +133,16 @@ export const UNITS: UnitDef[] = [
 ];
 
 export const UNIT_BASE_STATS: Record<string, { attack: number; defense: number }> = {
-  drone_recuperateur: { attack: 0, defense: 5 },
-  fregate: { attack: 15, defense: 20 },
-  cargo: { attack: 0, defense: 10 },
-  sentinelle: { attack: 5, defense: 30 },
-  chasseur: { attack: 105, defense: 10 },
+  drone_recuperateur: { attack: 15, defense: 5 },
+  fregate: { attack: 100, defense: 20 },
+  cargo: { attack: 50, defense: 10 },
+  sentinelle: { attack: 120, defense: 30 },
+  chasseur: { attack: 245, defense: 10 },
   etoile_noire: { attack: 500, defense: 500 },
-  roquette: { attack: 70, defense: 0 },
-  canon_impulsion: { attack: 90, defense: 10 },
-  canon_plasma: { attack: 125, defense: 20 },
-  batterie_aa: { attack: 155, defense: 60 },
+  roquette: { attack: 60, defense: 0 },
+  canon_impulsion: { attack: 80, defense: 10 },
+  canon_plasma: { attack: 105, defense: 20 },
+  batterie_aa: { attack: 135, defense: 60 },
   intercepteur: { attack: 255, defense: 15 },
 };
 
