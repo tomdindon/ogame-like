@@ -55,7 +55,7 @@ export const UNITS: UnitDef[] = [
     name: "Sentinelle",
     image: "/assets/units/Sentinelle.png",
     maxLevel: 10,
-    description: "Unité défensive spécialisée dans la détection et la protection.",
+    description: "Unité offensive spécialisée dans la détection et la protection.",
     cost: { scrap: 800, energy: 400 },
     stats: { attaque: 120, defense: 30, vitesse: 1, detection: 10, cargo: 0 },
     category: "attack",

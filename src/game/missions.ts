@@ -24,6 +24,13 @@ export const MISSIONS: Record<string, MissionDef> = {
     reward: { reinforcedSteel: 800, cyberModule: 600, syntheticNanites: 500, aiFragment: 400, xp: 600 },
     prereq: { fregate: 10, sentinelle: 10, chasseur: 10, cargo: 15 },
   },
+  patrouille_perimetrique: {
+  key: "patrouille_perimetrique", name: "Patrouille du périmètre", duration: 600, reward: { scrap: 8000, xp: 40 }, prereq: { roquette: 4 } },
+  verrouillage_radar: { key: "verrouillage_radar", name: "Alerte invasion", duration: 1200, reward: { energy: 6000, xp: 90 }, prereq: { batterie_aa: 3, intercepteur: 2 } },
+  suppression_blindee: { key: "suppression_blindee", name: "Repli des envahisseurs", duration: 1800, reward: { reinforcedSteel: 45, xp: 160 }, prereq: { canon_impulsion: 4, roquette: 6 } },
+  bombardement_orbital: { key: "bombardement_orbital", name: "Siège repoussé", duration: 2700, reward: { scrap: 45000, cyberModule: 30, xp: 220 }, prereq: { canon_plasma: 5, canon_impulsion: 3 } },
+  interception_prioritaire: { key: "interception_prioritaire", name: "Dernier bastion", duration: 3600, reward: { syntheticNanites: 40, aiFragment: 25, xp: 280 }, prereq: { intercepteur: 8, batterie_aa: 5 },
+},
 };
 
 export function hasPrerequisites(mission: MissionDef, units: Record<string, { count: number }>): boolean {
