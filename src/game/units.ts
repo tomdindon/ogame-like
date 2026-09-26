@@ -117,7 +117,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Défense spécialisée contre les unités rapides et aériennes.",
     cost: { scrap: 1800, energy: 900 },
-    stats: { attaque: 135, defense: 60, vitesse: 0, cargo: 0 },
+    stats: { attaque: 135, defense: 15, vitesse: 0, cargo: 0 },
     category: "defense",
   },
   {
@@ -127,7 +127,7 @@ export const UNITS: UnitDef[] = [
     maxLevel: 10,
     description: "Vaisseau ultra-rapide conçu pour intercepter les cibles prioritaires.",
     cost: { scrap: 2000, energy: 1200 },
-    stats: { attaque: 255, defense: 15, vitesse: 12, cargo: 5 },
+    stats: { attaque: 255, defense: 60, vitesse: 12, cargo: 5 },
     category: "defense",
   },
 ];
@@ -142,8 +142,8 @@ export const UNIT_BASE_STATS: Record<string, { attack: number; defense: number }
   roquette: { attack: 60, defense: 0 },
   canon_impulsion: { attack: 80, defense: 10 },
   canon_plasma: { attack: 105, defense: 20 },
-  batterie_aa: { attack: 135, defense: 60 },
-  intercepteur: { attack: 255, defense: 15 },
+  batterie_aa: { attack: 135, defense: 15 },
+  intercepteur: { attack: 255, defense: 60 },
 };
 
 export const UNIT_TO_TECH: Record<string, string> = {
